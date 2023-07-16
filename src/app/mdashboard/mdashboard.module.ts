@@ -4,6 +4,8 @@ import { MdashboardComponent } from './mdashboard.component';
 import { OverviewComponent } from './overview/overview.component';
 import { ScreenedComponent } from './screened/screened.component';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { EnrolledComponent } from './enrolled/enrolled.component';
+import { Covid19resultsComponent } from './covid19results/covid19results.component';
 
 
 
@@ -11,7 +13,9 @@ import { HighchartsChartModule } from 'highcharts-angular';
   declarations: [
     MdashboardComponent,
     OverviewComponent,
-    ScreenedComponent
+    ScreenedComponent,
+    EnrolledComponent,
+    Covid19resultsComponent
   ],
   imports: [
     CommonModule,
