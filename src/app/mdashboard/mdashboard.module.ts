@@ -6,8 +6,7 @@ import { ScreenedComponent } from './screened/screened.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { EnrolledComponent } from './enrolled/enrolled.component';
 import { Covid19resultsComponent } from './covid19results/covid19results.component';
-
-
+import { HttpClientModule } from '@angular/common/http'; // Use HTTP import
 
 @NgModule({
   declarations: [
@@ -19,7 +18,8 @@ import { Covid19resultsComponent } from './covid19results/covid19results.compone
   ],
   imports: [
     CommonModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    HttpClientModule // Add HttpClientModule here
   ],
   exports: [
     MdashboardComponent

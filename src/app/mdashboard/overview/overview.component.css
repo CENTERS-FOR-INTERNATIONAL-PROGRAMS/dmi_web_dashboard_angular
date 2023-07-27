@@ -2,3 +2,25 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 }
+
+.overViewRow{
+    display: flex;
+    column-gap: 0.125rem;
+    align-items: center;
+}
+.overViewRow .card{
+    min-width: 14rem;
+    min-height: 16rem
+}
+
+.covidCharts{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 1rem 0;
+    column-gap: 0.625rem;
+}
+
+.covidCharts div:first-child{
+    padding: 0 1rem;
+    border-right: 2px solid black;
+}
