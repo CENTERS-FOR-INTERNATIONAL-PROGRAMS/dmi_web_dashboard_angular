@@ -80,6 +80,12 @@
                     </div>
                 </div>
                 <div class="col py-3">
+                  <h2>Fetched API Data</h2>
+<ul>
+  <li *ngFor="let user of users">
+    {{ user.username }} - {{ user.email }} <!-- Data matching JSON structure -->
+  </li>
+</ul>
                     <app-overview></app-overview>
                 </div>
             </div>
