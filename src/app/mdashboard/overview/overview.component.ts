@@ -30,6 +30,77 @@ export class OverviewComponent {
 		"5-9 yrs",
 		"15-34 yrs",
 	];
+
+    overallpositivitybyfacilitychartOptions: Highcharts.Options = {
+        title:{
+          text:'Overall Positivity By Facility',
+        },
+// Data retrieved from https://gs.statcounter.com/browser-market-share#monthly-202201-202201-bar
+
+// Create the chart
+// const ColumnChart1 = () => {
+	// const options = {
+		chart: {
+			type: "column",
+		},
+		// title: {
+		// 	text: "Enrollment Cascade",
+		// },
+		xAxis: {
+			categories: ["Kenyatta National Hospital", "Busia County Referral", "Marsabit County ", "JOOTRH", "Makueni"], // Replace with your categories
+		},
+		yAxis: {
+			title: {
+				text: "Number Positive",
+			},
+		},
+        
+		series: [
+			{
+				name: "Health Facilities",
+				data: [60, 55, 20, 20, 15],
+                type:'column',
+				color: "#234FEA",
+			},
+		],
+	};
+
+
+
+
+
+        // series: [{
+        //   data: [1, 2, 3],
+        //   type: 'pie'
+        // }],
+        // plotOptions: {
+        //                 pie: {
+        //                     innerSize: "70%", // Adjust the innerSize to control the size of the inner hole (donut hole)
+        //                     depth: 25, // Adjust the depth to control the thickness of the donut
+        //                     dataLabels: {
+        //                         enabled: false, // Disable data labels inside the donut segments
+        //                     },
+        //                 },
+        //             },
+      
+    //   ageCategories = [
+    //         "0-4 yrs",
+    //         "5-9 yrs",
+    //         "15-34 yrs",
+        // ];
+
+
+
+
+
+
+
+
+
+
+
+
+
     // const PieChart2 = ({h}) => {
     //     const options = {
     //         chart: {
@@ -179,76 +250,91 @@ export class OverviewComponent {
   //     type: 'line'
   //   }]
   // };
-  enrolledandtestedchartOptions: Highcharts.Options ={
-    chart: {
-        type: 'bar'
-    },
-    title: {
-        text: 'Number enrolled and tested COVID-19 positive',
+  covid19positivitybygenderchartOptions: Highcharts.Options ={
+
+    title:{
+        text:'Covid 19 Positivity by Gender',
         align: 'left'
-    },
-    // subtitle: {
-    //     text: 'Source: <a ' +
-    //         'href="https://en.wikipedia.org/wiki/List_of_continents_and_continental_subregions_by_population"' +
-    //         'target="_blank">Wikipedia.org</a>',
+      },
+      series: [{
+        data: [1, 2, 3],
+        type: 'pie'
+      }],
+
+    
+    // chart: {
+    //     type: 'bar'
+    // },
+    // title: {
+    //     text: 'Number enrolled and tested COVID-19 positive',
     //     align: 'left'
     // },
-    xAxis: {
-        categories: ['Busia CRH', 'Nakuru Level 6', 'Kapenguria', 'Loitoktok'],
-        title: {
-            text: null
-        },
-        gridLineWidth: 1,
-        lineWidth: 0
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: 'Cases',
-            align: 'high'
-        },
-        labels: {
-            overflow: 'justify'
-        },
-        gridLineWidth: 0
-    },
-    // tooltip: {
-    //     valueSuffix: ' millions'
+    
+    // // subtitle: {
+    // //     text: 'Source: <a ' +
+    // //         'href="https://en.wikipedia.org/wiki/List_of_continents_and_continental_subregions_by_population"' +
+    // //         'target="_blank">Wikipedia.org</a>',
+    // //     align: 'left'
+    // // },
+
+    // xAxis: {
+    //     categories: ['Busia CRH', 'Nakuru Level 6', 'Kapenguria', 'Loitoktok'],
+    //     title: {
+    //         text: null
+    //     },
+    //     gridLineWidth: 1,
+    //     lineWidth: 0
     // },
-    plotOptions: {
-        bar: {
-            borderRadius: '50%',
-            dataLabels: {
-                enabled: true
-            },
-            groupPadding: 0.1
-        }
-    },
-    legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'top',
-        x: -40,
-        y: 80,
-        floating: true,
-        borderWidth: 1,
-        backgroundColor:
-            '#FFFFFF',
-        shadow: true
-    },
-    credits: {
-        enabled: false
-    },
-    series: [{
-        name: 'Total Enrolled',
-        data: [631, 727, 3202, 721],
-        type: 'bar'
-    }, {
-        name: 'Covid-19 Positive',
-        data: [814, 841, 3714, 726],
-        type: 'bar'
-    }] 
+    // yAxis: {
+    //     min: 0,
+    //     title: {
+    //         text: 'Cases',
+    //         align: 'high'
+    //     },
+    //     labels: {
+    //         overflow: 'justify'
+    //     },
+    //     gridLineWidth: 0
+    // },
+    // // tooltip: {
+    // //     valueSuffix: ' millions'
+    // // },
+    // plotOptions: {
+    //     bar: {
+    //         borderRadius: '50%',
+    //         dataLabels: {
+    //             enabled: true
+    //         },
+    //         groupPadding: 0.1
+    //     }
+    // },
+    // legend: {
+    //     layout: 'vertical',
+    //     align: 'right',
+    //     verticalAlign: 'top',
+    //     x: -40,
+    //     y: 80,
+    //     floating: true,
+    //     borderWidth: 1,
+    //     backgroundColor:
+    //         '#FFFFFF',
+    //     shadow: true
+    // },
+    // credits: {
+    //     enabled: false
+    // },
+    // series: [{
+    //     name: 'Total Enrolled',
+    //     data: [631, 727, 3202, 721],
+    //     type: 'bar'
+    // }, {
+    //     name: 'Covid-19 Positive',
+    //     data: [814, 841, 3714, 726],
+    //     type: 'bar'
+    // }] 
 };
+
+
 
 }
 
