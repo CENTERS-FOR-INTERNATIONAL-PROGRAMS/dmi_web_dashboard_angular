@@ -159,8 +159,15 @@ export class OverviewComponent {
         data: [-13.6, -14.9, -5.8, -0.7, 3.1, 13.0, 14.5, 10.8, 5.8,
             -0.7, -11.0, -16.4],
         tooltip: {
-            valueSuffix: '°C'
-        }
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+        },
+            accessibility: { point: { valueSuffix: '%' } },
+            // valueSuffix: '°C'
+            // tooltip: {
+            //     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+            // },
+            // accessibility: { point: { valueSuffix: '%' } },
+        
     }]
 };
   //  positivitybysexandagechartOptions: Highcharts.Options = {

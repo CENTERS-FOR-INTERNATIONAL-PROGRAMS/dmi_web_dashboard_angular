@@ -7,6 +7,14 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { EnrolledComponent } from './enrolled/enrolled.component';
 import { Covid19resultsComponent } from './covid19results/covid19results.component';
 import { HttpClientModule } from '@angular/common/http'; // Use HTTP import
+import { RouterModule, Routes } from '@angular/router';
+
+const appRoute: Routes = [
+  {path:'Covid 19 Results', component:Covid19resultsComponent},
+  {path:'Enrollment', component:EnrolledComponent},
+  {path:'Screening', component:ScreenedComponent},
+  {path:'Overview', component:OverviewComponent}
+]
 
 @NgModule({
   declarations: [
@@ -19,6 +27,7 @@ import { HttpClientModule } from '@angular/common/http'; // Use HTTP import
   imports: [
     CommonModule,
     HighchartsChartModule,
+    RouterModule.forRoot(appRoute),
     HttpClientModule // Add HttpClientModule here
   ],
   exports: [
