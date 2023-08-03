@@ -1,12 +1,12 @@
 <div>
+    <h5>Screening</h5>
     <div class="screenedCharts">
-        <h5>Screening</h5>
         <div>
             <highcharts-chart [Highcharts]="Highcharts" [options]="screenedbygenderchartOptions"
                 style="width: 100%; height: 400px; display: block"></highcharts-chart>
         </div>
 
-        <div>
+        <div class="screenedRow">
             <highcharts-chart [Highcharts]="Highcharts" [options]="screeningbyageandgenderchartOptions"
                 style="width: 100%; height: 400px; display: block"></highcharts-chart>
         </div>
