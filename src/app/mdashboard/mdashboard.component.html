@@ -34,7 +34,7 @@
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                             id="menu">
                             <li class="nav-item">
-                                <a routerLink ="/Overview" class="nav-link align-middle px-0">
+                                <a routerLink ="/" class="nav-link align-middle px-0">
                                     <i class="fs-4 bi-house"></i>
                                     <span class="ms-1 d-none d-sm-inline">Overview</span>
                                 </a>
@@ -57,7 +57,7 @@
                                     <span class="ms-1 d-none d-sm-inline">Covid 19 Results</span>
                                 </a>
                             </li>
-                            <router-outlet> </router-outlet>
+                            <!-- <router-outlet> </router-outlet> -->
                         </ul>
                         <hr />
                         <!-- <div class="dropdown pb-4">
@@ -87,7 +87,8 @@
     {{ user.username }} - {{ user.email }} <!-- Data matching JSON structure -->
   </li>
 </ul>
-                    <app-overview></app-overview>
+                    <!-- <app-overview></app-overview> -->
+                    <router-outlet> </router-outlet>
                 </div>
             </div>
         </div>
