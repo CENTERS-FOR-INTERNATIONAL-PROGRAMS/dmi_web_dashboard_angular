@@ -103,7 +103,7 @@ export class OverviewComponent {
         ],
     };
 
-    positivitybysexandagechartOptions: Highcharts.Options = {
+    positivityovertimechartOptions: Highcharts.Options = {
         chart: {
             //zoomType: 'xy'
         },
@@ -220,9 +220,9 @@ export class OverviewComponent {
         ],
     };
 
-    screenedovertimechartOptions: Highcharts.Options = {
+    positivitybyageandgenderchartOptions: Highcharts.Options = {
         title: {
-            text: 'Screened Over Time',
+            text: 'Covid positivity by Age and Gender',
             align: 'left',
         },
 
