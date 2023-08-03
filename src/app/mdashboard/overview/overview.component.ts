@@ -46,7 +46,13 @@ export class OverviewComponent implements OnInit{
       title: {
         text: 'Overall COVID-19 Positivity',
       },
+      colors: [
+        "#FF0000",
+        "green",
+      ],
       series: [{
+
+        name: "Data",
 
         data: [{
          name: 'Positives',
@@ -64,7 +70,7 @@ export class OverviewComponent implements OnInit{
           innerSize: "60%", // Adjust the innerSize to control the size of the inner hole (donut hole)
           depth: 25, // Adjust the depth to control the thickness of the donut
           dataLabels: {
-            enabled: false, // Disable data labels inside the donut segments
+            enabled: true, // Disable data labels inside the donut segments
           },
         },
       },
