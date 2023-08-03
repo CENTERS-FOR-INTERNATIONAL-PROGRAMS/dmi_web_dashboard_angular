@@ -34,29 +34,30 @@
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                             id="menu">
                             <li class="nav-item">
-                                <a href="#" class="nav-link align-middle px-0">
+                                <a routerLink ="/Overview" class="nav-link align-middle px-0">
                                     <i class="fs-4 bi-house"></i>
                                     <span class="ms-1 d-none d-sm-inline">Overview</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link align-middle px-0">
+                                <a routerLink ="/Screening" class="nav-link align-middle px-0">
                                     <i class="fs-4 bi-house"></i>
                                     <span class="ms-1 d-none d-sm-inline">Screening</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" class="nav-link px-0 align-middle">
+                            <li class="nav-item">
+                                <a routerLink ="/Enrollment" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-table"></i>
                                     <span class="ms-1 d-none d-sm-inline">Enrollment</span></a>
                             </li>
 
-                            <li>
-                                <a href="#" class="nav-link px-0 align-middle">
+                            <li class="nav-item">
+                                <a routerLink = "/Covid 19 Results" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-people"></i>
                                     <span class="ms-1 d-none d-sm-inline">Covid 19 Results</span>
                                 </a>
                             </li>
+                            <router-outlet> </router-outlet>
                         </ul>
                         <hr />
                         <!-- <div class="dropdown pb-4">
