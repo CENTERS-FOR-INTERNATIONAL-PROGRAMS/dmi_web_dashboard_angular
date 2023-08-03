@@ -7,13 +7,13 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./mdashboard.component.css']
 })
 
-export class MdashboardComponent implements OnInit { //Use HTTP 
+export class MdashboardComponent implements OnInit { //Use HTTP
   users: any[] = [];
 
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.fetchUsersData();
+   // this.fetchUsersData();
   }
 
   fetchUsersData(): void {

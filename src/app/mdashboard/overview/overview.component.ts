@@ -12,19 +12,19 @@ export class OverviewComponent {
             text: 'Overall COVID-19 Positivity',
         },
         colors: [
-			"#FF0000",
-			"green", 
-		],
+            "#FF0000",
+            "green", 
+        ],
         series: [
-			{
-				name: "Data",
+            {
+                name: "Data",
                 type: 'pie',
-				data: [
-					["Posivite", 20],
-					["Negative", 30],
-				], // Replace with your data values
-			},
-		],
+                data: [
+                    ["Posivite", 20],
+                    ["Negative", 30],
+                ], // Replace with your data values
+            },
+        ],
         // series: [{
         //     data: [1, 2,],
         //     type: 'pie'
@@ -37,6 +37,7 @@ export class OverviewComponent {
                 dataLabels: {
                     enabled: true, // Disable data labels inside the donut segments
                 },
+            },
         },
     };
     ageCategories = [
@@ -81,7 +82,7 @@ export class OverviewComponent {
             type: "column",
         },
         // title: {
-        // 	text: "Enrollment Cascade",
+        //  text: "Enrollment Cascade",
         // },
         xAxis: {
             categories: ["Kenyatta National Hospital", "Busia County Referral", "Marsabit County ", "JOOTRH", "Makueni"], // Replace with your categories
@@ -267,7 +268,6 @@ export class OverviewComponent {
                 type: 'bar'
             },
         ],
-
 
 
     }
