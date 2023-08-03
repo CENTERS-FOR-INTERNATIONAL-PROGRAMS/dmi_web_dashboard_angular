@@ -13,7 +13,7 @@ const appRoute: Routes = [
   {path:'Covid 19 Results', component:Covid19resultsComponent},
   {path:'Enrollment', component:EnrolledComponent},
   {path:'Screening', component:ScreenedComponent},
-  {path:'Overview', component:OverviewComponent}
+  {path:'', component:OverviewComponent}
 ]
 
 @NgModule({
