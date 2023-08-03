@@ -37,7 +37,8 @@ export class OverviewComponent {
                 dataLabels: {
                     enabled: true, // Disable data labels inside the donut segments
                 },
-        },
+            },
+        }
     };
     ageCategories = [
         "0-4 yrs",
