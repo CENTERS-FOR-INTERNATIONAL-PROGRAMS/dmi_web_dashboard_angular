@@ -8,7 +8,9 @@
     </p>
 
     <div class="overViewRow">
-        <highcharts-chart [Highcharts]="Highcharts" [options]="overallpositivitychartOptions"
+
+
+        <highcharts-chart [Highcharts]="highcharts" [options]="overallpositivitychartOptions"
             style="width: 100%; height: 400px; display: block"></highcharts-chart>
        <router-outlet> </router-outlet>
             <div class="card">
@@ -42,7 +44,7 @@
             </div>
         </div>
     </div>
-    <div class="covidCharts">
+   <!--  <div class="covidCharts">
         <div>
             <highcharts-chart [Highcharts]="Highcharts" [options]="covid19positivitybygenderchartOptions"
                 style="width: 100%; height: 400px; display: block;"></highcharts-chart>
@@ -59,6 +61,6 @@
             <highcharts-chart [Highcharts]="Highcharts" [options]="positivitybysexandagechartOptions"
                 style="width: 100%; height: 400px; display: block;"></highcharts-chart>
         </div>
-        
-    </div>
+
+    </div> -->
 </div>
