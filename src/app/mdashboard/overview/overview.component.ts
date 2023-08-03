@@ -1,19 +1,84 @@
-import { Component } from '@angular/core';
+import { ReviewService } from './../../services/review.service.ts.service';
+import { CovidPositivity } from './../../models/covidPositivity.model';
+import { NumEnrolled } from './../../models/numEnrolled.model';
+import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
+import HC_exporting from 'highcharts/modules/exporting';
 @Component({
     selector: 'app-overview',
     templateUrl: './overview.component.html',
     styleUrls: ['./overview.component.css']
 })
-export class OverviewComponent {
-    Highcharts: typeof Highcharts = Highcharts;
+export class OverviewComponent implements OnInit{
+
+  numberEnrolled: NumEnrolled[] = [];
+  covidPositivity: CovidPositivity[] = [];
+  positives: number = 0;
+  negatives: number = 0;
+  highcharts = Highcharts;
+  highcharts1 = Highcharts;
+  highcharts2 = Highcharts;
+  highcharts3 = Highcharts;
+  overallpositivitychartOptions: {} = {};
+
+  constructor(private reviewService: ReviewService,) {
+    //this.loadOverallPositivity();
+  }
+  ngOnInit() {
+    this.loadCovidPositivityData();
+    this.loadCovidPositivitychat();
+  }
+  loadCovidPositivityData() {
+    this.reviewService.findCovidPositivity().subscribe(
+      response => {
+        this.covidPositivity = response;
+        this.positives = this.covidPositivity[0].Covid19Positive;
+        this.negatives = this.covidPositivity[0].Covid19Negative;
+        this.loadCovidPositivitychat();
+      });
+  }
+
+  loadCovidPositivitychat() {
+    this.overallpositivitychartOptions = {
+      chart: {
+        type: 'pie'
+      },
+      title: {
+        text: 'Overall COVID-19 Positivity',
+      },
+      series: [{
+
+        data: [{
+         name: 'Positives',
+         y: this.positives
+
+        }, {
+         name: 'Negatives',
+          y: this.negatives
+        }
+      ],
+
+      }],
+      plotOptions: {
+        pie: {
+          innerSize: "60%", // Adjust the innerSize to control the size of the inner hole (donut hole)
+          depth: 25, // Adjust the depth to control the thickness of the donut
+          dataLabels: {
+            enabled: false, // Disable data labels inside the donut segments
+          },
+        },
+      },
+    };
+    HC_exporting(Highcharts);
+  }
+ /*    Highcharts: typeof Highcharts = Highcharts;
     overallpositivitychartOptions: Highcharts.Options = {
         title: {
             text: 'Overall COVID-19 Positivity',
         },
         colors: [
             "#FF0000",
-            "green", 
+            "green",
         ],
         series: [
             {
@@ -39,40 +104,12 @@ export class OverviewComponent {
                 },
             },
         },
-    };
+    }; */
     ageCategories = [
         "0-4 yrs",
         "5-9 yrs",
         "15-34 yrs",
     ];
-
-    // screenedovertimechartOptions: Highcharts.Options = {
-    //     title:{
-    //       text:'Screened Over Time',
-    //       align: 'left',
-    //     },
-
-    //     series: [{
-    //       data: [1, 2, 3],
-    //       type: 'pie'
-    //     }],
-
-    //     plotOptions: {
-    //                     pie: {
-    //                         innerSize: "70%", // Adjust the innerSize to control the size of the inner hole (donut hole)
-    //                         depth: 25, // Adjust the depth to control the thickness of the donut
-    //                         dataLabels: {
-    //                             enabled: false, // Disable data labels inside the donut segments
-    //                         },
-    //                     },
-    //                 },
-    //   };
-    //   ageyCategories = [
-    //         "0-4 yrs",
-    //         "5-9 yrs",
-    //         "15-34 yrs",
-    //     ]        
-
     overallpositivitybyfacilitychartOptions: Highcharts.Options = {
         title: {
             text: 'Overall Positivity By Facility',
@@ -102,7 +139,6 @@ export class OverviewComponent {
             },
         ],
     };
-
     positivitybysexandagechartOptions: Highcharts.Options = {
         chart: {
             //zoomType: 'xy'
@@ -192,7 +228,6 @@ export class OverviewComponent {
 
         }]
     };
-
     covid19positivitybygenderchartOptions: Highcharts.Options = {
 
         title: {
@@ -219,7 +254,6 @@ export class OverviewComponent {
             },
         ],
     };
-
     screenedovertimechartOptions: Highcharts.Options = {
         title: {
             text: 'Screened Over Time',
