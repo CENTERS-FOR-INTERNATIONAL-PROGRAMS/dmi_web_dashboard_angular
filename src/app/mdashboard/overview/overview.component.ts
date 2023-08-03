@@ -37,7 +37,6 @@ export class OverviewComponent {
                 dataLabels: {
                     enabled: true, // Disable data labels inside the donut segments
                 },
-            },
         },
     };
     ageCategories = [
@@ -268,6 +267,7 @@ export class OverviewComponent {
                 type: 'bar'
             },
         ],
+
 
 
     }
