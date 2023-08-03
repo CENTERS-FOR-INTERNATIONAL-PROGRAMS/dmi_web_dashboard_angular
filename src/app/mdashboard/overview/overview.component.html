@@ -8,10 +8,8 @@
     </p>
 
     <div class="overViewRow">
-        <highcharts-chart [Highcharts]="Highcharts" [options]="overallpositivitychartOptions"
-            style="width: 100%; height: 400px; display: block"></highcharts-chart>
-       <router-outlet> </router-outlet>
-            <div class="card">
+        <router-outlet> </router-outlet>
+        <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Total Screened</h5>
                 <hr>
@@ -41,6 +39,8 @@
                 <span>80 last month</span>
             </div>
         </div>
+        <highcharts-chart [Highcharts]="Highcharts" [options]="overallpositivitychartOptions"
+            style="width: 100%; height: 400px; display: block"></highcharts-chart>
     </div>
     <div class="covidCharts">
         <div>
@@ -56,9 +56,9 @@
                 style="width: 100%; height: 400px; display: block;"></highcharts-chart>
         </div>
         <div>
-            <highcharts-chart [Highcharts]="Highcharts" [options]="positivitybysexandagechartOptions"
+            <highcharts-chart [Highcharts]="Highcharts" [options]="screenedovertimechartOptions"
                 style="width: 100%; height: 400px; display: block;"></highcharts-chart>
         </div>
-        
+
     </div>
 </div>
