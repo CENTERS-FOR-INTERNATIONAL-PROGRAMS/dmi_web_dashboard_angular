@@ -1,0 +1,26 @@
+.covid19results-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.covid19resultsRow{
+    display: flex;
+    column-gap: 0.125rem;
+    align-items: center;
+}
+.covid19resultsRow .card{
+    min-width: 14rem;
+    min-height: 16rem
+}
+
+.covid19resultsCharts{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 1rem 0;
+    column-gap: 0.625rem;
+}
+
+.covid19resultsCharts div:first-child{
+    padding: 0 1rem;
+    border-right: 2px solid black;
+}
