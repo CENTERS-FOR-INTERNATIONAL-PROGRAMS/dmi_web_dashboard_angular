@@ -4,6 +4,7 @@ import { Observable, catchError, retry, throwError } from 'rxjs';
 import { NumEnrolled } from '../models/numEnrolled.model';
 import { CovidPositivity } from '../models/covidPositivity.model';
 import { Covid19PositivityByGender } from '../models/covid19PositivityByGender.model';
+import { Covid19OverallPositivityByFacility } from '../models/covid19OverallPositivityByFacility.model';
 
 
 
@@ -12,8 +13,9 @@ import { Covid19PositivityByGender } from '../models/covid19PositivityByGender.m
 })
 
 export class ReviewService {
-  public BASE_URL  = 'http://localhost:8080/api/overview/findCovidPositivity';
+  public BASE_URL  = 'http://localhost:8080/api/overview/findCovid19Positivity';
   public BASE_URL_BY_GENDER  = 'http://localhost:8080/api/overview/findCovid19PositivityByGender';
+  public BASE_URL_BY_FACILITY  = 'http://localhost:8080/api/overview/findCovid19OverallPositivityByFacility';
   constructor(private http: HttpClient) {
   }
   findNumberEnrolledByFacility(): Observable<NumEnrolled[]> {
@@ -36,6 +38,13 @@ export class ReviewService {
   findCovid19PositivityByGender(): Observable<Covid19PositivityByGender[]> {
     console.log('In the service');
     return this.http.get<Covid19PositivityByGender[]>( `${this.BASE_URL_BY_GENDER }`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
+  findCovid19OverallPositivityByFacility(): Observable<Covid19OverallPositivityByFacility[]> {
+    return this.http.get<Covid19OverallPositivityByFacility[]>( `${this.BASE_URL_BY_FACILITY }`).pipe(
       retry(1),
       catchError(this.handleError)
     );

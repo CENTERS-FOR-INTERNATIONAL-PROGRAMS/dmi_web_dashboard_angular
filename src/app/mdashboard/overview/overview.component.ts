@@ -1,6 +1,7 @@
 import { ReviewService } from './../../services/review.service.ts.service';
 import { CovidPositivity } from './../../models/covidPositivity.model';
 import { Covid19PositivityByGender } from './../../models/covid19PositivityByGender.model';
+import { Covid19OverallPositivityByFacility } from './../../models/covid19OverallPositivityByFacility.model';
 import { NumEnrolled } from './../../models/numEnrolled.model';
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
@@ -13,23 +14,32 @@ import HC_exporting from 'highcharts/modules/exporting';
 export class OverviewComponent implements OnInit{
 
   numberEnrolled: NumEnrolled[] = [];
+  //Positivity --
   covidPositivity: CovidPositivity[] = [];
-  
-  // ----
-  covid19PositivityByGender: Covid19PositivityByGender[]= [];
-  covid19PositivityByGenderSeries: any[] = [];
-  // ---
-
   positives: number = 0;
   negatives: number = 0;
-  PositiveNumber: number = 0;
+  //---
+  
+  // Positivity By Gender----
+  covid19PositivityByGender: Covid19PositivityByGender[]= [];
+  covid19PositivityByGenderSeries: any[] = [];
   Gender: number = 0;
+  // ---
+
+   // Overall Positivity By Facility----
+   covid19OverallPositivityByFacility: Covid19OverallPositivityByFacility[]= [];
+   covid19OverallPositivityByFacilitySeries: any[][] = [];
+   Facility: number = 0;
+   // ---
+
+  PositiveNumber: number = 0;
   highcharts = Highcharts;
   highcharts1 = Highcharts;
   highcharts2 = Highcharts;
   highcharts3 = Highcharts;
   overallpositivitychartOptions: {} = {};
   overallpositivitybygenderchartOptions: {} = {};
+  overallpositivitybyfacilitychartOptions: {} = {};
 
   constructor(private reviewService: ReviewService,) {
     //this.loadOverallPositivity();
@@ -40,6 +50,9 @@ export class OverviewComponent implements OnInit{
 
     this.loadCovid19PositivityByGenderData();
     this.loadCovid19PositivityByGenderchart();
+
+    this.loadCovid19OverallPositivityByFacilityData();
+    this.loadCovid19OverallPositivityByFacilityChart();
   }
   loadCovidPositivityData() {
     this.reviewService.findCovidPositivity().subscribe(
@@ -142,12 +155,65 @@ export class OverviewComponent implements OnInit{
     };
     HC_exporting(Highcharts);
   }
-    ageCategories = [
+
+  //---
+  loadCovid19OverallPositivityByFacilityData() {
+    this.reviewService.findCovid19OverallPositivityByFacility().subscribe(
+      response => {
+        this.covid19OverallPositivityByFacility = response;
+
+        // Health Facilities (index --> 0)
+        this.covid19OverallPositivityByFacilitySeries.push([]);
+        // Positive Numbers (index --> 1)
+        this.covid19OverallPositivityByFacilitySeries.push([]);
+
+        this.covid19OverallPositivityByFacility.forEach(dataInstance => {
+            this.covid19OverallPositivityByFacilitySeries[0].push(dataInstance.Facility);
+            this.covid19OverallPositivityByFacilitySeries[1].push(dataInstance.PositiveNumber); 
+        });
+      });
+  }
+  loadCovid19OverallPositivityByFacilityChart() {
+    this.overallpositivitybyfacilitychartOptions = {
+        title: {
+            text: 'Overall Positivity By Facility',
+            align: 'left'
+        },
+        chart: {
+            type: "column",
+        },
+        // title: {
+        //  text: "Enrollment Cascade",
+        // },
+        xAxis: {
+            categories: this.covid19OverallPositivityByFacilitySeries[0], // Replace with your categories
+        },
+        yAxis: {
+            title: {
+                text: "Number Positive",
+            },
+        },
+
+        series: [
+            {
+                name: "Health Facilities",
+                data: this.covid19OverallPositivityByFacilitySeries[1],
+                type: 'column',
+                color: "#234FEA",
+            },
+        ],
+    };
+    HC_exporting(Highcharts);
+  }
+
+  //---
+
+    /*ageCategories = [
         "0-4 yrs",
         "5-9 yrs",
         "15-34 yrs",
-    ];
-    overallpositivitybyfacilitychartOptions: Highcharts.Options = {
+    ];*/
+    /*overallpositivitybyfacilitychartOptions: Highcharts.Options = {
         title: {
             text: 'Overall Positivity By Facility',
             align: 'left'
@@ -175,7 +241,7 @@ export class OverviewComponent implements OnInit{
                 color: "#234FEA",
             },
         ],
-    };
+    };*/
     positivitybysexandagechartOptions: Highcharts.Options = {
         chart: {
             //zoomType: 'xy'
