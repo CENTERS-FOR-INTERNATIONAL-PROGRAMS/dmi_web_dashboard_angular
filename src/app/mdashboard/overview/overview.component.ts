@@ -52,8 +52,57 @@ export class OverviewComponent implements OnInit{
     this.loadCovid19PositivityByGenderchart();
 
     this.loadCovid19OverallPositivityByFacilityData();
-    this.loadCovid19OverallPositivityByFacilityChart();
+    this.loadCovid19OverallPositivityByFacilityChat();
   }
+  loadCovid19OverallPositivityByFacilityData() {
+    this.reviewService.findCovid19OverallPositivityByFacility().subscribe(
+      response => {
+        this.covid19OverallPositivityByFacility = response;
+
+        // Health Facilities (index --> 0)
+        this.covid19OverallPositivityByFacilitySeries.push([]);
+        // Positive Numbers (index --> 1)
+        this.covid19OverallPositivityByFacilitySeries.push([]);
+
+        this.covid19OverallPositivityByFacility.forEach(dataInstance => {
+            this.covid19OverallPositivityByFacilitySeries[0].push(dataInstance.Facility);
+            this.covid19OverallPositivityByFacilitySeries[1].push(dataInstance.PositiveNumber); 
+        });
+      });
+
+      this.loadCovid19OverallPositivityByFacilityChat();
+
+  }
+
+  
+loadCovid19OverallPositivityByFacilityChat() {
+  this.overallpositivitybyfacilitychartOptions = {
+    title: {
+      text: 'Overall Positivity By Facility',
+      align: 'left'
+    },
+    chart: {
+      // type: "column",
+    },
+    xAxis: {
+      categories: [this.covid19OverallPositivityByFacilitySeries[0]], // Replace with your categories
+    },
+    yAxis: {
+      title: {
+        text: "Number Positive",
+      },
+    },
+    series: [
+      {
+        name: "Health Facilities",
+        data: this.covid19OverallPositivityByFacilitySeries[1],
+        type: 'column',
+        color: "#234FEA",
+      },
+    ],
+  };
+  HC_exporting(Highcharts);
+}
   loadCovidPositivityData() {
     this.reviewService.findCovidPositivity().subscribe(
       response => {
@@ -157,54 +206,7 @@ export class OverviewComponent implements OnInit{
   }
 
   //---
-  loadCovid19OverallPositivityByFacilityData() {
-    this.reviewService.findCovid19OverallPositivityByFacility().subscribe(
-      response => {
-        this.covid19OverallPositivityByFacility = response;
 
-        // Health Facilities (index --> 0)
-        this.covid19OverallPositivityByFacilitySeries.push([]);
-        // Positive Numbers (index --> 1)
-        this.covid19OverallPositivityByFacilitySeries.push([]);
-
-        this.covid19OverallPositivityByFacility.forEach(dataInstance => {
-            this.covid19OverallPositivityByFacilitySeries[0].push(dataInstance.Facility);
-            this.covid19OverallPositivityByFacilitySeries[1].push(dataInstance.PositiveNumber); 
-        });
-      });
-  }
-  loadCovid19OverallPositivityByFacilityChart() {
-    this.overallpositivitybyfacilitychartOptions = {
-        title: {
-            text: 'Overall Positivity By Facility',
-            align: 'left'
-        },
-        chart: {
-            type: "column",
-        },
-        // title: {
-        //  text: "Enrollment Cascade",
-        // },
-        xAxis: {
-            categories: this.covid19OverallPositivityByFacilitySeries[0], // Replace with your categories
-        },
-        yAxis: {
-            title: {
-                text: "Number Positive",
-            },
-        },
-
-        series: [
-            {
-                name: "Health Facilities",
-                data: this.covid19OverallPositivityByFacilitySeries[1],
-                type: 'column',
-                color: "#234FEA",
-            },
-        ],
-    };
-    HC_exporting(Highcharts);
-  }
 
   //---
 
