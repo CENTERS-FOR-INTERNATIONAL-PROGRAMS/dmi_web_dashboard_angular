@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { NumEnrolled } from '../models/numEnrolled.model';
 import { CovidPositivity } from '../models/covidPositivity.model';
-import { CovidPositivityByGender } from '../models/covidPositivityByGender.model';
+import { Covid19PositivityByGender } from '../models/covid19PositivityByGender.model';
 
 
 
@@ -13,7 +13,7 @@ import { CovidPositivityByGender } from '../models/covidPositivityByGender.model
 
 export class ReviewService {
   public BASE_URL  = 'http://localhost:8080/api/overview/findCovidPositivity';
-  public BASE_URL_BY_GENDER  = 'http://localhost:8080/api/overview/findCovidPositivityByGender';
+  public BASE_URL_BY_GENDER  = 'http://localhost:8080/api/overview/findCovid19PositivityByGender';
   constructor(private http: HttpClient) {
   }
   findNumberEnrolledByFacility(): Observable<NumEnrolled[]> {
@@ -33,9 +33,9 @@ export class ReviewService {
     );
   }
 
-  findCovidPositivityByGender(): Observable<CovidPositivityByGender[]> {
+  findCovid19PositivityByGender(): Observable<Covid19PositivityByGender[]> {
     console.log('In the service');
-    return this.http.get<CovidPositivityByGender[]>( `${this.BASE_URL_BY_GENDER }`).pipe(
+    return this.http.get<Covid19PositivityByGender[]>( `${this.BASE_URL_BY_GENDER }`).pipe(
       retry(1),
       catchError(this.handleError)
     );

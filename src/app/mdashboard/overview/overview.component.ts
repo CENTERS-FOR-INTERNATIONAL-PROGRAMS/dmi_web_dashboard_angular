@@ -1,6 +1,6 @@
 import { ReviewService } from './../../services/review.service.ts.service';
 import { CovidPositivity } from './../../models/covidPositivity.model';
-import { CovidPositivityByGender } from './../../models/covidPositivityByGender.model';
+import { Covid19PositivityByGender } from './../../models/covid19PositivityByGender.model';
 import { NumEnrolled } from './../../models/numEnrolled.model';
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
@@ -14,11 +14,16 @@ export class OverviewComponent implements OnInit{
 
   numberEnrolled: NumEnrolled[] = [];
   covidPositivity: CovidPositivity[] = [];
-  covidPositivityByGender: CovidPositivityByGender[] = [];
+  
+  // ----
+  covid19PositivityByGender: Covid19PositivityByGender[]= [];
+  covid19PositivityByGenderSeries: any[] = [];
+  // ---
+
   positives: number = 0;
   negatives: number = 0;
-  female: number = 0;
-  male: number = 0;
+  PositiveNumber: number = 0;
+  Gender: number = 0;
   highcharts = Highcharts;
   highcharts1 = Highcharts;
   highcharts2 = Highcharts;
@@ -32,8 +37,9 @@ export class OverviewComponent implements OnInit{
   ngOnInit() {
     this.loadCovidPositivityData();
     this.loadCovidPositivitychat();
-    this.loadCovidPositivityByGenderData();
-    this.loadCovidPositivityByGenderchart();
+
+    this.loadCovid19PositivityByGenderData();
+    this.loadCovid19PositivityByGenderchart();
   }
   loadCovidPositivityData() {
     this.reviewService.findCovidPositivity().subscribe(
@@ -85,16 +91,29 @@ export class OverviewComponent implements OnInit{
     HC_exporting(Highcharts);
   }
 
-  loadCovidPositivityByGenderData() {
-    this.reviewService.findCovidPositivityByGender().subscribe(
+  loadCovid19PositivityByGenderData() {
+    this.reviewService.findCovid19PositivityByGender().subscribe(
       response => {
-        this.covidPositivityByGender = response;
-        this.female = this.covidPositivityByGender[0].Female;
-        this.male = this.covidPositivityByGender[0].Male;
-        this.loadCovidPositivityByGenderchart();
+        this.covid19PositivityByGender = response;
+        
+        this.covid19PositivityByGender.forEach(dataInstance => {
+            if(dataInstance.Gender == "Male") {
+                this.covid19PositivityByGenderSeries.push(dataInstance.PositiveNumber);    
+            }
+            
+            if(dataInstance.Gender == "Female") {
+                this.covid19PositivityByGenderSeries.push(dataInstance.PositiveNumber);    
+            }
+        });
+
+        
+
+        // this.PositiveNumber = this.covid19PositivityByGender[0].PositiveNumber;
+        // this.Gender = this.covid19PositivityByGender[0].Gender;
+        this.loadCovid19PositivityByGenderchart();
       });
   }
-  loadCovidPositivityByGenderchart() {
+  loadCovid19PositivityByGenderchart() {
     this.overallpositivitybygenderchartOptions = {
 
         title: {
@@ -110,58 +129,19 @@ export class OverviewComponent implements OnInit{
             "#234FEA", // Color for Category 2
             "#FC7500", // Color for Category 3
         ],
-        series: [{
-
-            name: "Data",
-    
-            data: [{
-             name: 'Male',
-             y: this.male
-    
-            }, {
-             name: 'Female',
-              y: this.female
-            }
-          ],
-    
-          }],
-    };
-    HC_exporting(Highcharts);
-  }
- /*    Highcharts: typeof Highcharts = Highcharts;
-    overallpositivitychartOptions: Highcharts.Options = {
-        title: {
-            text: 'Overall COVID-19 Positivity',
-        },
-        colors: [
-            "#FF0000",
-            "green",
-        ],
         series: [
             {
                 name: "Data",
                 type: 'pie',
                 data: [
-                    ["Posivite", 20],
-                    ["Negative", 30],
+                    ["Male", this.covid19PositivityByGenderSeries[0]],
+                    ["Female", this.covid19PositivityByGenderSeries[1]],
                 ], // Replace with your data values
             },
         ],
-        // series: [{
-        //     data: [1, 2,],
-        //     type: 'pie'
-        // }],
-
-        plotOptions: {
-            pie: {
-                innerSize: "70%", // Adjust the innerSize to control the size of the inner hole (donut hole)
-                depth: 25, // Adjust the depth to control the thickness of the donut
-                dataLabels: {
-                    enabled: true, // Disable data labels inside the donut segments
-                },
-            },
-        },
-    }; */
+    };
+    HC_exporting(Highcharts);
+  }
     ageCategories = [
         "0-4 yrs",
         "5-9 yrs",
@@ -285,7 +265,7 @@ export class OverviewComponent implements OnInit{
 
         }]
     };
-    covid19positivitybygenderchartOptions: Highcharts.Options = {
+    /*covid19positivitybygenderchartOptions: Highcharts.Options = {
 
         title: {
             text: 'Covid 19 Positivity by Gender',
@@ -310,7 +290,7 @@ export class OverviewComponent implements OnInit{
                 ], // Replace with your data values
             },
         ],
-    };
+    };*/
     screenedovertimechartOptions: Highcharts.Options = {
         title: {
             text: 'Screened Over Time',
