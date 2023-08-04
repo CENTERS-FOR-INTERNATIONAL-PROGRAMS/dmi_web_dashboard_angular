@@ -4,6 +4,7 @@ import { Observable, catchError, retry, throwError } from 'rxjs';
 import { NumEnrolled } from '../models/numEnrolled.model';
 import { CovidPositivity } from '../models/covidPositivity.model';
 import { CovidPositivityOvertime } from '../models/covidPositivityOverTime.model';
+import { CovidPositivityByAgeGender } from '../models/covidPositivityByAgeGender.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ import { CovidPositivityOvertime } from '../models/covidPositivityOverTime.model
 export class ReviewService {
   public BASE_URL = 'http://localhost:8080/api/overview/findCovidPositivity';
   public BASE_URL1 = 'http://localhost:8080/api/overview/findCovid19OverTime';
+  public BASE_URL3 = 'http://localhost:8080/api/overview/findCovid19PositivityByAgeGender';
 
   constructor(private http: HttpClient) {
   }
@@ -35,6 +37,14 @@ export class ReviewService {
   findCovidPositivityOvertime(): Observable<CovidPositivityOvertime[]> {
     console.log('In the service');
     return this.http.get<CovidPositivityOvertime[]>(`${this.BASE_URL1}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
+  findCovid19PositivityByAgeGender(): Observable<CovidPositivityByAgeGender[]> {
+    console.log('In the service');
+    return this.http.get<CovidPositivityByAgeGender[]>(`${this.BASE_URL3}`).pipe(
       retry(1),
       catchError(this.handleError)
     );
