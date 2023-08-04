@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { NumEnrolled } from '../models/numEnrolled.model';
 import { CovidPositivity } from '../models/covidPositivity.model';
+import { CovidPositivityByGender } from '../models/covidPositivityByGender.model';
 
 
 
@@ -12,6 +13,7 @@ import { CovidPositivity } from '../models/covidPositivity.model';
 
 export class ReviewService {
   public BASE_URL  = 'http://localhost:8080/api/overview/findCovidPositivity';
+  public BASE_URL_BY_GENDER  = 'http://localhost:8080/api/overview/findCovidPositivityByGender';
   constructor(private http: HttpClient) {
   }
   findNumberEnrolledByFacility(): Observable<NumEnrolled[]> {
@@ -30,6 +32,15 @@ export class ReviewService {
       catchError(this.handleError)
     );
   }
+
+  findCovidPositivityByGender(): Observable<CovidPositivityByGender[]> {
+    console.log('In the service');
+    return this.http.get<CovidPositivityByGender[]>( `${this.BASE_URL_BY_GENDER }`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

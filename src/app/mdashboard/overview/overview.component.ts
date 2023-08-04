@@ -1,5 +1,6 @@
 import { ReviewService } from './../../services/review.service.ts.service';
 import { CovidPositivity } from './../../models/covidPositivity.model';
+import { CovidPositivityByGender } from './../../models/covidPositivityByGender.model';
 import { NumEnrolled } from './../../models/numEnrolled.model';
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
@@ -13,13 +14,17 @@ export class OverviewComponent implements OnInit{
 
   numberEnrolled: NumEnrolled[] = [];
   covidPositivity: CovidPositivity[] = [];
+  covidPositivityByGender: CovidPositivityByGender[] = [];
   positives: number = 0;
   negatives: number = 0;
+  female: number = 0;
+  male: number = 0;
   highcharts = Highcharts;
   highcharts1 = Highcharts;
   highcharts2 = Highcharts;
   highcharts3 = Highcharts;
   overallpositivitychartOptions: {} = {};
+  overallpositivitybygenderchartOptions: {} = {};
 
   constructor(private reviewService: ReviewService,) {
     //this.loadOverallPositivity();
@@ -27,6 +32,8 @@ export class OverviewComponent implements OnInit{
   ngOnInit() {
     this.loadCovidPositivityData();
     this.loadCovidPositivitychat();
+    this.loadCovidPositivityByGenderData();
+    this.loadCovidPositivityByGenderchart();
   }
   loadCovidPositivityData() {
     this.reviewService.findCovidPositivity().subscribe(
@@ -74,6 +81,50 @@ export class OverviewComponent implements OnInit{
           },
         },
       },
+    };
+    HC_exporting(Highcharts);
+  }
+
+  loadCovidPositivityByGenderData() {
+    this.reviewService.findCovidPositivityByGender().subscribe(
+      response => {
+        this.covidPositivityByGender = response;
+        this.female = this.covidPositivityByGender[0].Female;
+        this.male = this.covidPositivityByGender[0].Male;
+        this.loadCovidPositivityByGenderchart();
+      });
+  }
+  loadCovidPositivityByGenderchart() {
+    this.overallpositivitybygenderchartOptions = {
+
+        title: {
+            text: 'Covid 19 Positivity by Gender',
+            align: 'left'
+        },
+
+        chart: {
+            type: "pie",
+        },
+
+        colors: [
+            "#234FEA", // Color for Category 2
+            "#FC7500", // Color for Category 3
+        ],
+        series: [{
+
+            name: "Data",
+    
+            data: [{
+             name: 'Male',
+             y: this.male
+    
+            }, {
+             name: 'Female',
+              y: this.female
+            }
+          ],
+    
+          }],
     };
     HC_exporting(Highcharts);
   }
