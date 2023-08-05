@@ -10,10 +10,10 @@ import { HttpClientModule } from '@angular/common/http'; // Use HTTP import
 import { RouterModule, Routes } from '@angular/router';
 
 const appRoute: Routes = [
+  {path:'', component:OverviewComponent},
   {path:'Covid 19 Results', component:Covid19resultsComponent},
   {path:'Enrollment', component:EnrolledComponent},
   {path:'Screening', component:ScreenedComponent},
-  {path:'Overview', component:OverviewComponent}
 ]
 
 @NgModule({
