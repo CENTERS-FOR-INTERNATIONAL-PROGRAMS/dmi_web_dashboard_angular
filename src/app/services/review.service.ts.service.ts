@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { NumEnrolled } from '../models/numEnrolled.model';
 import { CovidPositivity } from '../models/covidPositivity.model';
-import { CovidPositivityOvertime } from '../models/covidPositivityOverTime.model';
+import { CovidPositivityOverTime } from '../models/covidPositivityOverTime.model';
 import { CovidPositivityByAgeGender } from '../models/covidPositivityByAgeGender.model';
 
 @Injectable({
@@ -34,9 +34,9 @@ export class ReviewService {
     );
   }
 
-  findCovidPositivityOvertime(): Observable<CovidPositivityOvertime[]> {
+  findCovidPositivityOvertime(): Observable<CovidPositivityOverTime[]> {
     console.log('In the service');
-    return this.http.get<CovidPositivityOvertime[]>(`${this.BASE_URL1}`).pipe(
+    return this.http.get<CovidPositivityOverTime[]>(`${this.BASE_URL1}`).pipe(
       retry(1),
       catchError(this.handleError)
     );
