@@ -1,6 +1,6 @@
 import { ReviewService } from './../../services/review.service.ts.service';
 import { CovidPositivity } from './../../models/covidPositivity.model';
-import { CovidPositivityOvertime } from './../../models/covidPositivityOverTime.model';
+import { CovidPositivityOverTime } from './../../models/covidPositivityOverTime.model';
 import { CovidPositivityByAgeGender } from './../../models/covidPositivityByAgeGender.model';
 import { NumEnrolled } from './../../models/numEnrolled.model';
 import { Component, OnInit } from '@angular/core';
@@ -18,7 +18,7 @@ export class OverviewComponent implements OnInit {
     covidPositivity: CovidPositivity[] = [];
 
     //#region Prerequisites --> COVID-19 positivity overtime
-    covid19PositivityOvertime: CovidPositivityOvertime[] = [];
+    covid19PositivityOvertime: CovidPositivityOverTime[] = [];
     covid19PositivityOvertimeSeries: any[][] = [];
     covid19PositivityOvertimeOptions: {} = {};
     //#endregion
@@ -330,7 +330,7 @@ export class OverviewComponent implements OnInit {
            //     data: [1, 2,],
            //     type: 'pie'
            // }],
-   
+
            plotOptions: {
                pie: {
                    innerSize: "70%", // Adjust the innerSize to control the size of the inner hole (donut hole)
@@ -396,5 +396,8 @@ export class OverviewComponent implements OnInit {
                 ], // Replace with your data values
             },
         ],
+        credits: {
+          enabled: false
+      },
     };
 }

@@ -11,7 +11,7 @@ import { CovidPositivityByAgeGender } from '../models/covidPositivityByAgeGender
 })
 
 export class ReviewService {
-  public BASE_URL = 'http://localhost:8080/api/overview/findCovidPositivity';
+  public BASE_URL = 'http://localhost:8080/api/overview/findCovid19Positivity';
   public BASE_URL1 = 'http://localhost:8080/api/overview/findCovid19OverTime';
   public BASE_URL3 = 'http://localhost:8080/api/overview/findCovid19PositivityByAgeGender';
 
