@@ -94,18 +94,16 @@ covid19resultsagainstenrollmentperfacilitychartOptions: Highcharts.Options = {
       }
   },
   series: [{
-      name: 'BPL',
+      name: 'Positive',
       data: [3, 5, 1, 13],
-      type:'column'
+      type:'column',
+      color:'#FF0000'
   }, {
-      name: 'FA Cup',
+      name: 'Negative',
       data: [14, 8, 8, 12],
-      type:'column'
-  }, {
-      name: 'CL',
-      data: [0, 2, 6, 3],
-      type:'column'
-  }]
+      type:'column',
+      color:'#008000'
+  }, ]
 }
 
 
