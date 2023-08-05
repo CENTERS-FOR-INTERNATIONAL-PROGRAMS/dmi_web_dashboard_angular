@@ -8,6 +8,7 @@
     </p>
 
     <div class="overViewRow">
+        <router-outlet> </router-outlet>
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Total Screened</h5>
@@ -38,26 +39,25 @@
                 <span>80 last month</span>
             </div>
         </div>
-        <highcharts-chart [Highcharts]="Highcharts" [options]="overallpositivitychartOptions"
+        <highcharts-chart [Highcharts]="highcharts" [options]="overallpositivitychartOptions"
             style="width: 100%; height: 400px; display: block"></highcharts-chart>
     </div>
     <div class="covidCharts">
         <div>
-            <highcharts-chart [Highcharts]="Highcharts" [options]="covid19positivitybygenderchartOptions"
+            <highcharts-chart [Highcharts]="highcharts" [options]="covid19positivitybygenderchartOptions"
                 style="width: 100%; height: 400px; display: block;"></highcharts-chart>
         </div>
         <div>
-            <highcharts-chart [Highcharts]="Highcharts" [options]="positivityovertimechartOptions"
+            <highcharts-chart [Highcharts]="highcharts2" [options]="covid19PositivityByAgeGenderOptions"
                 style="width: 100%; height: 400px; display: block;"></highcharts-chart>
         </div>
         <div>
-            <highcharts-chart [Highcharts]="Highcharts" [options]="overallpositivitybyfacilitychartOptions"
+            <highcharts-chart [Highcharts]="highcharts2" [options]="overallpositivitybyfacilitychartOptions"
                 style="width: 100%; height: 400px; display: block;"></highcharts-chart>
         </div>
         <div>
-            <highcharts-chart [Highcharts]="Highcharts" [options]="positivitybyageandgenderchartOptions"
+            <highcharts-chart [Highcharts]="highcharts1" [options]="covid19PositivityOvertimeOptions"
                 style="width: 100%; height: 400px; display: block;"></highcharts-chart>
         </div>
-
     </div>
 </div>

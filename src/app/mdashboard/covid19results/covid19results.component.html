@@ -10,13 +10,27 @@
             <highcharts-chart [Highcharts]="Highcharts" [options]="covid19resultsagainstenrollmentperfacilitychartOptions"
                 style="width: 100%; height: 400px; display: block"></highcharts-chart>
         </div>
-        <div>
-            <highcharts-chart [Highcharts]="Highcharts" [options]="covid19positivitybygenderchartOptions"
-                style="width: 100%; height: 400px; display: block"></highcharts-chart>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Enrolled & Tested</h5>
+                <hr>
+                <h3>94</h3>
+            </div>
+            <div class="card-footer">
+                <span>80 last month</span>
+            </div>
+        </div>
+    </div>
+    <div class="covidCharts"> -->
+        <!-- <div>
+            <highcharts-chart [Highcharts]="Highcharts" [options]="enrolledandtestedchartOptions"
+                style="width: 100%; height: 400px; display: block;"></highcharts-chart>
         </div>
         <div>
             <highcharts-chart [Highcharts]="Highcharts" [options]="covid19positivitybyageandgenderchartOptions"
                 style="width: 100%; height: 400px; display: block"></highcharts-chart>
+            <highcharts-chart [Highcharts]="Highcharts" [options]="covid19PositivityOvertimeOptions"
+                style="width: 100%; height: 400px; display: block;"></highcharts-chart>
         </div>
 
     </div>
