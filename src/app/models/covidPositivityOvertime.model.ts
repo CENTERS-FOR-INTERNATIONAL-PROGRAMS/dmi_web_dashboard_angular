@@ -1,5 +1,5 @@
-export interface CovidPositivityOvertime {
-  EpiWeek: number;
-  SampleTested: Number;
+export interface CovidPositivityOverTime {
+  SampleTested: number;
   CovidPositive: number;
+  EpiWeek : number;
 }
