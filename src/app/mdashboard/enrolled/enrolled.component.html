@@ -2,23 +2,22 @@
     <h5>Enrollment</h5>
     <div class="enrolledCharts">
         <div>
-            <highcharts-chart [Highcharts]="Highcharts" [options]="enrollmentbygenderchartOptions"
+            <highcharts-chart [Highcharts]="Highcharts" [options]="enrollmentByGenderOptions"
                 style="width: 100%; height: 400px; display: block"></highcharts-chart>
         </div>
 
         <div class="enrollCharts">
-            <highcharts-chart [Highcharts]="Highcharts" [options]="enrollmentbyageandgenderchartOptions"
+            <highcharts-chart [Highcharts]="Highcharts" [options]="enrollmentByAgeGenderOptions"
                 style="width: 100%; height: 400px; display: block"></highcharts-chart>
         </div>
         <div>
-            <highcharts-chart [Highcharts]="Highcharts" [options]="enrollmentbyhealthfacilitiesrchartOptions"
+            <highcharts-chart [Highcharts]="Highcharts" [options]="enrollmentByFacilityOptions"
                 style="width: 100%; height: 400px; display: block"></highcharts-chart>
         </div>
         <div>
-            <highcharts-chart [Highcharts]="Highcharts" [options]="enrollmentovertimechartOptions"
+            <highcharts-chart [Highcharts]="Highcharts" [options]="enrollmentByEpiWeekOptions"
                 style="width: 100%; height: 400px; display: block"></highcharts-chart>
         </div>
 
     </div>
 </div>
-
