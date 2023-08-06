@@ -14,6 +14,11 @@ import { EnrollmentByAgeGender } from '../models/enrollmentByAgeGender.model';
 import { EnrollmentByFacility } from '../models/enrollmentByFacility.model';
 import { EnrollmentByEpiWeek } from '../models/enrollmentByEpiWeek.model';
 
+import { ScreeningByGender } from '../models/screeningByGender.model';
+import { ScreeningByAgeGender } from '../models/screeningByAgeGender.model';
+import { ScreeningByFacility } from '../models/screeningByFacility.model';
+import { ScreeningByOverTime } from '../models/screeningByOvertime.model';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,6 +35,14 @@ export class ReviewService {
   public BASE_URLE2 = 'http://localhost:8080/api/enrollment/findEnrollmentByAgeGender';
   public BASE_URLE3 = 'http://localhost:8080/api/enrollment/findEnrollmentByFacility';
   public BASE_URLE4 = 'http://localhost:8080/api/enrollment/findEnrollmentByEpiWeek';
+
+
+  //Screening --//
+  public BASE_URLES1 = 'http://localhost:8080/api/screening//findScreeningByGender';
+  public BASE_URLES2 = 'http://localhost:8080/api/screening/findScreeningByAgeGender';
+  public BASE_URLES3 = 'http://localhost:8080/api/screening/findScreeningByHealthFacilities';
+  public BASE_URLES4 = 'http://localhost:8080/api/screening/findScreeningOverTime';
+
 
   constructor(private http: HttpClient) {
   }
@@ -104,6 +117,36 @@ export class ReviewService {
   
   findEnrollmentByEpiWeek(): Observable<EnrollmentByEpiWeek[]> {
     return this.http.get<EnrollmentByEpiWeek[]>(`${this.BASE_URLE4}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  //#endregion
+
+  //#region Screening
+  findScreeningByGender(): Observable<ScreeningByGender[]> {
+    return this.http.get<ScreeningByGender[]>(`${this.BASE_URLES1}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
+  findScreeningByAgeGender(): Observable<ScreeningByAgeGender[]> {
+    return this.http.get<ScreeningByAgeGender[]>(`${this.BASE_URLES2}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
+  findScreeningByFacility(): Observable<ScreeningByFacility[]> {
+    return this.http.get<ScreeningByFacility[]>(`${this.BASE_URLES3}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
+  findScreeningByOvertime(): Observable<ScreeningByOverTime[]> {
+    return this.http.get<ScreeningByOverTime[]>(`${this.BASE_URLES4}`).pipe(
       retry(1),
       catchError(this.handleError)
     );
