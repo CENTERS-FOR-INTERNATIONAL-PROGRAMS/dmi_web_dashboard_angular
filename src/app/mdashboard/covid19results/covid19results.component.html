@@ -2,14 +2,15 @@
     <h5>COVID-19 Results</h5>
     <div class="covid19resultsCharts">
         <div>
-            <highcharts-chart [Highcharts]="Highcharts" [options]="overallpositivitychartOptions"
+            <highcharts-chart [Highcharts]="Highcharts" [options]="covid19ResultsByStatusOptions"
                 style="width: 100%; height: 400px; display: block"></highcharts-chart>
         </div>
 
-        <div class="covid19resultsCharts">
-            <highcharts-chart [Highcharts]="Highcharts" [options]="covid19resultsagainstenrollmentperfacilitychartOptions"
+        <div>
+            <highcharts-chart [Highcharts]="Highcharts" [options]="covid19ResultsByFacilityOptions"
                 style="width: 100%; height: 400px; display: block"></highcharts-chart>
         </div>
+
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Enrolled & Tested</h5>
@@ -22,8 +23,8 @@
         </div>
     </div>
     <div class="covidCharts">
-</div>
-<!-- <div>
+    </div>
+    <!-- <div>
          <div>
             <highcharts-chart [Highcharts]="Highcharts" [options]="enrolledandtestedchartOptions"
                 style="width: 100%; height: 400px; display: block;"></highcharts-chart>
