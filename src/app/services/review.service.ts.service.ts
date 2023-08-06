@@ -5,10 +5,14 @@ import { NumEnrolled } from '../models/numEnrolled.model';
 import { CovidPositivity } from '../models/covidPositivity.model';
 import { CovidPositivityOvertime } from '../models/covidPositivityOverTime.model';
 import { CovidPositivityByAgeGender } from '../models/covidPositivityByAgeGender.model';
+
 import { EnrollmentByGender } from '../models/enrollmentByGender.model';
 import { EnrollmentByAgeGender } from '../models/enrollmentByAgeGender.model';
 import { EnrollmentByFacility } from '../models/enrollmentByFacility.model';
 import { EnrollmentByEpiWeek } from '../models/enrollmentByEpiWeek.model';
+
+import { Covid19ResultsByStatus } from '../models/covid19ResultsByStatus.model';
+import { Covid19ResultsByFacility } from '../models/covid19ResultsByFacility.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +26,9 @@ export class ReviewService {
   public BASE_URLE2 = 'http://localhost:8080/api/enrollment/findEnrollmentByAgeGender';
   public BASE_URLE3 = 'http://localhost:8080/api/enrollment/findEnrollmentByFacility';
   public BASE_URLE4 = 'http://localhost:8080/api/enrollment/findEnrollmentByEpiWeek';
+
+  public BASE_URLR1 = 'http://localhost:8080/api/results/findCovid19ResultsByStatus';
+  public BASE_URLR2 = 'http://localhost:8080/api/results/findCovid19ResultsByFacility';
 
   constructor(private http: HttpClient) {
   }
@@ -65,23 +72,39 @@ export class ReviewService {
       catchError(this.handleError)
     );
   }
-  
+
   findEnrollmentByAgeGender(): Observable<EnrollmentByAgeGender[]> {
     return this.http.get<EnrollmentByAgeGender[]>(`${this.BASE_URLE2}`).pipe(
       retry(1),
       catchError(this.handleError)
     );
   }
-  
+
   findEnrollmentByFacility(): Observable<EnrollmentByFacility[]> {
     return this.http.get<EnrollmentByFacility[]>(`${this.BASE_URLE3}`).pipe(
       retry(1),
       catchError(this.handleError)
     );
   }
-  
+
   findEnrollmentByEpiWeek(): Observable<EnrollmentByEpiWeek[]> {
     return this.http.get<EnrollmentByEpiWeek[]>(`${this.BASE_URLE4}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  //#endregion
+
+  //#region Results
+  findCovid19ResultsByStatus(): Observable<Covid19ResultsByStatus[]> {
+    return this.http.get<Covid19ResultsByStatus[]>(`${this.BASE_URLR1}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
+  findCovid19ResultsByFacility(): Observable<Covid19ResultsByFacility[]> {
+    return this.http.get<Covid19ResultsByFacility[]>(`${this.BASE_URLR2}`).pipe(
       retry(1),
       catchError(this.handleError)
     );

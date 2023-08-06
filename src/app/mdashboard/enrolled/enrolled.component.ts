@@ -12,6 +12,7 @@ import { EnrollmentByEpiWeek } from 'src/app/models/enrollmentByEpiWeek.model';
     templateUrl: './enrolled.component.html',
     styleUrls: ['./enrolled.component.css']
 })
+
 export class EnrolledComponent {
     //#region Prerequisites --> Enrolled by Gender
     enrollmentByGender: EnrollmentByGender[] = [];
@@ -131,17 +132,34 @@ export class EnrolledComponent {
 
                 //#region Push series data into array at specific indexes
                 this.enrollmentByAgeGenderSeries[0].forEach(ageGroupInstance => {
-                    this.enrollmentByAgeGender.forEach(dataInstance => {
-                        //Compile Male Positivity
-                        if ((dataInstance.AgeGroup == ageGroupInstance) && (dataInstance.Gender == "Female")) {
-                            this.enrollmentByAgeGenderSeries[1].push(dataInstance.Enrolled);
-                        }
+                    //Compile Female Positivity
+                    let female_found = false;
+                    let male_found = false;
 
-                        //Compile Female Positivity
-                        if ((dataInstance.AgeGroup == ageGroupInstance) && (dataInstance.Gender == "Male")) {
-                            this.enrollmentByAgeGenderSeries[2].push(dataInstance.Enrolled * -1);
+                    this.enrollmentByAgeGender.forEach(dataInstance => {
+                        if (dataInstance.AgeGroup == ageGroupInstance) {
+                            if (dataInstance.Gender == "Female") {
+                                this.enrollmentByAgeGenderSeries[1].push(dataInstance.Enrolled);
+                                female_found = true;
+                            }
+
+                            //Compile Male Positivity
+                            else if (dataInstance.Gender == "Male") {
+                                this.enrollmentByAgeGenderSeries[2].push(dataInstance.Enrolled * -1);
+                                male_found = true;
+                            }
                         }
                     });
+
+                    if (!female_found) {
+                        this.enrollmentByAgeGenderSeries[1].push(0);
+                        console.log(ageGroupInstance, "!Female");
+                    }
+
+                    if (!male_found) {
+                        this.enrollmentByAgeGenderSeries[2].push(0);
+                        console.log(ageGroupInstance, "!Male");
+                    }
                 });
                 //#endregion
 
