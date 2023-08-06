@@ -2,7 +2,7 @@ import { ReviewService } from './../../services/review.service.ts.service';
 import { CovidPositivity } from './../../models/covidPositivity.model';
 import { Covid19PositivityByGender } from './../../models/covid19PositivityByGender.model';
 import { Covid19OverallPositivityByFacility } from './../../models/covid19OverallPositivityByFacility.model';
-import { CovidPositivityOvertime } from './../../models/covidPositivityOverTime.model';
+import { CovidPositivityOvertime } from './../../models/covidPositivityOvertime.model';
 import { CovidPositivityByAgeGender } from './../../models/covidPositivityByAgeGender.model';
 import { NumEnrolled } from './../../models/numEnrolled.model';
 import { Component, OnInit } from '@angular/core';

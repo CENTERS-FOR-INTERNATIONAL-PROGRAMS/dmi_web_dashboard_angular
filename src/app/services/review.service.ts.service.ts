@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { NumEnrolled } from '../models/numEnrolled.model';
 import { CovidPositivity } from '../models/covidPositivity.model';
-mport { CovidPositivityOvertime } from '../models/covidPositivityOverTime.model';
+import { CovidPositivityOvertime } from '../models/covidPositivityOvertime.model';
 import { CovidPositivityByAgeGender } from '../models/covidPositivityByAgeGender.model';
 import { Covid19PositivityByGender } from '../models/covid19PositivityByGender.model';
 import { Covid19OverallPositivityByFacility } from '../models/covid19OverallPositivityByFacility.model';
