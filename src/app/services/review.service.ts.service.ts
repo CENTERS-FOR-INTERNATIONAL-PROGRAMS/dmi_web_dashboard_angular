@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { NumEnrolled } from '../models/numEnrolled.model';
 import { CovidPositivity } from '../models/covidPositivity.model';
+mport { CovidPositivityOvertime } from '../models/covidPositivityOverTime.model';
+import { CovidPositivityByAgeGender } from '../models/covidPositivityByAgeGender.model';
 import { Covid19PositivityByGender } from '../models/covid19PositivityByGender.model';
 import { Covid19OverallPositivityByFacility } from '../models/covid19OverallPositivityByFacility.model';
 
@@ -14,22 +16,32 @@ import { Covid19OverallPositivityByFacility } from '../models/covid19OverallPosi
 
 export class ReviewService {
   public BASE_URL  = 'http://localhost:8080/api/overview/findCovid19Positivity';
+  public BASE_URL1 = 'http://localhost:8080/api/overview/findCovid19OverTime';
+  public BASE_URL3 = 'http://localhost:8080/api/overview/findCovid19PositivityByAgeGender';
   public BASE_URL_BY_GENDER  = 'http://localhost:8080/api/overview/findCovid19PositivityByGender';
   public BASE_URL_BY_FACILITY  = 'http://localhost:8080/api/overview/findCovid19OverallPositivityByFacility';
+
   constructor(private http: HttpClient) {
   }
+
   findNumberEnrolledByFacility(): Observable<NumEnrolled[]> {
     console.log('In the service');
-    return this.http.get<NumEnrolled[]>( `${this.BASE_URL }`).pipe(
+    return this.http.get<NumEnrolled[]>(`${this.BASE_URL}`).pipe(
       retry(1),
       catchError(this.handleError)
     );
-
   }
 
   findCovidPositivity(): Observable<CovidPositivity[]> {
     console.log('In the service');
-    return this.http.get<CovidPositivity[]>( `${this.BASE_URL }`).pipe(
+    return this.http.get<CovidPositivity[]>(`${this.BASE_URL}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  findCovidPositivityOvertime(): Observable<CovidPositivityOvertime[]> {
+    console.log('In the service');
+    return this.http.get<CovidPositivityOvertime[]>(`${this.BASE_URL1}`).pipe(
       retry(1),
       catchError(this.handleError)
     );
@@ -49,7 +61,14 @@ export class ReviewService {
       catchError(this.handleError)
     );
   }
-
+  findCovid19PositivityByAgeGender(): Observable<CovidPositivityByAgeGender[]> {
+    console.log('In the service');
+    return this.http.get<CovidPositivityByAgeGender[]>(`${this.BASE_URL3}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -64,5 +83,4 @@ export class ReviewService {
     // return an observable with a user-facing error message
     return throwError('Something bad happened. Please try again later.');
   }
-
 }
