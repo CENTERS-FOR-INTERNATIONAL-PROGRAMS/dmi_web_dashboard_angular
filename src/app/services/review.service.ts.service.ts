@@ -9,17 +9,27 @@ import { Covid19PositivityByGender } from '../models/covid19PositivityByGender.m
 import { Covid19OverallPositivityByFacility } from '../models/covid19OverallPositivityByFacility.model';
 
 
+import { EnrollmentByGender } from '../models/enrollmentByGender.model';
+import { EnrollmentByAgeGender } from '../models/enrollmentByAgeGender.model';
+import { EnrollmentByFacility } from '../models/enrollmentByFacility.model';
+import { EnrollmentByEpiWeek } from '../models/enrollmentByEpiWeek.model';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class ReviewService {
+  // Overview -- //
   public BASE_URL  = 'http://localhost:8080/api/overview/findCovid19Positivity';
   public BASE_URL1 = 'http://localhost:8080/api/overview/findCovid19OverTime';
   public BASE_URL3 = 'http://localhost:8080/api/overview/findCovid19PositivityByAgeGender';
   public BASE_URL_BY_GENDER  = 'http://localhost:8080/api/overview/findCovid19PositivityByGender';
   public BASE_URL_BY_FACILITY  = 'http://localhost:8080/api/overview/findCovid19OverallPositivityByFacility';
+  // Enrollment --//
+  public BASE_URLE1 = 'http://localhost:8080/api/enrollment/findEnrollmentByGender';
+  public BASE_URLE2 = 'http://localhost:8080/api/enrollment/findEnrollmentByAgeGender';
+  public BASE_URLE3 = 'http://localhost:8080/api/enrollment/findEnrollmentByFacility';
+  public BASE_URLE4 = 'http://localhost:8080/api/enrollment/findEnrollmentByEpiWeek';
 
   constructor(private http: HttpClient) {
   }
@@ -32,7 +42,7 @@ export class ReviewService {
     );
   }
 
-  findCovidPositivity(): Observable<CovidPositivity[]> {
+  findCovid19Positivity(): Observable<CovidPositivity[]> {
     console.log('In the service');
     return this.http.get<CovidPositivity[]>(`${this.BASE_URL}`).pipe(
       retry(1),
@@ -69,6 +79,37 @@ export class ReviewService {
     );
   }
   
+
+  //#region Enrollment
+  findEnrollmentByGender(): Observable<EnrollmentByGender[]> {
+    return this.http.get<EnrollmentByGender[]>(`${this.BASE_URLE1}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
+  findEnrollmentByAgeGender(): Observable<EnrollmentByAgeGender[]> {
+    return this.http.get<EnrollmentByAgeGender[]>(`${this.BASE_URLE2}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
+  findEnrollmentByFacility(): Observable<EnrollmentByFacility[]> {
+    return this.http.get<EnrollmentByFacility[]>(`${this.BASE_URLE3}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
+  findEnrollmentByEpiWeek(): Observable<EnrollmentByEpiWeek[]> {
+    return this.http.get<EnrollmentByEpiWeek[]>(`${this.BASE_URLE4}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  //#endregion
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
