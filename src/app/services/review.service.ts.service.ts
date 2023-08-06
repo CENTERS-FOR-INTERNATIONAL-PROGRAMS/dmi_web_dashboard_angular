@@ -33,7 +33,7 @@ export class ReviewService {
 
   constructor(private http: HttpClient) {
   }
-
+  //#region Overview
   findNumberEnrolledByFacility(): Observable<NumEnrolled[]> {
     console.log('In the service');
     return this.http.get<NumEnrolled[]>(`${this.BASE_URL}`).pipe(

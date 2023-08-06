@@ -20,9 +20,11 @@ export class OverviewComponent implements OnInit {
 
     //#region Prerequisites --> COVID-19 Positivity
     //Positivity --
-  covid19Positivity: CovidPositivity[] = [];
+    covid19Positivity: CovidPositivity[] = [];
     covid19PositivitySeries: any[] = [];
     covid19PositivityOptions: {} = {};
+    //overallpositivitychartOptions: {} = {};
+    
     //#endregion
 
     //#region Prerequisites --> COVID-19 positivity overtime
@@ -36,27 +38,26 @@ export class OverviewComponent implements OnInit {
     covid19PositivityByAgeGenderSeries: any[][] = [];
     covid19PositivityByAgeGenderOptions: {} = {};
     //#endregion
+
      // Overall Positivity By Facility----
    covid19OverallPositivityByFacility: Covid19OverallPositivityByFacility[]= [];
    covid19OverallPositivityByFacilitySeries: any[][] = [];
-   Facility: number = 0;
+   overallpositivitybyfacilitychartOptions: {} = {};
    // ---
 
     // Positivity By Gender----
-  covid19PositivityByGender: Covid19PositivityByGender[]= [];
-  covid19PositivityByGenderSeries: any[] = [];
-  Gender: number = 0;
-  PositiveNumber: number = 0;
-  // ---
+      covid19PositivityByGender: Covid19PositivityByGender[]= [];
+      covid19PositivityByGenderSeries: any[] = [];
+      overallpositivitybygenderchartOptions: {} = {};
+    // ---
+
     positives: number = 0;
     negatives: number = 0;
     highcharts = Highcharts;
     highcharts1 = Highcharts;
     highcharts2 = Highcharts;
     highcharts3 = Highcharts;
-  overallpositivitybygenderchartOptions: {} = {};
-  overallpositivitybyfacilitychartOptions: {} = {};
-  overallpositivitychartOptions: {} = {};
+    
 
     constructor(private reviewService: ReviewService,) {
         //this.loadOverallPositivity();
@@ -76,7 +77,7 @@ export class OverviewComponent implements OnInit {
         this.loadCovid19PositivityByAgeGenderChart();
 
         this.loadCovid19OverallPositivityByFacilityData();
-        this.loadCovid19OverallPositivityByFacilityChat();
+        this.loadCovid19OverallPositivityByFacilityChart();
   }
   loadCovid19OverallPositivityByFacilityData() {
     this.reviewService.findCovid19OverallPositivityByFacility().subscribe(
@@ -87,19 +88,19 @@ export class OverviewComponent implements OnInit {
         this.covid19OverallPositivityByFacilitySeries.push([]);
         // Positive Numbers (index --> 1)
         this.covid19OverallPositivityByFacilitySeries.push([]);
-
+        //#region Push series data into array at specific indexes
         this.covid19OverallPositivityByFacility.forEach(dataInstance => {
             this.covid19OverallPositivityByFacilitySeries[0].push(dataInstance.Facility);
             this.covid19OverallPositivityByFacilitySeries[1].push(dataInstance.PositiveNumber); 
         });
-      });
 
-      this.loadCovid19OverallPositivityByFacilityChat();
+      this.loadCovid19OverallPositivityByFacilityChart();
+      });
 
   }
 
   
-loadCovid19OverallPositivityByFacilityChat() {
+loadCovid19OverallPositivityByFacilityChart() {
   this.overallpositivitybyfacilitychartOptions = {
     title: {
       text: 'Overall Positivity By Facility',
@@ -109,7 +110,7 @@ loadCovid19OverallPositivityByFacilityChat() {
       // type: "column",
     },
     xAxis: {
-      categories: [this.covid19OverallPositivityByFacilitySeries[0]], // Replace with your categories
+      categories: this.covid19OverallPositivityByFacilitySeries[0], // Replace with your categories
     },
     yAxis: {
       title: {
@@ -133,17 +134,17 @@ loadCovid19OverallPositivityByFacilityChat() {
         this.reviewService.findCovid19PositivityByGender().subscribe(
             response => {
                 this.covid19PositivityByGender = response;
-
-                //#region Push series data into array at specific indexes
                 this.covid19PositivityByGender.forEach(dataInstance => {
-                    // Gender (Index --> 0)
-                    this.covid19PositivityByGenderSeries.push(dataInstance.Gender);
+                    if (dataInstance.Gender == "Male") {
+                        this.covid19PositivityByGenderSeries.push(dataInstance.PositiveNumber);
+                    }
 
-                    // Positive (Index --> 1)
-                    this.covid19PositivitySeries.push(dataInstance.PositiveNumber);
+                    else if (dataInstance.Gender == "Female") {
+                        this.covid19PositivityByGenderSeries.push(dataInstance.PositiveNumber);
+                    }
                 });
+                console.log(this.covid19PositivityByGenderSeries[0])
                 //#endregion
-
                 this.loadCovid19PositivityByGenderChart();
             });
     }
@@ -168,8 +169,8 @@ loadCovid19OverallPositivityByFacilityChat() {
                     name: "Data",
                     type: 'pie',
                     data: [
-                        ["Male", this.covid19PositivityByAgeGenderSeries[0]],
-                        ["Female",this.covid19PositivityByAgeGenderSeries[1]],
+                        ["Male", this.covid19PositivityByGenderSeries[0]],
+                        ["Female",this.covid19PositivityByGenderSeries[1]],
                     ], // Replace with your data values
                 },
             ],
