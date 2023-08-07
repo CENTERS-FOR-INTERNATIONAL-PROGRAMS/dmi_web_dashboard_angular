@@ -260,7 +260,7 @@ export class OverviewComponent implements OnInit {
     loadCovid19PositivityByAgeGenderChart() {
         this.covid19PositivityByAgeGenderOptions = {
             title: {
-                text: 'Covid-19 Positivity By Age and Gender',
+                text: '',
                 align: 'left',
             },
             chart: { type: "bar" },
@@ -374,7 +374,7 @@ export class OverviewComponent implements OnInit {
     covid19positivitybygenderchartOptions: Highcharts.Options = {
 
         title: {
-            text: 'Covid 19 Positivity by Gender',
+            text: '',
             align: 'left'
         },
 
