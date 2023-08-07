@@ -1,13 +1,112 @@
+import { ReviewService } from './../../services/review.service.ts.service';
 import { Component } from '@angular/core';
 import * as Highcharts from 'highcharts';
+import HC_exporting from 'highcharts/modules/exporting';
+import { ScreeningByGender } from 'src/app/models/screeningByGender.model';
+import { ScreeningByAgeGender } from 'src/app/models/screeningByAgeGender.model';
+import { ScreeningByFacility } from 'src/app/models/screeningByFacility.model';
+import { ScreeningByOverTime } from 'src/app/models/screeningByOvertime.model';
 
 @Component({
     selector: 'app-screened',
     templateUrl: './screened.component.html',
     styleUrls: ['./screened.component.css']
 })
+
 export class ScreenedComponent {
-    Highcharts: typeof Highcharts = Highcharts;
+//#region Prerequisites --> Screening by Gender
+ScreeningByGender: ScreeningByGender[] = [];
+ScreeningByGenderSeries: any[] = [];
+screenedbygenderchartOptions: {} = {};
+//#endregion
+
+//#region Prerequisites --> Screening by Age and Gender
+ScreeningByAgeGender: ScreeningByAgeGender[] = [];
+ScreeningByAgeGenderSeries: any[][] = [];
+screeningbyageandgenderchartOptions: {} = {};
+//#endregion
+
+//#region Prerequisites --> Screening by Facility
+ScreeningByFacility: ScreeningByFacility[] = [];
+ScreeningByFacilitySeries: any[][] = [];
+screenedbyhealthfacilitieschartOptions: {} = {};
+//#endregion
+
+//#region Prerequisites --> Screening by Overtime
+ScreeningByOverTime: ScreeningByOverTime[] = [];
+ScreeningByOverTimeSeries: any[][] = [];
+screenedovertimechartOptions: {} = {};
+//#endregion
+
+constructor(private reviewService: ReviewService,) {
+    //this.loadOverallPositivity();
+}
+
+ngOnInit() {
+    this.loadScreeningByGenderData();
+    this.loadScreeningByGenderChart();
+
+    this.loadScreeningByAgeGenderData();
+    this.loadScreeningByAgeGenderChart();
+
+    this.loadScreeningByFacilityData();
+    this.loadScreeningByFacilityChart();
+
+    this.loadScreeningByOverTimeData();
+    this.loadScreeningByOverTimeChart();
+}
+
+//#region Load Chart --> Screening by Gender
+loadScreeningByGenderData() {
+    this.reviewService.findScreeningByGender().subscribe(
+        response => {
+            this.ScreeningByGender = response;
+
+            //#region Push series data into array at specific indexes
+            this.ScreeningByGender.forEach(dataInstance => {
+                if (dataInstance.Gender == "Male") {
+                    this.ScreeningByGenderSeries.push(dataInstance.Screened);
+                }
+
+                else if (dataInstance.Gender == "Female") {
+                    this.ScreeningByGenderSeries.push(dataInstance.Screened);
+                }
+            });
+            //#endregion
+
+            this.loadScreeningByGenderChart();
+        });
+}
+loadScreeningByGenderChart() {
+    this.screenedbygenderchartOptions = {
+        title: {
+            text: 'Screnned by Gender',
+            align: 'left'
+        },
+        chart: {
+            type: "pie",
+        },
+        colors: [
+            "#234FEA", // Color for Category 2
+            "#FC7500", // Color for Category 3
+        ],
+        series: [
+            {
+                name: "Data",
+                type: 'pie',
+                data: [
+                    ["Male", this.ScreeningByGenderSeries[0]],
+                    ["Female", this.ScreeningByGenderSeries[1]]
+                ]
+            }
+        ]
+    };
+
+    HC_exporting(Highcharts);
+}
+//#endregion
+
+    /*Highcharts: typeof Highcharts = Highcharts;
     screenedbygenderchartOptions: Highcharts.Options = {
         title: {
             text: 'Screnned by Gender',
@@ -33,9 +132,100 @@ export class ScreenedComponent {
             },
         ],
 
-    };
+    };*/
+    //#region Load Chart --> Screening by Age and Gender
+    loadScreeningByAgeGenderData() {
+        this.reviewService.findScreeningByAgeGender().subscribe(
+            response => {
+                this.ScreeningByAgeGender = response;
 
-    screeningbyageandgenderchartOptions: Highcharts.Options = {
+                //#region Init series indexes
+                // Age Group(Index --> 0)
+                this.ScreeningByAgeGenderSeries.push([]);
+                this.ScreeningByAgeGenderSeries[0].push("0-4 Yrs");
+                this.ScreeningByAgeGenderSeries[0].push("5-14 Yrs");
+                this.ScreeningByAgeGenderSeries[0].push("15-34 Yrs");
+                this.ScreeningByAgeGenderSeries[0].push("35-64 Yrs");
+                this.ScreeningByAgeGenderSeries[0].push("65-84 Yrs");
+                this.ScreeningByAgeGenderSeries[0].push("85+ Yrs");
+
+                //Positivity - Female (Index --> 1)
+                this.ScreeningByAgeGenderSeries.push([]);
+
+                //Positivity - Male (Index --> 2)
+                this.ScreeningByAgeGenderSeries.push([]);
+                //#endregion
+
+                //#region Push series data into array at specific indexes
+                this.ScreeningByAgeGenderSeries[0].forEach(ageGroupInstance => {
+                    this.ScreeningByAgeGender.forEach(dataInstance => {
+                        //Compile Male Positivity
+                        if ((dataInstance.AgeGroup == ageGroupInstance) && (dataInstance.Gender == "Female")) {
+                            this.ScreeningByAgeGenderSeries[1].push(dataInstance.Screened);
+                        }
+
+                        //Compile Female Positivity
+                        if ((dataInstance.AgeGroup == ageGroupInstance) && (dataInstance.Gender == "Male")) {
+                            this.ScreeningByAgeGenderSeries[2].push(dataInstance.Screened * -1);
+                        }
+                    });
+                });
+                //#endregion
+
+                this.loadScreeningByAgeGenderChart();
+            });
+    }
+    loadScreeningByAgeGenderChart() {
+        this.screeningbyageandgenderchartOptions = {
+            title: {
+                text: 'Screening By Age and Gender',
+                align: 'left',
+            },
+            chart: { type: "bar" },
+            xAxis: [
+                {
+                    categories: this.ScreeningByAgeGenderSeries[0],
+                    title: { text: "" },
+                    reversed: false
+                },
+                {
+                    categories: this.ScreeningByAgeGenderSeries[0],
+                    title: { text: "" },
+                    reversed: false,
+                    linkedTo: 0,
+                    opposite: true,
+                },
+            ],
+            yAxis: [
+                {
+                    title: {
+                        text: "Positivity"
+                    }
+                }
+            ],
+            plotOptions: { series: { stacking: "normal" }, bar: { pointWidth: 18 } },
+            tooltip: {
+            },
+            legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
+            series: [
+                {
+                    name: "Female",
+                    data: this.ScreeningByAgeGenderSeries[1],
+                    color: "#FC7500",
+                    type: 'bar'
+                },
+                {
+                    name: "Male",
+                    data: this.ScreeningByAgeGenderSeries[2],
+                    color: "#234FEA",
+                    type: 'bar'
+                },
+            ],
+        };
+    }
+    //#endregion
+
+    /*screeningbyageandgenderchartOptions: Highcharts.Options = {
 
         title: {
             text: 'Screened by age & Gender',
@@ -88,8 +278,66 @@ export class ScreenedComponent {
 
 
 
-    };
+    };*/
+     //#region Load Chart --> Screening by Facility
+     loadScreeningByFacilityData() {
+        this.reviewService.findScreeningByFacility().subscribe(
+            response => {
+                this.ScreeningByFacility = response;
 
+                //#region Init series indexes
+                // Facilities (Index --> 0)
+                this.ScreeningByFacilitySeries.push([]);
+
+                //Screening (Index --> 1)
+                this.ScreeningByFacilitySeries.push([]);
+                //#endregion
+
+                //#region Push series data into array at specific indexes
+                this.ScreeningByFacility.forEach(dataInstance => {
+                    //Compile Facilities
+                    this.ScreeningByFacilitySeries[0].push(dataInstance.Facility);
+
+                    //Compile Screenings
+                    this.ScreeningByFacilitySeries[1].push(dataInstance.Screened);
+                });
+                //#endregion
+
+                this.loadScreeningByFacilityChart();
+            });
+    }
+
+    loadScreeningByFacilityChart() {
+        this.screenedbyhealthfacilitieschartOptions = {
+            title: {
+                text: 'No screened at different health facilities',
+                align: 'left'
+            },
+            chart: {
+                type: "column",
+            },
+            xAxis: {
+                categories: this.ScreeningByFacilitySeries[0],
+                title: false
+            },
+            yAxis: {
+                title: {
+                    text: "Screening",
+                }
+            },
+            series: [
+                {
+                    showInLegend: false,
+                    name: "Health Facilities",
+                    data: this.ScreeningByFacilitySeries[1],
+                    type: 'column',
+                    color: "#234FEA",
+                }
+            ]
+        };
+    }
+    //#endregion
+    /*
     screenedbyhealthfacilitieschartOptions: Highcharts.Options = {
 
         title: {
@@ -100,7 +348,7 @@ export class ScreenedComponent {
             type: "column",
         },
         // title: {
-        // 	text: "Enrollment Cascade",
+        // 	text: "Screening Cascade",
         // },
         xAxis: {
             categories: ["Kenyatta National Hospital", "Busia County Referral", "Marsabit County ", "JOOTRH", "Makueni"], // Replace with your categories
@@ -121,9 +369,66 @@ export class ScreenedComponent {
         ],
 
 
+    };*/
+
+//#region Load Chart --> Screening by Overtime
+loadScreeningByOverTimeData() {
+    this.reviewService.findScreeningByOvertime().subscribe(
+        response => {
+            this.ScreeningByOverTime = response;
+
+            console.log(this.ScreeningByOverTime);
+
+            //#region Init series indexes
+            // EpiWeek (Index --> 0)
+            this.ScreeningByOverTimeSeries.push([]);
+
+            //Enrolled (Index --> 1)
+            this.ScreeningByOverTimeSeries.push([]);
+            //#endregion
+
+            //#region Push series data into array at specific indexes
+            this.ScreeningByOverTime.forEach(dataInstance => {
+                //Compile EpiWeek
+                this.ScreeningByOverTimeSeries[0].push(dataInstance.EpiWeek);
+
+                //Compile Screenings
+                this.ScreeningByOverTimeSeries[1].push(dataInstance.Screened);
+            });
+            //#endregion
+
+            this.loadScreeningByOverTimeChart();
+        });
+}
+
+loadScreeningByOverTimeChart() {
+    this.screenedovertimechartOptions = {
+        title: {
+            text: 'Screened over time',
+            align: 'left'
+        },
+        chart: {
+            type: "line"
+        },
+        xAxis: {
+            categories: this.ScreeningByOverTimeSeries[0],
+        },
+        yAxis: {
+            title: {
+                text: "Enrolled",
+            }
+        },
+        series: [
+            {
+                name: "Epi Week",
+                data: this.ScreeningByOverTimeSeries[1],
+                color: "#234FEA",
+            }
+        ]
     };
-
-
+}
+//#endregion
+    /*
     screenedovertimechartOptions: Highcharts.Options = {
 
         chart: {
@@ -213,7 +518,9 @@ export class ScreenedComponent {
             // accessibility: { point: { valueSuffix: '%' } },
 
         }]
-    };
+    };*/
+
+    Highcharts: typeof Highcharts = Highcharts;
 
 
 

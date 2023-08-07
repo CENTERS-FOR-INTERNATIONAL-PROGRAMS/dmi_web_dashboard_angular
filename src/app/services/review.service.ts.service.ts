@@ -2,37 +2,64 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import { NumEnrolled } from '../models/numEnrolled.model';
+
 import { CovidPositivity } from '../models/covidPositivity.model';
-import { CovidPositivityOvertime } from '../models/covidPositivityOverTime.model';
+import { CovidPositivityOvertime } from '../models/covidPositivityOvertime.model';
 import { CovidPositivityByAgeGender } from '../models/covidPositivityByAgeGender.model';
+
+import { Covid19PositivityByGender } from '../models/covid19PositivityByGender.model';
+import { Covid19OverallPositivityByFacility } from '../models/covid19OverallPositivityByFacility.model';
+
 
 import { EnrollmentByGender } from '../models/enrollmentByGender.model';
 import { EnrollmentByAgeGender } from '../models/enrollmentByAgeGender.model';
 import { EnrollmentByFacility } from '../models/enrollmentByFacility.model';
 import { EnrollmentByEpiWeek } from '../models/enrollmentByEpiWeek.model';
 
+
+import { ScreeningByGender } from '../models/screeningByGender.model';
+import { ScreeningByAgeGender } from '../models/screeningByAgeGender.model';
+import { ScreeningByFacility } from '../models/screeningByFacility.model';
+import { ScreeningByOverTime } from '../models/screeningByOvertime.model';
+
 import { Covid19ResultsByStatus } from '../models/covid19ResultsByStatus.model';
 import { Covid19ResultsByFacility } from '../models/covid19ResultsByFacility.model';
+
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class ReviewService {
-  public BASE_URL = 'http://localhost:8080/api/overview/findCovid19Positivity';
+  // Overview -- //
+  public BASE_URL  = 'http://localhost:8080/api/overview/findCovid19Positivity';
   public BASE_URL1 = 'http://localhost:8080/api/overview/findCovid19OverTime';
   public BASE_URL3 = 'http://localhost:8080/api/overview/findCovid19PositivityByAgeGender';
+  public BASE_URL_BY_GENDER  = 'http://localhost:8080/api/overview/findCovid19PositivityByGender';
+  public BASE_URL_BY_FACILITY  = 'http://localhost:8080/api/overview/findCovid19OverallPositivityByFacility';
+  
+  // Enrollment --//
   public BASE_URLE1 = 'http://localhost:8080/api/enrollment/findEnrollmentByGender';
   public BASE_URLE2 = 'http://localhost:8080/api/enrollment/findEnrollmentByAgeGender';
   public BASE_URLE3 = 'http://localhost:8080/api/enrollment/findEnrollmentByFacility';
   public BASE_URLE4 = 'http://localhost:8080/api/enrollment/findEnrollmentByEpiWeek';
 
+
+
+  //Screening --//
+  public BASE_URLES1 = 'http://localhost:8080/api/screening//findScreeningByGender';
+  public BASE_URLES2 = 'http://localhost:8080/api/screening/findScreeningByAgeGender';
+  public BASE_URLES3 = 'http://localhost:8080/api/screening/findScreeningByHealthFacilities';
+  public BASE_URLES4 = 'http://localhost:8080/api/screening/findScreeningOverTime';
+
+
   public BASE_URLR1 = 'http://localhost:8080/api/results/findCovid19ResultsByStatus';
   public BASE_URLR2 = 'http://localhost:8080/api/results/findCovid19ResultsByFacility';
 
+
   constructor(private http: HttpClient) {
   }
-
+  //#region Overview
   findNumberEnrolledByFacility(): Observable<NumEnrolled[]> {
     console.log('In the service');
     return this.http.get<NumEnrolled[]>(`${this.BASE_URL}`).pipe(
@@ -48,7 +75,6 @@ export class ReviewService {
       catchError(this.handleError)
     );
   }
-
   findCovidPositivityOvertime(): Observable<CovidPositivityOvertime[]> {
     console.log('In the service');
     return this.http.get<CovidPositivityOvertime[]>(`${this.BASE_URL1}`).pipe(
@@ -57,6 +83,20 @@ export class ReviewService {
     );
   }
 
+  findCovid19PositivityByGender(): Observable<Covid19PositivityByGender[]> {
+    console.log('In the service');
+    return this.http.get<Covid19PositivityByGender[]>( `${this.BASE_URL_BY_GENDER }`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
+  findCovid19OverallPositivityByFacility(): Observable<Covid19OverallPositivityByFacility[]> {
+    return this.http.get<Covid19OverallPositivityByFacility[]>( `${this.BASE_URL_BY_FACILITY }`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
   findCovid19PositivityByAgeGender(): Observable<CovidPositivityByAgeGender[]> {
     console.log('In the service');
     return this.http.get<CovidPositivityByAgeGender[]>(`${this.BASE_URL3}`).pipe(
@@ -64,6 +104,7 @@ export class ReviewService {
       catchError(this.handleError)
     );
   }
+  
 
   //#region Enrollment
   findEnrollmentByGender(): Observable<EnrollmentByGender[]> {
@@ -95,9 +136,39 @@ export class ReviewService {
   }
   //#endregion
 
+  //#region Screening
+  findScreeningByGender(): Observable<ScreeningByGender[]> {
+    return this.http.get<ScreeningByGender[]>(`${this.BASE_URLES1}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
   //#region Results
   findCovid19ResultsByStatus(): Observable<Covid19ResultsByStatus[]> {
     return this.http.get<Covid19ResultsByStatus[]>(`${this.BASE_URLR1}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
+  
+  findScreeningByAgeGender(): Observable<ScreeningByAgeGender[]> {
+    return this.http.get<ScreeningByAgeGender[]>(`${this.BASE_URLES2}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
+  findScreeningByFacility(): Observable<ScreeningByFacility[]> {
+    return this.http.get<ScreeningByFacility[]>(`${this.BASE_URLES3}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
+  findScreeningByOvertime(): Observable<ScreeningByOverTime[]> {
+    return this.http.get<ScreeningByOverTime[]>(`${this.BASE_URLES4}`).pipe(
       retry(1),
       catchError(this.handleError)
     );
