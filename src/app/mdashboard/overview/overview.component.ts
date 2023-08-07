@@ -640,7 +640,7 @@ loadCovid19OverallPositivityByFacilityChart() {
     /*covid19positivitybygenderchartOptions: Highcharts.Options = {
 
         title: {
-            text: 'Covid 19 Positivity by Gender',
+            text: '',
             align: 'left'
         },
 

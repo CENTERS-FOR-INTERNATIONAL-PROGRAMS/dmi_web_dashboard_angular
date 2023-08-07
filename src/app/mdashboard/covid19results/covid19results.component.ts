@@ -191,4 +191,87 @@ export class Covid19resultsComponent {
     //#endregion
 
     Highcharts: typeof Highcharts = Highcharts;
+
+    covid19positivitybygenderchartOptions: Highcharts.Options = {
+   
+        chart: {
+			type: "pie",
+		},
+		title: {
+			text: "Enrollment By Sex",
+		},
+		colors: [
+			"#234FEA", // Color for Category 2
+			"#FC7500", // Color for Category 3
+		],
+		series: [
+			{
+				name: "Data",
+                type: 'pie',
+				data: [
+					["Male", 20],
+					["Female", 30],
+				], // Replace with your data values
+			},
+		],
+     
+        
+
+
+    }
+
+
+
+
+    covid19positivitybyageandgenderchartOptions: Highcharts.Options = {
+   
+        chart: { type: "bar" },
+		title: { text: "Participant Distribution by Age, Sex" },
+		xAxis: [
+			{ categories: ["0-4 yrs","5-9 yrs","15-34 yrs"],
+            title: { text: "" }, reversed: false },
+			{
+                categories: ["0-4 yrs","5-9 yrs","15-34 yrs"],
+                title: { text: "" },
+                reversed: false,
+                linkedTo: 0,
+                opposite: true,
+            },
+		],
+		yAxis: [
+			{
+                // labels: {
+                //     formatter: function () {
+                //         return Math.abs(this.value).toString();
+                //     },
+                // },
+            },
+		],
+		plotOptions: { series: { stacking: "normal" }, bar: { pointWidth: 18 } },
+		tooltip: {
+		},
+		legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
+		series: [
+			{ name: "Female", 
+            data: [10, 60, 30], 
+            color: "blue",
+            type: 'bar' 
+        },
+			{ name: "Male", 
+            data: [-9, -41, -34], 
+            color: "orange",
+            type:'bar'
+         },
+		],
+     
+        
+
+
+
+
+
+    }
+
+
+
 }
