@@ -1,0 +1,26 @@
+.enrolled-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.enrolledRow{
+    display: flex;
+    column-gap: 0.125rem;
+    align-items: center;
+}
+.enrolledRow .card{
+    min-width: 14rem;
+    min-height: 16rem
+}
+
+.enrolledCharts{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 1rem 0;
+    column-gap: 0.625rem;
+}
+
+.enrolledCharts div:first-child{
+    padding: 0 1rem;
+    border-right: 2px solid black;
+}
