@@ -663,6 +663,7 @@ loadCovid19OverallPositivityByFacilityChart() {
             },
         ],
     };*/
+  /*
     screenedovertimechartOptions: Highcharts.Options = {
         title: {
             text: 'Screened Over Time',
@@ -714,4 +715,6 @@ loadCovid19OverallPositivityByFacilityChart() {
 
 
     }
+}
+    };*/
 }
