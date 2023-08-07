@@ -34,25 +34,25 @@
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                             id="menu">
                             <li class="nav-item">
-                                <a routerLink ="/" class="nav-link align-middle px-0">
+                                <a routerLink="/" class="nav-link align-middle px-0">
                                     <i class="fs-4 bi-house"></i>
                                     <span class="ms-1 d-none d-sm-inline">Overview</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a routerLink ="/Screening" class="nav-link align-middle px-0">
+                                <a routerLink="/Screening" class="nav-link align-middle px-0">
                                     <i class="fs-4 bi-house"></i>
                                     <span class="ms-1 d-none d-sm-inline">Screening</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a routerLink ="/Enrollment" class="nav-link px-0 align-middle">
+                                <a routerLink="/Enrollment" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-table"></i>
                                     <span class="ms-1 d-none d-sm-inline">Enrollment</span></a>
                             </li>
 
                             <li class="nav-item">
-                                <a routerLink = "/Covid 19 Results" class="nav-link px-0 align-middle">
+                                <a routerLink="/Covid 19 Results" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-people"></i>
                                     <span class="ms-1 d-none d-sm-inline">Covid 19 Results</span>
                                 </a>
@@ -81,12 +81,12 @@
                     </div>
                 </div>
                 <div class="col py-3">
-                  <!-- <h2>Fetched API Data</h2> -->
-<ul>
-  <li *ngFor="let user of users">
-    {{ user.username }} - {{ user.email }} <!-- Data matching JSON structure -->
-  </li>
-</ul>
+                    <!-- <h2>Fetched API Data</h2> -->
+                    <ul>
+                        <li *ngFor="let user of users">
+                            {{ user.username }} - {{ user.email }} <!-- Data matching JSON structure -->
+                        </li>
+                    </ul>
                     <!-- <app-overview></app-overview> -->
                     <router-outlet> </router-outlet>
                 </div>
