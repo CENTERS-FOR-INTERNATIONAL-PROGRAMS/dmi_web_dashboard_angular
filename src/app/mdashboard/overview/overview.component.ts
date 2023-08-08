@@ -156,58 +156,56 @@ loadCovid19OverallPositivityByFacilityChart() {
         this.overallpositivitybygenderchartOptions= {
 
              title: {
-              text: 'Covid 19 Positivity by Gender',
+              text: 'Covid 19 Positivity by Gender'
+             },
+              chart: {
+                  type: 'column'
+              },
+              // subtitle: {
+              //     text:
+              //         'Source: <a target="_blank" ' +
+              //         'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>',
+              //     align: 'left'
+            //  },
+              xAxis: {
+                  categories: ['Enrolled', 'Tested', 'Positive', 'Enrolled', 'Tested', 'Positive'],
+                  crosshair: true,
+                  accessibility: {
+                      description: 'Categories'
+                  }
+              },
+              yAxis: {
+                  min: 0,
+                  title: {
+                      text: 'Number Enrolled'
+                  }
+              },
+              tooltip: {
+                  valueSuffix: ''
+              },
+              plotOptions: {
+                  column: {
+                      pointPadding: 0.2,
+                      borderWidth: 0
+                  }
+              },
+              series: [
+                  {
+                      name: 'Enrolled',
+                      data: [4, 2, 107000, 68300, 27500, 14500]
+                  },
+                  {
+                      name: 'Tested',
+                      data: [51086, 136000, 5500, 141000, 107180, 77000]
+                  },
+                  {
+                    name: 'Positive',
+                    data: [51086, 136000, 5500, 141000, 107180, 77000]
+                }
+              ]
+               }
 
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: 'Corn vs wheat estimated production for 2020',
-                align: 'left'
-            },
-            // subtitle: {
-            //     text:
-            //         'Source: <a target="_blank" ' +
-            //         'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>',
-            //     align: 'left'
-          //  },
-            xAxis: {
-                categories: ['USA', 'China', 'Brazil', 'EU', 'India', 'Russia'],
-                crosshair: true,
-                accessibility: {
-                    description: 'Countries'
-                }
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: '1000 metric tons (MT)'
-                }
-            },
-            tooltip: {
-                valueSuffix: ' (1000 MT)'
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
-                }
-            },
-            series: [
-                {
-                    name: 'Corn',
-                    data: [406292, 260000, 107000, 68300, 27500, 14500],
-                    type:'bar'
-                },
-                {
-                    name: 'Wheat',
-                    data: [51086, 136000, 5500, 141000, 107180, 77000],
-                    type:'bar'
-                }
-            ]
-             }
-
-        };
+        
     }
     //#endregion
 
