@@ -5,22 +5,16 @@
 
 .overViewRow{
     display: flex;
-    column-gap: 0.125rem;
+    /* column-gap: 0.125rem; */
     align-items: center;
 }
 .overViewRow .card{
-    min-width: 14rem;
+    min-width: '100%';
     min-height: 16rem
 }
 
-.covidCharts{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin: 1rem 0;
-    column-gap: 0.625rem;
-}
-
-
 .covidCharts .card{
     margin-bottom: 1rem;
+    margin-top: 1rem;
+    
 }
