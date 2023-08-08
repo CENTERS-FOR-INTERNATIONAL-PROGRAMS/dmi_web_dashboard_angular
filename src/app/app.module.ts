@@ -8,6 +8,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { MdashboardModule } from './mdashboard/mdashboard.module';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import HighchartsMore from 'highcharts/highcharts-more.src';
+import HighchartsSolidGauge from 'highcharts/modules/solid-gauge'
+import * as Highcharts from 'highcharts';
 
 
 @NgModule({
@@ -20,7 +24,9 @@ import { MdashboardModule } from './mdashboard/mdashboard.module';
     BrowserAnimationsModule,
     CoreModule,
     HighchartsChartModule,
-    MdashboardModule
+    MdashboardModule,
+    // HighchartsMore(Highcharts),
+    // HighchartsSolidGauge(Highcharts),
   ],
   providers: [],
   bootstrap: [AppComponent]
