@@ -168,7 +168,7 @@ loadCovid19OverallPositivityByFacilityChart() {
               //     align: 'left'
             //  },
               xAxis: {
-                  categories: ['Enrolled', 'Tested', 'Positive', 'Enrolled', 'Tested', 'Positive'],
+                  categories: ['Enrolled', 'Tested', 'Positive'],
                   crosshair: true,
                   accessibility: {
                       description: 'Categories'
@@ -191,17 +191,14 @@ loadCovid19OverallPositivityByFacilityChart() {
               },
               series: [
                   {
-                      name: 'Enrolled',
-                      data: [4, 2, 107000, 68300, 27500, 14500]
+                      name: 'MALE',
+                      data: [62403, 123232, 77000]
                   },
                   {
-                      name: 'Tested',
-                      data: [51086, 136000, 5500, 141000, 107180, 77000]
+                      name: 'FEMALE',
+                      data: [51086, 106000, 75500]
                   },
-                  {
-                    name: 'Positive',
-                    data: [51086, 136000, 5500, 141000, 107180, 77000]
-                }
+                  
               ]
                }
 
