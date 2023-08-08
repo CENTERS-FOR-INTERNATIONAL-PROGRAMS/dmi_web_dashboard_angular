@@ -8,6 +8,10 @@ import { NumEnrolled } from './../../models/numEnrolled.model';
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
+import * as HighchartsMore from 'highcharts/highcharts-more.src';
+import * as HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
+
+
 
 @Component({
     selector: 'app-overview',
@@ -151,30 +155,54 @@ loadCovid19OverallPositivityByFacilityChart() {
     loadCovid19PositivityByGenderChart(){
         this.overallpositivitybygenderchartOptions= {
 
-            title: {
-                text: 'Covid 19 Positivity by Gender',
-                align: 'left'
-            },
-    
-            chart: {
-                type: "pie",
-            },
-    
-            colors: [
-                "#234FEA", // Color for Category 2
-                "#FC7500", // Color for Category 3
-            ],
-            series: [
-                {
-                    name: "Data",
-                    type: 'pie',
-                    data: [
-                        ["Male", this.covid19PositivityByGenderSeries[0]],
-                        ["Female",this.covid19PositivityByGenderSeries[1]],
-                    ], // Replace with your data values
-                },
-            ],
-        };
+             title: {
+              text: 'Covid 19 Positivity by Gender'
+             },
+              chart: {
+                  type: 'column'
+              },
+              // subtitle: {
+              //     text:
+              //         'Source: <a target="_blank" ' +
+              //         'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>',
+              //     align: 'left'
+            //  },
+              xAxis: {
+                  categories: ['Enrolled', 'Tested', 'Positive'],
+                  crosshair: true,
+                  accessibility: {
+                      description: 'Categories'
+                  }
+              },
+              yAxis: {
+                  min: 0,
+                  title: {
+                      text: 'Number Enrolled'
+                  }
+              },
+              tooltip: {
+                  valueSuffix: ''
+              },
+              plotOptions: {
+                  column: {
+                      pointPadding: 0.2,
+                      borderWidth: 0
+                  }
+              },
+              series: [
+                  {
+                      name: 'MALE',
+                      data: [62403, 123232, 77000]
+                  },
+                  {
+                      name: 'FEMALE',
+                      data: [51086, 106000, 75500]
+                  },
+                  
+              ]
+               }
+
+        
     }
     //#endregion
 
@@ -717,4 +745,145 @@ loadCovid19OverallPositivityByFacilityChart() {
     }
 }
     };*/
+
+    
+ overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
+
+    chart: {
+        type: 'solidgauge'
+    },
+
+    title:{
+        text:''
+    },
+
+    pane: {
+        center: ['50%', '85%'],
+        size: '100%',
+        startAngle: -90,
+        endAngle: 90,
+        background: [{
+            backgroundColor:'#EEE',
+            innerRadius: '60%',
+            outerRadius: '100%',
+            shape: 'arc'
+        }
+    ]
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    tooltip: {
+        enabled: false
+    },
+    yAxis: {
+        stops: [
+            [1, '#55BF3B'],
+        ],
+        lineWidth: 0,
+        tickWidth: 0,
+        minorTickInterval: null,
+        tickAmount: 2,
+        title: {
+            y: -70
+        },
+        labels: {
+            y: 16
+        },
+    		min: 0,
+        max: 100,
+        // title: {
+        //     text: 'Speed'
+        // }
+    },
+    plotOptions: {
+        solidgauge: {
+            dataLabels: {
+                y: 5,
+                borderWidth: 0,
+                useHTML: true
+            }
+        }
+    },
+    series: [{
+        name: 'Speed',
+        type:'solidgauge',
+        data: [80],
+        dataLabels: {
+            format:
+                '<div style="text-align:center">' +
+                '<span style="font-size:25px">{y}</span><br/>' +
+                '</div>'
+        },
+        tooltip: {
+            valueSuffix: '',
+        }
+    }]
+
+
+
+
+
+ }
+//     chart: {
+//         type: 'solidgauge'
+//     },
+
+//     title:{text:''
+
+//     },
+    
+//     pane: {
+//         center: ['50%', '85%'],
+//         size: '140%',
+//         startAngle: -90,
+//         endAngle: 90,
+//         background: {
+//             // backgroundColor:
+//             //     Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+//             // innerRadius: '60%',
+//             // outerRadius: '100%',
+//             // shape: 'arc'
+//         }
+//     },
+
+//     exporting: {
+//         enabled: false
+//     },
+
+//     tooltip: {
+//         enabled: false
+//     },
+
+//     // the value axis
+//     yAxis: {
+//         stops: [
+//             [0.1, '#55BF3B'], // green
+//             [0.5, '#DDDF0D'], // yellow
+//             [0.9, '#DF5353'] // red
+//         ],
+//         lineWidth: 0,
+//         tickWidth: 0,
+//         minorTickInterval: null,
+//         tickAmount: 2,
+//         title: {
+//             y: -70
+//         },
+//         labels: {
+//             y: 16
+//         }
+//     },
+
+//     plotOptions: {
+//         solidgauge: {
+//             dataLabels: {
+//                 y: 5,
+//                 borderWidth: 0,
+//                 useHTML: true
+//             }
+//         }
+//     }
+// };
 }
