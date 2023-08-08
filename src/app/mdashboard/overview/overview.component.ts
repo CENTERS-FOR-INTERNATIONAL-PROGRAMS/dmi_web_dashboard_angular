@@ -753,77 +753,77 @@ export class OverviewComponent implements OnInit {
 }
     };*/
 
-    overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
-        chart: {
-            type: 'solidgauge',
-        },
+  overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
+    chart: {
+      type: 'solidgauge',
+      height: '100%',
+    },
 
-        title: {
-            text: '',
-        },
+    title: {
+      text: '',
+    },
 
-        pane: {
-            center: ['50%', '85%'],
-            size: '140%',
-            startAngle: -90,
-            endAngle: 90,
-            background: [
-                {
-                    backgroundColor: '#EEE',
-                    innerRadius: '60%',
-                    outerRadius: '100%',
-                    shape: 'arc',
-                },
-            ],
+    pane: {
+      center: ['50%', '85%'],
+      size: '100%',
+      startAngle: -90,
+      endAngle: 90,
+      background: [
+        {
+          backgroundColor: '#EEE',
+          innerRadius: '60%',
+          outerRadius: '100%',
+          shape: 'arc',
         },
+      ],
+    },
 
-        exporting: {
-            enabled: false,
+    exporting: {
+      enabled: false,
+    },
+
+    tooltip: {
+      enabled: true,
+    },
+    yAxis: {
+      stops: [[1, '#55BF3B']],
+      lineWidth: 0,
+      tickWidth: 0,
+      minorTickInterval: null,
+      tickAmount: 2,
+      title: {
+        y: -70,
+      },
+      labels: {
+        y: 16,
+      },
+      min: 0,
+      max: 100,
+    },
+    plotOptions: {
+      solidgauge: {
+        dataLabels: {
+          y: 5,
+          borderWidth: 0,
+          useHTML: true,
         },
-
+      },
+    },
+    series: [
+      {
+        name: 'Patients',
+        type: 'solidgauge',
+        data: [80],
+        dataLabels: {
+          format:
+            '<div style="text-align:center">' +
+            '<span style="font-size:25px">{y}</span><br/>' +
+            '</div>',
+        },
         tooltip: {
-            enabled: false,
+          valueSuffix: '',
         },
-        yAxis: {
-            stops: [[1, '#55BF3B']],
-            lineWidth: 0,
-            tickWidth: 0,
-            minorTickInterval: null,
-            tickAmount: 2,
-            title: {
-                y: -70,
-            },
-            labels: {
-                y: 16,
-            },
-            min: 0,
-            max: 100,
-        },
-        plotOptions: {
-            solidgauge: {
-                dataLabels: {
-                y: 5,
-                borderWidth: 0,
-                useHTML: true,
-                },
-            },
-        },
-        series: [
-            {
-                name: 'Speed',
-                type: 'solidgauge',
-                data: [80],
-                dataLabels: {
-                format:
-                    '<div style="text-align:center">' +
-                    '<span style="font-size:25px">{y}</span><br/>' +
-                    '</div>',
-                },
-                tooltip: {
-                    valueSuffix: '',
-                },
-            },
-        ],
-    };
-
+      },
+    ],
+  };
 }
