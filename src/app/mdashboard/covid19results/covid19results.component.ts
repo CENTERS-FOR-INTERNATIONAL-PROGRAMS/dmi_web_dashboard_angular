@@ -2,9 +2,13 @@ import { ReviewService } from './../../services/review.service.ts.service';
 import { Component } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
+import HighchartsMore from 'highcharts/highcharts-more';
+import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import { Covid19ResultsByStatus } from 'src/app/models/covid19ResultsByStatus.model';
 import { Covid19ResultsByFacility } from 'src/app/models/covid19ResultsByFacility.model';
 
+HighchartsMore(Highcharts);
+HighchartsSolidGauge(Highcharts);
 @Component({
     selector: 'app-covid19results',
     templateUrl: './covid19results.component.html',
@@ -268,25 +272,22 @@ export class Covid19resultsComponent {
     }
 
 
-overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
+overvieweligibleparticipantsguagechartOptions: Highcharts.Options =  {
     chart: {
         type: 'solidgauge'
     },
-
-    // title: 'h',
 
     pane: {
         center: ['50%', '85%'],
         size: '140%',
         startAngle: -90,
         endAngle: 90,
-        // background: {
-        //     backgroundColor:
-        //         Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-        //     innerRadius: '60%',
-        //     outerRadius: '100%',
-        //     shape: 'arc'
-        // }
+        background: [{ 
+            backgroundColor: '#EEE',
+            innerRadius: '60%',
+            outerRadius: '100%',
+            shape: 'arc'
+            }]
     },
 
     exporting: {
@@ -296,13 +297,9 @@ overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
     tooltip: {
         enabled: false
     },
-
-    // the value axis
     yAxis: {
         stops: [
-            [0.1, '#55BF3B'], // green
-            [0.5, '#DDDF0D'], // yellow
-            [0.9, '#DF5353'] // red
+            [1, '#55BF3B'],
         ],
         lineWidth: 0,
         tickWidth: 0,
@@ -313,9 +310,10 @@ overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
         },
         labels: {
             y: 16
-        }
+        },
+        min: 0,
+        max: 200,
     },
-
     plotOptions: {
         solidgauge: {
             dataLabels: {
@@ -324,7 +322,21 @@ overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
                 useHTML: true
             }
         }
-    }
+    },
+    series: [{
+        type: 'solidgauge',
+        name: 'Speed',
+        data: [80],
+        dataLabels: {
+            format:
+                '<div style="text-align:center">' +
+                '<span style="font-size:25px">{y}</span><br/>' +
+                '</div>'
+        },
+        tooltip: {
+            valueSuffix: ''
+        }
+    }]
 };
 
 
