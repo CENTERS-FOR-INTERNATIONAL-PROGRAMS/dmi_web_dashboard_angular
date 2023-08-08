@@ -8,6 +8,13 @@ import { EnrolledComponent } from './enrolled/enrolled.component';
 import { Covid19resultsComponent } from './covid19results/covid19results.component';
 import { HttpClientModule } from '@angular/common/http'; // Use HTTP import
 import { RouterModule, Routes } from '@angular/router';
+import { NgApexchartsModule } from 'ng-apexcharts/lib/ng-apexcharts.module';
+import * as HighchartsMore from 'highcharts/highcharts-more.src';
+import * as HighchartsSolidGauge from 'highcharts/modules/solid-gauge'; 
+import * as Highcharts from 'highcharts';
+
+
+
 
 const appRoute: Routes = [
   {path:'', component:OverviewComponent},
@@ -28,7 +35,9 @@ const appRoute: Routes = [
     CommonModule,
     HighchartsChartModule,
     RouterModule.forRoot(appRoute),
-    HttpClientModule // Add HttpClientModule here
+    HttpClientModule, // Add HttpClientModule here,
+    // HighchartsMore(Highcharts),
+    // HighchartsSolidGauge(Highcharts),
   ],
   exports: [
     MdashboardComponent
