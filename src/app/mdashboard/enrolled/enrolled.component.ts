@@ -5,7 +5,7 @@ import HC_exporting from 'highcharts/modules/exporting';
 import { EnrollmentByGender } from 'src/app/models/enrollmentByGender.model';
 import { EnrollmentByAgeGender } from 'src/app/models/enrollmentByAgeGender.model';
 import { EnrollmentByFacility } from 'src/app/models/enrollmentByFacility.model';
-import { EnrollmentByEpiWeek } from 'src/app/models/enrollmentByEpiWeek.model';
+import { EnrollmentOverTime } from 'src/app/models/enrollmentOverTime.model';
 
 @Component({
     selector: 'app-enrolled',
@@ -16,7 +16,7 @@ import { EnrollmentByEpiWeek } from 'src/app/models/enrollmentByEpiWeek.model';
 export class EnrolledComponent {
     //#region Prerequisites --> Enrolled by Gender
     enrollmentByGender: EnrollmentByGender[] = [];
-    enrollmentByGenderSeries: any[] = [];
+    enrollmentByGenderSeries: any[][] = [];
     enrollmentByGenderOptions: {} = {};
     //#endregion
 
@@ -33,9 +33,9 @@ export class EnrolledComponent {
     //#endregion
 
     //#region Prerequisites --> Enrolled by EpiWeek
-    enrollmentByEpiWeek: EnrollmentByEpiWeek[] = [];
-    enrollmentByEpiWeekSeries: any[][] = [];
-    enrollmentByEpiWeekOptions: {} = {};
+    enrollmentOverTime: EnrollmentOverTime[] = [];
+    enrollmentOverTimeSeries: any[][] = [];
+    enrollmentOverTimeOptions: {} = {};
     //#endregion
 
     constructor(private reviewService: ReviewService,) {
@@ -52,8 +52,8 @@ export class EnrolledComponent {
         this.loadEnrollmentByFacilityData();
         this.loadEnrollmentByFacilityChart();
 
-        this.loadEnrollmentByEpiWeekData();
-        this.loadEnrollmentByEpiWeekChart();
+        this.loadEnrollmentOverTimeData();
+        this.loadEnrollmentOverTimeChart();
     }
 
     //#region Load Chart --> Enrollment by Gender
@@ -63,15 +63,17 @@ export class EnrolledComponent {
                 this.enrollmentByGender = response;
 
                 //#region Push series data into array at specific indexes
-                this.enrollmentByGender.forEach(dataInstance => {
-                    if (dataInstance.Gender == "Male") {
-                        this.enrollmentByGenderSeries.push(dataInstance.Enrolled);
-                    }
+                //Male Series (Index --> 0)
+                this.enrollmentByGenderSeries.push([]);
+                this.enrollmentByGenderSeries[0].push(this.enrollmentByGender[0].Male_Screened);
+                this.enrollmentByGenderSeries[0].push(this.enrollmentByGender[0].Male_Eligible);
+                this.enrollmentByGenderSeries[0].push(this.enrollmentByGender[0].Male_Enrolled);
 
-                    else if (dataInstance.Gender == "Female") {
-                        this.enrollmentByGenderSeries.push(dataInstance.Enrolled);
-                    }
-                });
+                //Female Series (Index --> 1)
+                this.enrollmentByGenderSeries.push([]);
+                this.enrollmentByGenderSeries[1].push(this.enrollmentByGender[0].Female_Screened);
+                this.enrollmentByGenderSeries[1].push(this.enrollmentByGender[0].Female_Eligible);
+                this.enrollmentByGenderSeries[1].push(this.enrollmentByGender[0].Female_Enrolled);
                 //#endregion
 
                 this.loadEnrollmentByGenderChart();
@@ -81,25 +83,44 @@ export class EnrolledComponent {
     loadEnrollmentByGenderChart() {
         this.enrollmentByGenderOptions = {
             title: {
-                text: 'Enrolled By Gender',
+                text: 'Enrollment by Gender',
                 align: 'left'
             },
             chart: {
-                type: "pie",
+                type: 'column'
             },
-            colors: [
-                "#234FEA", // Color for Category 2
-                "#FC7500", // Color for Category 3
-            ],
+            xAxis: {
+                categories: ['Screened', 'Elligible', 'Enrolled'],
+                crosshair: true,
+                accessibility: {
+                    description: 'Categories'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Number'
+                }
+            },
+            tooltip: {
+                valueSuffix: ''
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
             series: [
                 {
-                    name: "Data",
-                    type: 'pie',
-                    data: [
-                        ["Male", this.enrollmentByGenderSeries[0]],
-                        ["Female", this.enrollmentByGenderSeries[1]]
-                    ]
-                }
+                    name: 'MALE',
+                    data: this.enrollmentByGenderSeries[0]
+                },
+                {
+                    name: 'FEMALE',
+                    data: this.enrollmentByGenderSeries[1]
+                },
+
             ]
         };
 
@@ -229,6 +250,9 @@ export class EnrolledComponent {
 
                 //Enrolled (Index --> 1)
                 this.enrollmentByFacilitySeries.push([]);
+
+                //Positive (Index --> 2)
+                this.enrollmentByFacilitySeries.push([]);
                 //#endregion
 
                 //#region Push series data into array at specific indexes
@@ -237,9 +261,14 @@ export class EnrolledComponent {
                     this.enrollmentByFacilitySeries[0].push(dataInstance.Facility);
 
                     //Compile Enrollments
-                    this.enrollmentByFacilitySeries[1].push(dataInstance.Enrolled);
+                    this.enrollmentByFacilitySeries[1].push(dataInstance.EnrolledNumber);
+
+                    //Compile Positives
+                    this.enrollmentByFacilitySeries[2].push(dataInstance.Covid19Positive);
                 });
                 //#endregion
+
+                console.log(this.enrollmentByFacilitySeries);
 
                 this.loadEnrollmentByFacilityChart();
             });
@@ -248,7 +277,7 @@ export class EnrolledComponent {
     loadEnrollmentByFacilityChart() {
         this.enrollmentByFacilityOptions = {
             title: {
-                text: 'Enrolled By Health Facilities',
+                text: 'Enrollment By Facility',
                 align: 'left'
             },
             chart: {
@@ -265,58 +294,79 @@ export class EnrolledComponent {
             },
             series: [
                 {
-                    showInLegend: false,
-                    name: "Health Facilities",
+                    showInLegend: true,
+                    name: "Enrolled",
                     data: this.enrollmentByFacilitySeries[1],
                     type: 'column',
                     color: "#234FEA",
+                },
+                {
+                    showInLegend: true,
+                    name: "Positive",
+                    data: this.enrollmentByFacilitySeries[2],
+                    type: 'column',
+                    color: "red",
                 }
-            ]
+            ],
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
         };
     }
     //#endregion
 
     //#region Load Chart --> Enrollment by EpiWeek
-    loadEnrollmentByEpiWeekData() {
-        this.reviewService.findEnrollmentByEpiWeek().subscribe(
+    loadEnrollmentOverTimeData() {
+        this.reviewService.findEnrollmentOverTime().subscribe(
             response => {
-                this.enrollmentByEpiWeek = response;
+                this.enrollmentOverTime = response;
 
-                console.log(this.enrollmentByEpiWeek);
+                console.log(this.enrollmentOverTime);
 
                 //#region Init series indexes
                 // EpiWeek (Index --> 0)
-                this.enrollmentByEpiWeekSeries.push([]);
+                this.enrollmentOverTimeSeries.push([]);
 
-                //Enrolled (Index --> 1)
-                this.enrollmentByEpiWeekSeries.push([]);
+                //Elligible (Index --> 1)
+                this.enrollmentOverTimeSeries.push([]);
+
+                //Enrolled (Index --> 2)
+                this.enrollmentOverTimeSeries.push([]);
                 //#endregion
 
                 //#region Push series data into array at specific indexes
-                this.enrollmentByEpiWeek.forEach(dataInstance => {
+                this.enrollmentOverTime.forEach(dataInstance => {
                     //Compile EpiWeek
-                    this.enrollmentByEpiWeekSeries[0].push(dataInstance.EpiWeek);
+                    this.enrollmentOverTimeSeries[0].push(dataInstance.EpiWeek);
 
-                    //Compile Enrollments
-                    this.enrollmentByEpiWeekSeries[1].push(dataInstance.Enrolled);
+                    //Compile Elligible
+                    this.enrollmentOverTimeSeries[1].push(dataInstance.ElligibleNumber);
+
+                    //Compile Enrolled
+                    this.enrollmentOverTimeSeries[2].push(dataInstance.EnrolledNumber);
                 });
                 //#endregion
 
-                this.loadEnrollmentByEpiWeekChart();
+                this.loadEnrollmentOverTimeChart();
             });
     }
 
-    loadEnrollmentByEpiWeekChart() {
-        this.enrollmentByEpiWeekOptions = {
+    loadEnrollmentOverTimeChart() {
+        this.enrollmentOverTimeOptions = {
             title: {
-                text: 'Enrolled By Epi Week',
+                text: 'Enrolled Over Time',
                 align: 'left'
             },
             chart: {
-                type: "line"
+                // type: "line"
             },
             xAxis: {
-                categories: this.enrollmentByEpiWeekSeries[0],
+                categories: this.enrollmentOverTimeSeries[0],
             },
             yAxis: {
                 title: {
@@ -325,9 +375,16 @@ export class EnrolledComponent {
             },
             series: [
                 {
-                    name: "Epi Week",
-                    data: this.enrollmentByEpiWeekSeries[1],
+                    name: "Enrolled",
+                    data: this.enrollmentOverTimeSeries[2],
+                    color: "red",
+                    type: "line"
+                },
+                {
+                    name: "Elligible",
+                    data: this.enrollmentOverTimeSeries[1],
                     color: "#234FEA",
+                    type: "column"
                 }
             ]
         };
@@ -356,5 +413,3 @@ export class EnrolledComponent {
 
 
 }
-
-
