@@ -7,6 +7,7 @@ import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import { Covid19ResultsByStatus } from 'src/app/models/covid19ResultsByStatus.model';
 import { Covid19ResultsByFacility } from 'src/app/models/covid19ResultsByFacility.model';
 import { Covid19ResultsByAgeGender } from 'src/app/models/covid19ResultsByAgeGender.model';
+import { Covid19ResultsByPositivityOverTime } from 'src/app/models/covid19ResultsByPositivityOverTime.model';
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
@@ -29,10 +30,16 @@ export class Covid19resultsComponent {
     covid19ResultsByFacilityOptions: {} = {};
     //#endregion
 
-    //#region Prerequisites --> Enrolled by Age and Gender
+    //#region Prerequisites --> Covid-19 by Age and Gender
     resultsByAgeGender: Covid19ResultsByAgeGender[] = [];
     resultsByAgeGenderSeries: any[][] = [];
     resultsByAgeGenderOptions: {} = {};
+    //#endregion
+
+    //#region Prerequisites --> Covid-19 by Positivity Over Time 
+    resultsByPositivityOverTime: Covid19ResultsByPositivityOverTime[] = [];
+    resultsByPositivityOverTimeSeries: any[][] = [];
+    resultsByPositivityOverTimeOptions: {} = {};
     //#endregion
 
     constructor(private reviewService: ReviewService,) {
@@ -45,9 +52,12 @@ export class Covid19resultsComponent {
 
         this.loadCovid19ResultsByFacilityData();
         this.loadCovid19ResultsByFacilityChart();
-        
+
         this.loadCovid19ResultsByAgeGenderData();
         this.loadCovid19ResultsByAgeGenderChart();
+
+        this.loadCovid19ResultsByPositivityOverTimeData();
+        this.loadCovid19ResultsByPositivityOverTimeChart();
     }
 
     //#region Load Chart --> Covid-19 Results by Status
@@ -204,7 +214,7 @@ export class Covid19resultsComponent {
     }
     //#endregion
 
-    //#region Load Chart --> Enrollment by Age and Gender
+    //#region Load Chart --> Covid-19 Results by Age and Gender
     loadCovid19ResultsByAgeGenderData() {
         this.reviewService.findCovid19ResultsByAgeGender().subscribe(
             response => {
@@ -310,6 +320,79 @@ export class Covid19resultsComponent {
                     type: 'bar'
                 }
             ],
+        };
+    }
+    //#endregion
+
+    //#region Load Chart --> Covid-19 Results by Positivity Over Time
+    loadCovid19ResultsByPositivityOverTimeData() {
+        this.reviewService.findCovid19ResultsByPositivityOverTime().subscribe(
+            response => {
+                this.resultsByPositivityOverTime = response;
+
+                //#region Init series indexes
+                // EpiWeek (Index --> 0)
+                this.resultsByPositivityOverTimeSeries.push([]);
+
+                //Elligible (Index --> 1)
+                this.resultsByPositivityOverTimeSeries.push([]);
+
+                //Enrolled (Index --> 2)
+                this.resultsByPositivityOverTimeSeries.push([]);
+                //#endregion
+
+                //#region Push series data into array at specific indexes
+                this.resultsByPositivityOverTime.forEach(dataInstance => {
+                    console.log(dataInstance);
+
+                    //Compile EpiWeek
+                    this.resultsByPositivityOverTimeSeries[0].push(dataInstance.EpiWeek);
+
+                    //Compile SampleTested
+                    this.resultsByPositivityOverTimeSeries[1].push(dataInstance.SampleTested);
+
+                    //Compile Covid-19 Positive
+                    this.resultsByPositivityOverTimeSeries[2].push(dataInstance.Covid19Positive);
+                });
+                //#endregion
+
+                console.log(this.resultsByPositivityOverTimeSeries);
+
+                this.loadCovid19ResultsByPositivityOverTimeChart();
+            });
+    }
+
+    loadCovid19ResultsByPositivityOverTimeChart() {
+        this.resultsByPositivityOverTimeOptions = {
+            title: {
+                text: 'COVID-19 Positivity Over Time',
+                align: 'left'
+            },
+            chart: {
+                // type: "line"
+            },
+            xAxis: {
+                categories: this.resultsByPositivityOverTimeSeries[0],
+            },
+            yAxis: {
+                title: {
+                    text: "Enrolled",
+                }
+            },
+            series: [
+                {
+                    name: "Tested",
+                    data: this.resultsByPositivityOverTimeSeries[1],
+                    color: "#234FEA",
+                    type: "column"
+                },
+                {
+                    name: "Positive",
+                    data: this.resultsByPositivityOverTimeSeries[2],
+                    color: "red",
+                    type: "line" 
+                }
+            ]
         };
     }
     //#endregion
