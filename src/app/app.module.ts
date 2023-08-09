@@ -20,7 +20,7 @@ import { MdashboardModule } from './mdashboard/mdashboard.module';
     BrowserAnimationsModule,
     CoreModule,
     HighchartsChartModule,
-    MdashboardModule
+    MdashboardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,9 +2,13 @@ import { ReviewService } from './../../services/review.service.ts.service';
 import { Component } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
+import HighchartsMore from 'highcharts/highcharts-more';
+import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import { Covid19ResultsByStatus } from 'src/app/models/covid19ResultsByStatus.model';
 import { Covid19ResultsByFacility } from 'src/app/models/covid19ResultsByFacility.model';
 
+HighchartsMore(Highcharts);
+HighchartsSolidGauge(Highcharts);
 @Component({
     selector: 'app-covid19results',
     templateUrl: './covid19results.component.html',
@@ -265,13 +269,83 @@ export class Covid19resultsComponent {
 		],
      
         
-
-
-
-
-
     }
+
+
+overvieweligibleparticipantsguagechartOptions: Highcharts.Options =  {
+    chart: {
+        type: 'solidgauge'
+    },
+
+    pane: {
+        center: ['50%', '85%'],
+        size: '140%',
+        startAngle: -90,
+        endAngle: 90,
+        background: [{ 
+            backgroundColor: '#EEE',
+            innerRadius: '60%',
+            outerRadius: '100%',
+            shape: 'arc'
+            }]
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    tooltip: {
+        enabled: false
+    },
+    yAxis: {
+        stops: [
+            [1, '#55BF3B'],
+        ],
+        lineWidth: 0,
+        tickWidth: 0,
+        minorTickInterval: null,
+        tickAmount: 2,
+        title: {
+            y: -70
+        },
+        labels: {
+            y: 16
+        },
+        min: 0,
+        max: 200,
+    },
+    plotOptions: {
+        solidgauge: {
+            dataLabels: {
+                y: 5,
+                borderWidth: 0,
+                useHTML: true
+            }
+        }
+    },
+    series: [{
+        type: 'solidgauge',
+        name: 'Speed',
+        data: [80],
+        dataLabels: {
+            format:
+                '<div style="text-align:center">' +
+                '<span style="font-size:25px">{y}</span><br/>' +
+                '</div>'
+        },
+        tooltip: {
+            valueSuffix: ''
+        }
+    }]
+};
 
 
 
 }
+
+
+
+
+
+
+
