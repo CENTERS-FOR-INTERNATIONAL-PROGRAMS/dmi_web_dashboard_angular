@@ -15,10 +15,10 @@
                     <div class="card-body">
                         <h5 class="card-title">Total Screened</h5>
                         <hr>
-                        <h3>200</h3>
+                        <h3>{{this.covid19SummaryGroup[0][0][0]}}</h3>
                     </div>
                     <div class="card-footer">
-                        <span>300 last month</span>
+                        <span>{{this.covid19SummaryGroup[0][2]}} last month</span>
                     </div>
                 </div>
             </div>
@@ -27,12 +27,12 @@
                     <div class="card-body">
                         <h5 class="card-title">Eligible</h5>
                         <hr>
-                        <highcharts-chart [Highcharts]="highcharts" [options]="overvieweligibleparticipantsguagechartOptions"
-                        style="max-width:100%; height: 150px; display: block;"></highcharts-chart>
-                        <h3>150</h3>
+                        <highcharts-chart [Highcharts]="highcharts" [options]="this.covid19SummaryGroup[1][1]"
+                            style="max-width:100%; height: 150px; display: block;"></highcharts-chart>
+                        <h3>{{this.covid19SummaryGroup[1][0][0]}}</h3>
                     </div>
                     <div class="card-footer">
-                        <span>200 last month</span>
+                        <span>{{this.covid19SummaryGroup[1][2]}} last month</span>
                     </div>
                 </div>
             </div>
@@ -41,12 +41,12 @@
                     <div class="card-body">
                         <h5 class="card-title">Enrolled</h5>
                         <hr>
-                         <highcharts-chart [Highcharts]="highcharts" [options]="overvieweligibleparticipantsguagechartOptions"
-                        style="max-width:100%; height: 150px; display: block"></highcharts-chart>
-                        <h3>94</h3>
+                        <highcharts-chart [Highcharts]="highcharts" [options]="this.covid19SummaryGroup[2][1]"
+                            style="max-width:100%; height: 150px; display: block"></highcharts-chart>
+                        <h3>{{this.covid19SummaryGroup[2][0][0]}}</h3>
                     </div>
                     <div class="card-footer">
-                        <span>80 last month</span>
+                        <span>{{this.covid19SummaryGroup[2][2]}} last month</span>
                     </div>
                 </div>
             </div>
@@ -55,12 +55,12 @@
                     <div class="card-body">
                         <h5 class="card-title">Tested</h5>
                         <hr>
-                         <highcharts-chart [Highcharts]="highcharts" [options]="overvieweligibleparticipantsguagechartOptions"
-                        style="max-width:100%; height: 150px; display: block"></highcharts-chart>
-                        <h3>94</h3>
+                        <highcharts-chart [Highcharts]="highcharts" [options]="this.covid19SummaryGroup[3][1]"
+                            style="max-width:100%; height: 150px; display: block"></highcharts-chart>
+                        <h3>{{this.covid19SummaryGroup[3][0][0]}}</h3>
                     </div>
                     <div class="card-footer">
-                        <span>80 last month</span>
+                        <span>{{this.covid19SummaryGroup[3][2]}} last month</span>
                     </div>
                 </div>
             </div>
@@ -69,16 +69,16 @@
                     <div class="card-body">
                         <h5 class="card-title">Positive</h5>
                         <hr>
-                         <highcharts-chart [Highcharts]="highcharts" [options]="overvieweligibleparticipantsguagechartOptions"
-                        style="max-width:100%; height: 150px; display: block"></highcharts-chart>
-                        <h3>11</h3>
+                        <highcharts-chart [Highcharts]="highcharts" [options]="this.covid19SummaryGroup[4][1]"
+                            style="max-width:100%; height: 150px; display: block"></highcharts-chart>
+                        <h3>{{this.covid19SummaryGroup[4][0][0]}}</h3>
                     </div>
                     <div class="card-footer">
-                        <span>9 last month</span>
+                        <span>{{this.covid19SummaryGroup[4][2]}} last month</span>
                     </div>
                 </div>
             </div>
-            
+
             <!-- <div class="col-xl-6 col-sm-6 col-md-6 col-6">
                 <div class="card">
                     <div class="card-body">
@@ -92,7 +92,8 @@
     <div class="covidCharts">
         <div class="row">
             <div class="card col-md-12 col-xl-6 col-sm-12 col-12">
-                <div class="card-body"><h5 class="card-title"></h5>
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
                     <highcharts-chart [Highcharts]="highcharts" [options]="overallpositivitybygenderchartOptions"
                         style="width: 100%; height: 400px; display: block;"></highcharts-chart>
                 </div>
@@ -101,19 +102,19 @@
                 <div class="card-body">
                     <h5 class="card-title"></h5>
                     <highcharts-chart [Highcharts]="highcharts2" [options]="covid19PositivityByAgeGenderOptions"
-                    style="width: 100%; height: 400px; display: block;"></highcharts-chart>
+                        style="width: 100%; height: 400px; display: block;"></highcharts-chart>
                 </div>
             </div>
             <div class="card col-md-12 col-xl-6 col-sm-12 col-12">
                 <div class="card-body">
                     <highcharts-chart [Highcharts]="highcharts2" [options]="overallpositivitybyfacilitychartOptions"
-                    style="width: 100%; height: 400px; display: block;"></highcharts-chart>
+                        style="width: 100%; height: 400px; display: block;"></highcharts-chart>
                 </div>
             </div>
             <div class="card col-md-12 col-xl-6 col-sm-12 col-12">
                 <div class="card-body">
                     <highcharts-chart [Highcharts]="highcharts1" [options]="covid19PositivityOvertimeOptions"
-                    style="width: 100%; height: 400px; display: block;"></highcharts-chart>
+                        style="width: 100%; height: 400px; display: block;"></highcharts-chart>
                 </div>
             </div>
             <!-- <div class="card col-md-12 col-xl-6 col-sm-12 col-12">
