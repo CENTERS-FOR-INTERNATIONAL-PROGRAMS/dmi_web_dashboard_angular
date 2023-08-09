@@ -108,28 +108,58 @@ export class OverviewComponent implements OnInit {
   loadCovid19OverallPositivityByFacilityChart() {
     this.overallpositivitybyfacilitychartOptions = {
       title: {
-        text: 'Overall Positivity By Facility',
-        align: 'left',
-      },
-      chart: {
-        // type: "column",
-      },
-      xAxis: {
-        categories: this.covid19OverallPositivityByFacilitySeries[0], // Replace with your categories
-      },
-      yAxis: {
+        text: 'Enrolled & Tested Postive by Facility',
+        align: 'left'
+    },
+    chart: {
+        type: 'column'
+    },
+    xAxis: {
+        categories: ['Kenyatta National Hospital', 'Busia CRH', 'Marsabit CRH', 'Machakos CRH']
+    },
+    yAxis: {
+        min: 0,
         title: {
-          text: 'Number Positive',
+            text: 'Number Screened'
         },
-      },
-      series: [
-        {
-          name: 'Health Facilities',
-          data: this.covid19OverallPositivityByFacilitySeries[1],
-          type: 'column',
-          color: '#234FEA',
-        },
-      ],
+        stackLabels: {
+            enabled: true
+        }
+    },
+    legend: {
+        align: 'left',
+        x: 70,
+        verticalAlign: 'top',
+        y: 70,
+        floating: true,
+        backgroundColor:'white',
+        borderColor: '#CCC',
+        borderWidth: 1,
+        shadow: false
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
+    series: [{
+        name: 'Enrolled',
+        data: [3, 5, 1, 13],
+        color:'#234FEA'
+    }, {
+        name: 'Positive',
+        data: [14, 8, 8, 12],
+        color:'#FF0000'
+    },
+] 
+
     };
     HC_exporting(Highcharts);
   }
