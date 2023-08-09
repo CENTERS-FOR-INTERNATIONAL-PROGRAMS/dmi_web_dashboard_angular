@@ -241,6 +241,7 @@ export class OverviewComponent implements OnInit {
     this.reviewService.findCovid19Positivity().subscribe((response) => {
       this.covid19Positivity = response;
 
+
       //#region Push series data into array at specific indexes
       this.covid19Positivity.forEach((dataInstance) => {
         // Covid-19 Positive (Index --> 0)
@@ -349,7 +350,6 @@ export class OverviewComponent implements OnInit {
               this.covid19PositivityByAgeGenderSeries[1].push(0);
               console.log(ageGroupInstance, '!Female');
             }
-
 
             if (!male_found) {
               this.covid19PositivityByAgeGenderSeries[2].push(0);
@@ -549,7 +549,7 @@ export class OverviewComponent implements OnInit {
   //#endregion
 
   //#endregion
-
+  
   /*    Highcharts: typeof Highcharts = Highcharts;
        overallpositivitychartOptions: Highcharts.Options = {
            title: {
