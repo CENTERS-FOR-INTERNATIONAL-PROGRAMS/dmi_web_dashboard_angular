@@ -19,7 +19,7 @@
     "@angular/platform-browser-dynamic": "^16.1.0",
     "@angular/router": "^16.1.0",
     "apexcharts": "^3.41.1",
-    "bootstrap": "^5.3.0",
+    "bootstrap": "^4.0.0-alpha.6",
     "font-awesome": "^4.7.0",
     "highcharts-angular": "^3.1.2",
     "i": "^0.3.7",
