@@ -18,3 +18,13 @@
     margin-top: 1rem;
     
 }
+
+.equal-col {
+    flex: 1;
+    max-width: 20%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.equal-height-row {
+    display: flex;
+}
