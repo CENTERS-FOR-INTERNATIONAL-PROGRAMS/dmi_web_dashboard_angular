@@ -43,16 +43,16 @@ export class OverviewComponent implements OnInit {
     covid19PositivityByAgeGenderOptions: {} = {};
     //#endregion
 
-     // Overall Positivity By Facility----
-   covid19OverallPositivityByFacility: Covid19OverallPositivityByFacility[]= [];
-   covid19OverallPositivityByFacilitySeries: any[][] = [];
-   overallpositivitybyfacilitychartOptions: {} = {};
-   // ---
+    // Overall Positivity By Facility----
+    covid19OverallPositivityByFacility: Covid19OverallPositivityByFacility[] = [];
+    covid19OverallPositivityByFacilitySeries: any[][] = [];
+    overallpositivitybyfacilitychartOptions: {} = {};
+    // ---
 
     // Positivity By Gender----
-      covid19PositivityByGender: Covid19PositivityByGender[]= [];
-      covid19PositivityByGenderSeries: any[] = [];
-      overallpositivitybygenderchartOptions: {} = {};
+    covid19PositivityByGender: Covid19PositivityByGender[] = [];
+    covid19PositivityByGenderSeries: any[] = [];
+    overallpositivitybygenderchartOptions: {} = {};
     // ---
 
     positives: number = 0;
@@ -82,11 +82,11 @@ export class OverviewComponent implements OnInit {
 
         this.loadCovid19OverallPositivityByFacilityData();
         this.loadCovid19OverallPositivityByFacilityChart();
-  }
-  loadCovid19OverallPositivityByFacilityData() {
-    this.reviewService.findCovid19OverallPositivityByFacility().subscribe(
-      response => {
-        this.covid19OverallPositivityByFacility = response;
+    }
+    loadCovid19OverallPositivityByFacilityData() {
+        this.reviewService.findCovid19OverallPositivityByFacility().subscribe(
+            response => {
+                this.covid19OverallPositivityByFacility = response;
 
         // Health Facilities (index --> 0)
         this.covid19OverallPositivityByFacilitySeries.push([]);
@@ -98,10 +98,10 @@ export class OverviewComponent implements OnInit {
             this.covid19OverallPositivityByFacilitySeries[1].push(dataInstance.PositiveNumber);
         });
 
-      this.loadCovid19OverallPositivityByFacilityChart();
-      });
+                this.loadCovid19OverallPositivityByFacilityChart();
+            });
 
-  }
+    }
 
 
 loadCovid19OverallPositivityByFacilityChart() {
@@ -152,33 +152,58 @@ loadCovid19OverallPositivityByFacilityChart() {
                 this.loadCovid19PositivityByGenderChart();
             });
     }
-    loadCovid19PositivityByGenderChart(){
-        this.overallpositivitybygenderchartOptions= {
 
-            title: {
-                text: 'Covid 19 Positivity by Gender',
-                align: 'left'
-            },
+    loadCovid19PositivityByGenderChart() {
+        this.overallpositivitybygenderchartOptions = {
 
-            chart: {
-                type: "pie",
-            },
+             title: {
+              text: 'Covid 19 Positivity by Gender'
+             },
+              chart: {
+                  type: 'column'
+              },
+              // subtitle: {
+              //     text:
+              //         'Source: <a target="_blank" ' +
+              //         'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>',
+              //     align: 'left'
+            //  },
+              xAxis: {
+                  categories: ['Enrolled', 'Tested', 'Positive'],
+                  crosshair: true,
+                  accessibility: {
+                      description: 'Categories'
+                  }
+              },
+              yAxis: {
+                  min: 0,
+                  title: {
+                      text: 'Number Enrolled'
+                  }
+              },
+              tooltip: {
+                  valueSuffix: ''
+              },
+              plotOptions: {
+                  column: {
+                      pointPadding: 0.2,
+                      borderWidth: 0
+                  }
+              },
+              series: [
+                  {
+                      name: 'MALE',
+                      data: [62403, 123232, 77000]
+                  },
+                  {
+                      name: 'FEMALE',
+                      data: [51086, 106000, 75500]
+                  },
 
-            colors: [
-                "#234FEA", // Color for Category 2
-                "#FC7500", // Color for Category 3
-            ],
-            series: [
-                {
-                    name: "Data",
-                    type: 'pie',
-                    data: [
-                        ["Male", this.covid19PositivityByGenderSeries[0]],
-                        ["Female",this.covid19PositivityByGenderSeries[1]],
-                    ], // Replace with your data values
-                },
-            ],
-        };
+              ]
+               }
+
+
     }
     //#endregion
 
@@ -524,34 +549,34 @@ loadCovid19OverallPositivityByFacilityChart() {
            },
        }; */
 
-   /* overallpositivitybyfacilitychartOptions: Highcharts.Options = {
-        title: {
-            text: 'Overall Positivity By Facility',
-            align: 'left'
-        },
-        chart: {
-            type: "column",
-        },
-        // title: {
-        //  text: "Enrollment Cascade",
-        // },
-        xAxis: {
-            categories: ["Kenyatta National Hospital", "Busia County Referral", "Marsabit County ", "JOOTRH", "Makueni"], // Replace with your categories
-        },
-        yAxis: {
-            title: {
-                text: "Number Positive",
-            },
-        },
-        series: [
-            {
-                name: "Health Facilities",
-                data: [60, 55, 20, 20, 15],
-                type: 'column',
-                color: "#234FEA",
-            },
-        ],
-    };*/
+    /* overallpositivitybyfacilitychartOptions: Highcharts.Options = {
+         title: {
+             text: 'Overall Positivity By Facility',
+             align: 'left'
+         },
+         chart: {
+             type: "column",
+         },
+         // title: {
+         //  text: "Enrollment Cascade",
+         // },
+         xAxis: {
+             categories: ["Kenyatta National Hospital", "Busia County Referral", "Marsabit County ", "JOOTRH", "Makueni"], // Replace with your categories
+         },
+         yAxis: {
+             title: {
+                 text: "Number Positive",
+             },
+         },
+         series: [
+             {
+                 name: "Health Facilities",
+                 data: [60, 55, 20, 20, 15],
+                 type: 'column',
+                 color: "#234FEA",
+             },
+         ],
+     };*/
     positivitybysexandagechartOptions: Highcharts.Options = {
         chart: {
             //zoomType: 'xy'
@@ -671,147 +696,147 @@ loadCovid19OverallPositivityByFacilityChart() {
       },
     };
     };*/
-  /*
-    screenedovertimechartOptions: Highcharts.Options = {
-        title: {
-            text: 'Screened Over Time',
-            align: 'left',
-        },
+    /*
+      screenedovertimechartOptions: Highcharts.Options = {
+          title: {
+              text: 'Screened Over Time',
+              align: 'left',
+          },
 
-        chart: { type: "bar" },
-        xAxis: [
-            {
-                categories: ["0-4 yrs", "5-9 yrs", "15-34 yrs"],
-                title: { text: "" },
-                reversed: false
-            },
-            {
-                categories: ["0-4 yrs", "5-9 yrs", "15-34 yrs"],
-                title: { text: "" },
-                reversed: false,
-                linkedTo: 0,
-                opposite: true,
-            },
-        ],
-        yAxis: [
-            {
-                // labels: {
-                //     formatter: function () {
-                //         return Math.abs(parseInt(this.value)).toString();
-                //     },
-                // },
-            },
-        ],
-        plotOptions: { series: { stacking: "normal" }, bar: { pointWidth: 18 } },
-        tooltip: {
-        },
-        legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
-        series: [
-            {
-                name: "Female",
-                data: [10, 60, 30],
-                color: "#FC7500",
-                type: 'bar'
-            },
-            {
-                name: "Male",
-                data: [-9, -41, -34],
-                color: "#234FEA",
-                type: 'bar'
-            },
-        ],
+          chart: { type: "bar" },
+          xAxis: [
+              {
+                  categories: ["0-4 yrs", "5-9 yrs", "15-34 yrs"],
+                  title: { text: "" },
+                  reversed: false
+              },
+              {
+                  categories: ["0-4 yrs", "5-9 yrs", "15-34 yrs"],
+                  title: { text: "" },
+                  reversed: false,
+                  linkedTo: 0,
+                  opposite: true,
+              },
+          ],
+          yAxis: [
+              {
+                  // labels: {
+                  //     formatter: function () {
+                  //         return Math.abs(parseInt(this.value)).toString();
+                  //     },
+                  // },
+              },
+          ],
+          plotOptions: { series: { stacking: "normal" }, bar: { pointWidth: 18 } },
+          tooltip: {
+          },
+          legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
+          series: [
+              {
+                  name: "Female",
+                  data: [10, 60, 30],
+                  color: "#FC7500",
+                  type: 'bar'
+              },
+              {
+                  name: "Male",
+                  data: [-9, -41, -34],
+                  color: "#234FEA",
+                  type: 'bar'
+              },
+          ],
 
 
-    }
-}
-    };*/
+      }
+  }
+      };*/
 
 
  overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
 
-    chart: {
-        type: 'solidgauge'
-    },
+        chart: {
+            type: 'solidgauge'
+        },
 
-    title:{
-        text:''
-    },
-
-    pane: {
-        center: ['50%', '85%'],
-        size: '100%',
-        startAngle: -90,
-        endAngle: 90,
-        background: [{
-            backgroundColor:'#EEE',
-            innerRadius: '60%',
-            outerRadius: '100%',
-            shape: 'arc'
-        }
-    ]
-    },
-
-    exporting: {
-        enabled: false
-    },
-
-    tooltip: {
-        enabled: false
-    },
-    yAxis: {
-        stops: [
-            [1, '#55BF3B'],
-        ],
-        lineWidth: 0,
-        tickWidth: 0,
-        minorTickInterval: null,
-        tickAmount: 2,
         title: {
-            y: -70
+            text: ''
         },
-        labels: {
-            y: 16
-        },
-    		min: 0,
-        max: 100,
-        // title: {
-        //     text: 'Speed'
-        // }
-    },
-    plotOptions: {
-        solidgauge: {
-            dataLabels: {
-                y: 5,
-                borderWidth: 0,
-                useHTML: true
+
+        pane: {
+            center: ['50%', '85%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: [{
+                backgroundColor: '#EEE',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc'
             }
-        }
-    },
-    series: [{
-        name: 'Speed',
-        type:'solidgauge',
-        data: [80],
-        dataLabels: {
-            format:
-                '<div style="text-align:center">' +
-                '<span style="font-size:25px">{y}</span><br/>' +
-                '</div>'
+            ]
         },
+
+        exporting: {
+            enabled: false
+        },
+
         tooltip: {
-            valueSuffix: '',
-        }
-    }]
+            enabled: false
+        },
+        yAxis: {
+            stops: [
+                [1, '#55BF3B'],
+            ],
+            lineWidth: 0,
+            tickWidth: 0,
+            minorTickInterval: null,
+            tickAmount: 2,
+            title: {
+                y: -70
+            },
+            labels: {
+                y: 16
+            },
+            min: 0,
+            max: 100,
+            // title: {
+            //     text: 'Speed'
+            // }
+        },
+        plotOptions: {
+            solidgauge: {
+                dataLabels: {
+                    y: 5,
+                    borderWidth: 0,
+                    useHTML: true
+                }
+            }
+        },
+        series: [{
+            name: 'Speed',
+            type: 'solidgauge',
+            data: [80],
+            dataLabels: {
+                format:
+                    '<div style="text-align:center">' +
+                    '<span style="font-size:25px">{y}</span><br/>' +
+                    '</div>'
+            },
+            tooltip: {
+                valueSuffix: '',
+            }
+        }]
 
 
 
 
 
- }
-//     chart: {
-//         type: 'solidgauge'
-//     },
+    }
+    //     chart: {
+    //         type: 'solidgauge'
+    //     },
 
-//     title:{text:''
+    //     title:{text:''
 
 //     },
 
@@ -829,41 +854,41 @@ loadCovid19OverallPositivityByFacilityChart() {
 //         }
 //     },
 
-//     exporting: {
-//         enabled: false
-//     },
+    //     exporting: {
+    //         enabled: false
+    //     },
 
-//     tooltip: {
-//         enabled: false
-//     },
+    //     tooltip: {
+    //         enabled: false
+    //     },
 
-//     // the value axis
-//     yAxis: {
-//         stops: [
-//             [0.1, '#55BF3B'], // green
-//             [0.5, '#DDDF0D'], // yellow
-//             [0.9, '#DF5353'] // red
-//         ],
-//         lineWidth: 0,
-//         tickWidth: 0,
-//         minorTickInterval: null,
-//         tickAmount: 2,
-//         title: {
-//             y: -70
-//         },
-//         labels: {
-//             y: 16
-//         }
-//     },
+    //     // the value axis
+    //     yAxis: {
+    //         stops: [
+    //             [0.1, '#55BF3B'], // green
+    //             [0.5, '#DDDF0D'], // yellow
+    //             [0.9, '#DF5353'] // red
+    //         ],
+    //         lineWidth: 0,
+    //         tickWidth: 0,
+    //         minorTickInterval: null,
+    //         tickAmount: 2,
+    //         title: {
+    //             y: -70
+    //         },
+    //         labels: {
+    //             y: 16
+    //         }
+    //     },
 
-//     plotOptions: {
-//         solidgauge: {
-//             dataLabels: {
-//                 y: 5,
-//                 borderWidth: 0,
-//                 useHTML: true
-//             }
-//         }
-//     }
-// };
+    //     plotOptions: {
+    //         solidgauge: {
+    //             dataLabels: {
+    //                 y: 5,
+    //                 borderWidth: 0,
+    //                 useHTML: true
+    //             }
+    //         }
+    //     }
+    // };
 }
