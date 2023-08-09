@@ -47,7 +47,7 @@ export class ReviewService {
   public BASE_URLE4 = 'http://localhost:8080/api/covid19/enrollment/findOverTime';
 
   //Screening --//
-  public BASE_URLES1 = 'http://localhost:8080/api/screening//findScreeningByGender';
+  public BASE_URLES1 = 'http://localhost:8080/api/screening/findScreeningByGender';
   public BASE_URLES2 = 'http://localhost:8080/api/screening/findScreeningByAgeGender';
   public BASE_URLES3 = 'http://localhost:8080/api/screening/findScreeningByHealthFacilities';
   public BASE_URLES4 = 'http://localhost:8080/api/screening/findScreeningOverTime';
