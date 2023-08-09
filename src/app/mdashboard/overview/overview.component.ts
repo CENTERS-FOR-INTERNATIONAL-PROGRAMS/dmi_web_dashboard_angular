@@ -1,5 +1,6 @@
 import { ReviewService } from './../../services/review.service.ts.service';
 import { CovidPositivity } from './../../models/covidPositivity.model';
+import { Covid19Summary } from './../../models/covid19Summary.model';
 import { Covid19PositivityByGender } from './../../models/covid19PositivityByGender.model';
 import { Covid19OverallPositivityByFacility } from './../../models/covid19OverallPositivityByFacility.model';
 import { CovidPositivityOvertime } from './../../models/covidPositivityOvertime.model';
@@ -11,24 +12,27 @@ import HC_exporting from 'highcharts/modules/exporting';
 import * as HighchartsMore from 'highcharts/highcharts-more.src';
 import * as HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 
-
-
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css'],
 })
+
 export class OverviewComponent implements OnInit {
-  
-  numberEnrolled: NumEnrolled[] = [];
+
+  //#region Prerequisites --> COVID-19 Summary
+  covid19Summary: Covid19Summary[] = [];
+  covid19SummaryByMonth: Covid19Summary[] = [];
+
+  covid19SummaryGroup: any[][] = [];
+  covid19SummarySeries: any[] = [];
+  covid19SummaryOptions: {} = {};
+  //#endregion
 
   //#region Prerequisites --> COVID-19 Positivity
-  //Positivity --
   covid19Positivity: CovidPositivity[] = [];
   covid19PositivitySeries: any[] = [];
   covid19PositivityOptions: {} = {};
-  //overallpositivitychartOptions: {} = {};
-
   //#endregion
 
   //#region Prerequisites --> COVID-19 positivity overtime
@@ -67,8 +71,12 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadCovid19SummaryData();
+    this.loadCovid19SummaryChart();
+
     this.loadCovid19PositivityData();
     this.loadCovid19PositivityChart();
+
     this.loadCovid19PositivityByGenderData();
     this.loadCovid19PositivityByGenderChart();
 
@@ -81,6 +89,7 @@ export class OverviewComponent implements OnInit {
     this.loadCovid19OverallPositivityByFacilityData();
     this.loadCovid19OverallPositivityByFacilityChart();
   }
+
   loadCovid19OverallPositivityByFacilityData() {
     this.reviewService
       .findCovid19OverallPositivityByFacility()
@@ -110,64 +119,263 @@ export class OverviewComponent implements OnInit {
       title: {
         text: 'Enrolled & Tested Postive by Facility',
         align: 'left'
-    },
-    chart: {
+      },
+      chart: {
         type: 'column'
-    },
-    xAxis: {
+      },
+      xAxis: {
         categories: ['Kenyatta National Hospital', 'Busia CRH', 'Marsabit CRH', 'Machakos CRH']
-    },
-    yAxis: {
+      },
+      yAxis: {
         min: 0,
         title: {
-            text: 'Number Screened'
+          text: 'Number Screened'
         },
         stackLabels: {
-            enabled: true
+          enabled: true
         }
-    },
-    legend: {
+      },
+      legend: {
         align: 'left',
         x: 70,
         verticalAlign: 'top',
         y: 70,
         floating: true,
-        backgroundColor:'white',
+        backgroundColor: 'white',
         borderColor: '#CCC',
         borderWidth: 1,
         shadow: false
-    },
-    tooltip: {
+      },
+      tooltip: {
         headerFormat: '<b>{point.x}</b><br/>',
         pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-    },
-    plotOptions: {
+      },
+      plotOptions: {
         column: {
-            stacking: 'normal',
-            dataLabels: {
-                enabled: true
-            }
+          stacking: 'normal',
+          dataLabels: {
+            enabled: true
+          }
         }
-    },
-    series: [{
+      },
+      series: [{
         name: 'Enrolled',
         data: [3, 5, 1, 13],
-        color:'#234FEA'
-    }, {
+        color: '#234FEA'
+      }, {
         name: 'Positive',
         data: [14, 8, 8, 12],
-        color:'#FF0000'
-    },
-] 
+        color: '#FF0000'
+      },
+      ]
 
     };
     HC_exporting(Highcharts);
   }
 
+  //#region Load Chart --> Covid-19 Summary
+  loadCovid19SummaryData() {
+    // Init Group
+    for (let index = 0; index < 5; index++) {
+      //Init Group Instance
+      this.covid19SummaryGroup.push([]);
+
+      //Init Chart Series (Index --> 0)
+      this.covid19SummaryGroup[index].push([]);
+
+      //Init Chart Options (Index --> 1)
+      this.covid19SummaryGroup[index].push({});
+
+      //Init Previous Month Data (Index --> 2)
+      this.covid19SummaryGroup[index].push(0);
+    }
+
+    this.reviewService.findSummary().subscribe((response) => {
+      this.covid19Summary = response;
+
+      //#region Push series data into array at specific indexes
+      this.covid19SummaryGroup.forEach((groupInstance, index) => {
+        switch (index) {
+          //Total Screened Card
+          case 0:
+            // Total Screened Number (Index --> 0)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].TotalScreened);
+            break;
+
+          //Eligible Card
+          case 1:
+            // Eligible Number (Index --> 0)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].Eligible);
+
+            // Eligible Percent (Index --> 1)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].PercentEligible);
+            break;
+
+          //Enrolled Card
+          case 2:
+            // Enrolled Number (Index --> 0)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].Enrolled);
+
+            // Enrolled Percent (Index --> 1)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].PercentEnrolled);
+            break;
+
+          //Tested Card
+          case 3:
+            // Tested Number (Index --> 0)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].Tested);
+
+            // Tested Percent (Index --> 1)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].PercentTested);
+            break;
+
+          //Positive Card
+          case 4:
+            // Positive Number (Index --> 0)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].Positive);
+
+            // Positive Percent (Index --> 1)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].PercentPositive);
+            break;
+
+          default:
+            break;
+        }
+      });
+      //#endregion
+
+      this.loadCovid19SummaryChart();
+    });
+
+    this.reviewService.findSummaryByMonth().subscribe((response) => {
+      this.covid19SummaryByMonth = response;
+
+      //#region Attach Summary --> Last Month Data
+      this.covid19SummaryGroup.forEach((groupInstance, index) => {
+        switch (index) {
+          //Total Screened Card (Index --> 0)
+          case 0:
+            // Total Screened Number --> Last Month (Index --> 2)
+            this.covid19SummaryGroup[index][2] = this.covid19SummaryByMonth[0].TotalScreenedLastMonth;
+            break;
+
+          //Eligible Card (Index --> 1)
+          case 1:
+            // Eligible Number --> Last Month (Index --> 0)
+            this.covid19SummaryGroup[index][2] = this.covid19SummaryByMonth[0].EligibleLastMonth;
+            break;
+
+          //Enrolled Card (Index --> 2)
+          case 2:
+            // Enrolled Number --> Last Month (Index --> 0)
+            this.covid19SummaryGroup[index][2] = this.covid19SummaryByMonth[0].EnrolledLastMonth;
+            break;
+
+          //Tested Card (Index --> 3)
+          case 3:
+            // Tested Number --> Last Month (Index --> 0)
+            this.covid19SummaryGroup[index][2] = this.covid19SummaryByMonth[0].TestedLastMonth;
+            break;
+
+          //Positive Card (Index --> 4)
+          case 4:
+            // Positive Number --> Last Month (Index --> 0)
+            this.covid19SummaryGroup[index][2] = this.covid19SummaryByMonth[0].PositiveLastMonth;
+            break;
+
+          default:
+            break;
+        }
+      });
+      //#endregion
+    });
+  }
+
+  loadCovid19SummaryChart() {
+    this.covid19SummaryGroup.forEach((groupInstance, index) => {
+      //Attach Chart Options (Index --> 1)
+      this.covid19SummaryGroup[index][1] = {
+        chart: {
+          type: 'solidgauge',
+        },
+        title: {
+          text: '',
+        },
+        pane: {
+          center: ['50%', '85%'],
+          size: '100%',
+          startAngle: -90,
+          endAngle: 90,
+          background: [
+            {
+              backgroundColor: '#EEE',
+              innerRadius: '60%',
+              outerRadius: '100%',
+              shape: 'arc',
+            },
+          ],
+        },
+        exporting: {
+          enabled: false,
+        },
+        tooltip: {
+          enabled: false,
+        },
+        yAxis: {
+          stops: [[1, 'blue']],
+          lineWidth: 0,
+          tickWidth: 0,
+          minorTickInterval: null,
+          tickAmount: 2,
+          title: {
+            y: -70,
+          },
+          labels: {
+            y: 16,
+          },
+          min: 0,
+          max: 100,
+        },
+        plotOptions: {
+          solidgauge: {
+            dataLabels: {
+              y: 5,
+              borderWidth: 0,
+              useHTML: true,
+            },
+          },
+        },
+        series: [
+          {
+            name: 'Speed',
+            type: 'solidgauge',
+            data: [groupInstance[0][1]],
+            dataLabels: {
+              format:
+                '<div style="text-align:center">' +
+                '<span style="font-size:25px">{y}%</span><br/>' +
+                '</div>',
+            },
+            tooltip: {
+              valueSuffix: '',
+            },
+          }
+        ],
+        credits: {
+          enabled: false,
+        }
+      }
+    });
+
+    HC_exporting(Highcharts);
+  }
+  //#endregion
+
   //#region Load Gender Data --> Covid-19 Positivity By Gender
   loadCovid19PositivityByGenderData() {
     this.reviewService.findCovid19PositivityByGender().subscribe((response) => {
       this.covid19PositivityByGender = response;
+
       this.covid19PositivityByGender.forEach((dataInstance) => {
         if (dataInstance.Gender == 'Male') {
           this.covid19PositivityByGenderSeries.push(
@@ -179,11 +387,11 @@ export class OverviewComponent implements OnInit {
           );
         }
       });
-      console.log(this.covid19PositivityByGenderSeries[0]);
-      //#endregion
+
       this.loadCovid19PositivityByGenderChart();
     });
   }
+
   loadCovid19PositivityByGenderChart() {
     this.overallpositivitybygenderchartOptions = {
       title: {
@@ -224,12 +432,12 @@ export class OverviewComponent implements OnInit {
         {
           name: 'MALE',
           data: [62403, 123232, 77000],
-          color:'#234FEA'
+          color: '#234FEA'
         },
         {
           name: 'FEMALE',
           data: [51086, 106000, 75500],
-          color:'#FC7500'
+          color: '#FC7500'
         },
       ],
     };
@@ -548,452 +756,4 @@ export class OverviewComponent implements OnInit {
   }
   //#endregion
 
-  //#endregion
-  
-  /*    Highcharts: typeof Highcharts = Highcharts;
-       overallpositivitychartOptions: Highcharts.Options = {
-           title: {
-               text: 'Overall COVID-19 Positivity',
-           },
-           colors: [
-               "#FF0000",
-               "green",
-           ],
-           series: [
-               {
-                   name: "Data",
-                   type: 'pie',
-                   data: [
-                       ["Posivite", 20],
-                       ["Negative", 30],
-                   ], // Replace with your data values
-               },
-           ],
-           // series: [{
-           //     data: [1, 2,],
-           //     type: 'pie'
-           // }],
-   
-           plotOptions: {
-               pie: {
-                   innerSize: "70%", // Adjust the innerSize to control the size of the inner hole (donut hole)
-                   depth: 25, // Adjust the depth to control the thickness of the donut
-                   dataLabels: {
-                       enabled: true, // Disable data labels inside the donut segments
-                   },
-               },
-           },
-       }; */
-
-
-  /* overallpositivitybyfacilitychartOptions: Highcharts.Options = {
-        title: {
-            text: 'Overall Positivity By Facility',
-            align: 'left'
-        },
-        chart: {
-            type: "column",
-        },
-        // title: {
-        //  text: "Enrollment Cascade",
-        // },
-        xAxis: {
-            categories: ["Kenyatta National Hospital", "Busia County Referral", "Marsabit County ", "JOOTRH", "Makueni"], // Replace with your categories
-        },
-        yAxis: {
-            title: {
-                text: "Number Positive",
-            },
-        },
-        series: [
-            {
-                name: "Health Facilities",
-                data: [60, 55, 20, 20, 15],
-                type: 'column',
-                color: "#234FEA",
-            },
-        ],
-    };*/
-  positivitybysexandagechartOptions: Highcharts.Options = {
-    chart: {
-      //zoomType: 'xy'
-    },
-    title: {
-      text: 'Covid-19 Positivity over Time',
-      align: 'left',
-    },
-    // subtitle: {
-    //     text: 'Source: ' +
-    //         '<a href="https://www.yr.no/nb/historikk/graf/5-97251/Norge/Troms%20og%20Finnmark/Karasjok/Karasjok?q=2021"' +
-    //         'target="_blank">YR</a>',
-    //     align: 'left'
-    // },
-    xAxis: [
-      {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
-        crosshair: true,
-      },
-    ],
-    yAxis: [
-      {
-        // Primary yAxis
-        labels: {
-          format: '{value}',
-          // style: {
-          //     color: Highcharts.getOptions().colors[1]
-          // }
-        },
-        title: {
-          text: 'Number Tested',
-          // style: {
-          //     color: Highcharts.getOptions().colors[1]
-          // }
-        },
-      },
-      {
-        // Secondary yAxis
-        title: {
-          text: 'Tested Positive',
-          // style: {
-          //     color: Highcharts.getOptions().colors[0]
-          // }
-        },
-        labels: {
-          format: '{value}%',
-          // style: {
-          //     color: Highcharts.getOptions().colors[0]
-          // }
-        },
-        opposite: true,
-      },
-    ],
-    tooltip: {
-      shared: true,
-    },
-    legend: {
-      align: 'left',
-      x: 80,
-      verticalAlign: 'top',
-      y: 60,
-      floating: true,
-      // backgroundColor:
-      //     Highcharts.defaultOptions.legend.backgroundColor || // theme
-      //     'rgba(255,255,255,0.25)'
-    },
-    series: [
-      {
-        name: 'Sample Tested',
-        type: 'column',
-        color: '#234FEA',
-        yAxis: 1,
-        data: [
-          27.6, 28.8, 21.7, 34.1, 29.0, 28.4, 45.6, 51.7, 39.0, 60.0, 28.6,
-          32.1,
-        ],
-        tooltip: {
-          valueSuffix: ' mm',
-        },
-      },
-      {
-        name: '% Positivity',
-        type: 'spline',
-        data: [
-          -13.6, -14.9, -5.8, -0.7, 3.1, 13.0, 14.5, 10.8, 5.8, -0.7, -11.0,
-          -16.4,
-        ],
-        color: 'red',
-        tooltip: {
-          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-        },
-        accessibility: { point: { valueSuffix: '%' } },
-        // valueSuffix: '°C'
-        // tooltip: {
-        //     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-        // },
-        // accessibility: { point: { valueSuffix: '%' } },
-      },
-    ],
-  };
-  /*covid19positivitybygenderchartOptions: Highcharts.Options = {
-
-        title: {
-            text: '',
-            align: 'left'
-        },
-
-        chart: {
-            type: "pie",
-        },
-
-        colors: [
-            "#234FEA", // Color for Category 2
-            "#FC7500", // Color for Category 3
-        ],
-        series: [
-            {
-                name: "Data",
-                type: 'pie',
-                data: [
-                    ["Male", 20],
-                    ["Female", 30],
-                ], // Replace with your data values
-            },
-        ],
-    };*/
-    /*
-      screenedovertimechartOptions: Highcharts.Options = {
-          title: {
-              text: 'Screened Over Time',
-              align: 'left',
-          },
-  
-          chart: { type: "bar" },
-          xAxis: [
-              {
-                  categories: ["0-4 yrs", "5-9 yrs", "15-34 yrs"],
-                  title: { text: "" },
-                  reversed: false
-              },
-              {
-                  categories: ["0-4 yrs", "5-9 yrs", "15-34 yrs"],
-                  title: { text: "" },
-                  reversed: false,
-                  linkedTo: 0,
-                  opposite: true,
-              },
-          ],
-          yAxis: [
-              {
-                  // labels: {
-                  //     formatter: function () {
-                  //         return Math.abs(parseInt(this.value)).toString();
-                  //     },
-                  // },
-              },
-          ],
-          plotOptions: { series: { stacking: "normal" }, bar: { pointWidth: 18 } },
-          tooltip: {
-          },
-          legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
-          series: [
-              {
-                  name: "Female",
-                  data: [10, 60, 30],
-                  color: "#FC7500",
-                  type: 'bar'
-              },
-              {
-                  name: "Male",
-                  data: [-9, -41, -34],
-                  color: "#234FEA",
-                  type: 'bar'
-              },
-          ],
-  
-  
-      }
-  }
-      };*/
-
-
-//     overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
-
-//         chart: {
-//             type: 'solidgauge'
-//         },
-
-//         title: {
-//             text: ''
-//         },
-
-//         pane: {
-//             center: ['50%', '85%'],
-//             size: '100%',
-//             startAngle: -90,
-//             endAngle: 90,
-//             background: [{
-//                 backgroundColor: '#EEE',
-//                 innerRadius: '60%',
-//                 outerRadius: '100%',
-//                 shape: 'arc'
-//             }
-//             ]
-//         },
-
-//         exporting: {
-//             enabled: false
-//         },
-
-//         tooltip: {
-//             enabled: false
-//         },
-//         yAxis: {
-//             stops: [
-//                 [1, '#55BF3B'],
-//             ],
-//             lineWidth: 0,
-//             tickWidth: 0,
-//             minorTickInterval: null,
-//             tickAmount: 2,
-//             title: {
-//                 y: -70
-//             },
-//             labels: {
-//                 y: 16
-//             },
-
-        
-
-
-//     }
-// }
-    
-
-  overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
-    chart: {
-      type: 'solidgauge',
-    },
-
-    title: {
-      text: '',
-    },
-
-    pane: {
-      center: ['50%', '85%'],
-      size: '100%',
-      startAngle: -90,
-      endAngle: 90,
-      background: [
-        {
-          backgroundColor: '#EEE',
-          innerRadius: '60%',
-          outerRadius: '100%',
-          shape: 'arc',
-        },
-      ],
-    },
-
-    exporting: {
-      enabled: false,
-    },
-
-    tooltip: {
-      enabled: false,
-    },
-    yAxis: {
-      stops: [[1, 'blue']],
-      lineWidth: 0,
-      tickWidth: 0,
-      minorTickInterval: null,
-      tickAmount: 2,
-      title: {
-        y: -70,
-      },
-      labels: {
-        y: 16,
-      },
-      min: 0,
-      max: 100,
-    },
-    plotOptions: {
-      solidgauge: {
-        dataLabels: {
-          y: 5,
-          borderWidth: 0,
-          useHTML: true,
-        },
-      },
-    },
-    series: [
-      {
-        name: 'Speed',
-        type: 'solidgauge',
-        data: [(Math.floor(Math.random() * 90))],
-        dataLabels: {
-          format:
-            '<div style="text-align:center">' +
-            '<span style="font-size:25px">{y}%</span><br/>' +
-            '</div>',
-        },
-        tooltip: {
-          valueSuffix: '',
-        },
-      },
-    ],
-    credits: {
-      enabled: false,
-    },
-  };
-  //     chart: {
-  //         type: 'solidgauge'
-  //     },
-
-  //     title:{text:''
-
-  //     },
-
-  //     pane: {
-  //         center: ['50%', '85%'],
-  //         size: '140%',
-  //         startAngle: -90,
-  //         endAngle: 90,
-  //         background: {
-  //             // backgroundColor:
-  //             //     Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-  //             // innerRadius: '60%',
-  //             // outerRadius: '100%',
-  //             // shape: 'arc'
-  //         }
-  //     },
-
-  //     exporting: {
-  //         enabled: false
-  //     },
-
-  //     tooltip: {
-  //         enabled: false
-  //     },
-
-  //     // the value axis
-  //     yAxis: {
-  //         stops: [
-  //             [0.1, '#55BF3B'], // green
-  //             [0.5, '#DDDF0D'], // yellow
-  //             [0.9, '#DF5353'] // red
-  //         ],
-  //         lineWidth: 0,
-  //         tickWidth: 0,
-  //         minorTickInterval: null,
-  //         tickAmount: 2,
-  //         title: {
-  //             y: -70
-  //         },
-  //         labels: {
-  //             y: 16
-  //         }
-  //     },
-
-  //     plotOptions: {
-  //         solidgauge: {
-  //             dataLabels: {
-  //                 y: 5,
-  //                 borderWidth: 0,
-  //                 useHTML: true
-  //             }
-  //         }
-  //     }
-  // };
 }
