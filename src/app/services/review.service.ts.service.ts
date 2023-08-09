@@ -34,13 +34,8 @@ export class ReviewService {
   public BASE_URL = 'http://localhost:8080/api/overview/findCovid19Positivity';
   public BASE_URL1 = 'http://localhost:8080/api/overview/findCovid19OverTime';
   public BASE_URL3 = 'http://localhost:8080/api/overview/findCovid19PositivityByAgeGender';
-<<<<<<< HEAD
-  public BASE_URL_BY_GENDER  = 'http://localhost:8080/api/overview/findCovid19PositivityByGender';
-  public BASE_URL_BY_FACILITY  = 'http://localhost:8080/api/overview/findCovid19OverallPositivityByFacility';
-=======
   public BASE_URL_BY_GENDER = 'http://localhost:8080/api/overview/findCovid19PositivityByGender';
   public BASE_URL_BY_FACILITY = 'http://localhost:8080/api/overview/findCovid19OverallPositivityByFacility';
->>>>>>> upstream/dev
 
   // Enrollment --//
   public BASE_URLE1 = 'http://localhost:8080/api/covid19/enrollment/findByGender';
@@ -156,10 +151,7 @@ export class ReviewService {
     );
   }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> upstream/dev
   findScreeningByAgeGender(): Observable<ScreeningByAgeGender[]> {
     return this.http.get<ScreeningByAgeGender[]>(`${this.BASE_URLES2}`).pipe(
       retry(1),
