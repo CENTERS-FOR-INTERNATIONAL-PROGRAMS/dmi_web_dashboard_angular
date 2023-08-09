@@ -238,7 +238,8 @@ loadScreeningByGenderChart() {
             tooltip: {
             },
             legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
-            series: [
+
+            series: [ 
                 {
                     name: "Male",
                     data: this.ScreeningByAgeGenderSeries[2],
@@ -251,6 +252,7 @@ loadScreeningByGenderChart() {
                     color: "#FC7500",
                     type: 'bar'
                 },
+
             ],
         };
     }

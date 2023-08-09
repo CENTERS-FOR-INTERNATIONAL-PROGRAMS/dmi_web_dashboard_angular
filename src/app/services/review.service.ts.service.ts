@@ -1,6 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
+
+import { Covid19Summary } from '../models/covid19Summary.model';
 import { NumEnrolled } from '../models/numEnrolled.model';
 
 import { CovidPositivity } from '../models/covidPositivity.model';
@@ -25,13 +27,14 @@ import { Covid19ResultsByFacility } from '../models/covid19ResultsByFacility.mod
 import { Covid19ResultsByAgeGender } from '../models/covid19ResultsByAgeGender.model';
 import { Covid19ResultsByPositivityOverTime } from '../models/covid19ResultsByPositivityOverTime.model';
 
-
 @Injectable({
   providedIn: 'root'
 })
 
 export class ReviewService {
   // Overview -- //
+  public BASE_URL_COVID19_SUMMARY = 'http://localhost:8080/api/overview/findCovid19Summary';
+  public BASE_URL_COVID19_SUMMARYBYMONTH = 'http://localhost:8080/api/overview/findCovid19SummaryByMonth';
   public BASE_URL = 'http://localhost:8080/api/overview/findCovid19Positivity';
   public BASE_URL1 = 'http://localhost:8080/api/overview/findCovid19OverTime';
   public BASE_URL3 = 'http://localhost:8080/api/overview/findCovid19PositivityByAgeGender';
@@ -59,6 +62,20 @@ export class ReviewService {
   constructor(private http: HttpClient) {
   }
   //#region Overview
+  findSummary(): Observable<Covid19Summary[]> {
+    return this.http.get<Covid19Summary[]>(`${this.BASE_URL_COVID19_SUMMARY}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
+  findSummaryByMonth(): Observable<Covid19Summary[]> {
+    return this.http.get<Covid19Summary[]>(`${this.BASE_URL_COVID19_SUMMARYBYMONTH}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
   findNumberEnrolledByFacility(): Observable<NumEnrolled[]> {
     console.log('In the service');
     return this.http.get<NumEnrolled[]>(`${this.BASE_URL}`).pipe(
@@ -104,7 +121,6 @@ export class ReviewService {
       catchError(this.handleError)
     );
   }
-
 
   //#region Enrollment
   findEnrollmentByGender(): Observable<EnrollmentByGender[]> {
@@ -188,7 +204,7 @@ export class ReviewService {
       catchError(this.handleError)
     );
   }
-  
+
   findCovid19ResultsByPositivityOverTime(): Observable<Covid19ResultsByPositivityOverTime[]> {
     return this.http.get<Covid19ResultsByPositivityOverTime[]>(`${this.BASE_URLR4}`).pipe(
       retry(1),

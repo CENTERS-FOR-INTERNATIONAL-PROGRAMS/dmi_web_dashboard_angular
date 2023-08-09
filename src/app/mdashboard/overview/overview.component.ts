@@ -1,6 +1,6 @@
 import { ReviewService } from './../../services/review.service.ts.service';
 import { CovidPositivity } from './../../models/covidPositivity.model';
-import { CovidPositivityOverTime } from './../../models/covidPositivityOverTime.model';
+import { Covid19Summary } from './../../models/covid19Summary.model';
 import { Covid19PositivityByGender } from './../../models/covid19PositivityByGender.model';
 import { Covid19OverallPositivityByFacility } from './../../models/covid19OverallPositivityByFacility.model';
 import { CovidPositivityByAgeGender } from './../../models/covidPositivityByAgeGender.model';
@@ -11,24 +11,20 @@ import HC_exporting from 'highcharts/modules/exporting';
 import * as HighchartsMore from 'highcharts/highcharts-more.src';
 import * as HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 
-
-
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css'],
 })
+
 export class OverviewComponent implements OnInit {
 
   numberEnrolled: NumEnrolled[] = [];
 
   //#region Prerequisites --> COVID-19 Positivity
-  //Positivity --
   covid19Positivity: CovidPositivity[] = [];
   covid19PositivitySeries: any[] = [];
   covid19PositivityOptions: {} = {};
-  //overallpositivitychartOptions: {} = {};
-
   //#endregion
 
     //#region Prerequisites --> COVID-19 positivity overtime
@@ -67,8 +63,12 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadCovid19SummaryData();
+    this.loadCovid19SummaryChart();
+
     this.loadCovid19PositivityData();
     this.loadCovid19PositivityChart();
+
     this.loadCovid19PositivityByGenderData();
     this.loadCovid19PositivityByGenderChart();
 
@@ -81,6 +81,7 @@ export class OverviewComponent implements OnInit {
     this.loadCovid19OverallPositivityByFacilityData();
     this.loadCovid19OverallPositivityByFacilityChart();
   }
+
   loadCovid19OverallPositivityByFacilityData() {
     this.reviewService
       .findCovid19OverallPositivityByFacility()
@@ -110,64 +111,263 @@ export class OverviewComponent implements OnInit {
       title: {
         text: 'Enrolled & Tested Postive by Facility',
         align: 'left'
-    },
-    chart: {
+      },
+      chart: {
         type: 'column'
-    },
-    xAxis: {
+      },
+      xAxis: {
         categories: ['Kenyatta National Hospital', 'Busia CRH', 'Marsabit CRH', 'Machakos CRH']
-    },
-    yAxis: {
+      },
+      yAxis: {
         min: 0,
         title: {
-            text: 'Number Screened'
+          text: 'Number Screened'
         },
         stackLabels: {
-            enabled: true
+          enabled: true
         }
-    },
-    legend: {
+      },
+      legend: {
         align: 'left',
         x: 70,
         verticalAlign: 'top',
         y: 70,
         floating: true,
-        backgroundColor:'white',
+        backgroundColor: 'white',
         borderColor: '#CCC',
         borderWidth: 1,
         shadow: false
-    },
-    tooltip: {
+      },
+      tooltip: {
         headerFormat: '<b>{point.x}</b><br/>',
         pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-    },
-    plotOptions: {
+      },
+      plotOptions: {
         column: {
-            stacking: 'normal',
-            dataLabels: {
-                enabled: true
-            }
+          stacking: 'normal',
+          dataLabels: {
+            enabled: true
+          }
         }
-    },
-    series: [{
+      },
+      series: [{
         name: 'Enrolled',
         data: [3, 5, 1, 13],
-        color:'#234FEA'
-    }, {
+        color: '#234FEA'
+      }, {
         name: 'Positive',
         data: [14, 8, 8, 12],
-        color:'#FF0000'
-    },
-] 
+        color: '#FF0000'
+      },
+      ]
 
     };
     HC_exporting(Highcharts);
   }
 
+  //#region Load Chart --> Covid-19 Summary
+  loadCovid19SummaryData() {
+    // Init Group
+    for (let index = 0; index < 5; index++) {
+      //Init Group Instance
+      this.covid19SummaryGroup.push([]);
+
+      //Init Chart Series (Index --> 0)
+      this.covid19SummaryGroup[index].push([]);
+
+      //Init Chart Options (Index --> 1)
+      this.covid19SummaryGroup[index].push({});
+
+      //Init Previous Month Data (Index --> 2)
+      this.covid19SummaryGroup[index].push(0);
+    }
+
+    this.reviewService.findSummary().subscribe((response) => {
+      this.covid19Summary = response;
+
+      //#region Push series data into array at specific indexes
+      this.covid19SummaryGroup.forEach((groupInstance, index) => {
+        switch (index) {
+          //Total Screened Card
+          case 0:
+            // Total Screened Number (Index --> 0)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].TotalScreened);
+            break;
+
+          //Eligible Card
+          case 1:
+            // Eligible Number (Index --> 0)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].Eligible);
+
+            // Eligible Percent (Index --> 1)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].PercentEligible);
+            break;
+
+          //Enrolled Card
+          case 2:
+            // Enrolled Number (Index --> 0)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].Enrolled);
+
+            // Enrolled Percent (Index --> 1)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].PercentEnrolled);
+            break;
+
+          //Tested Card
+          case 3:
+            // Tested Number (Index --> 0)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].Tested);
+
+            // Tested Percent (Index --> 1)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].PercentTested);
+            break;
+
+          //Positive Card
+          case 4:
+            // Positive Number (Index --> 0)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].Positive);
+
+            // Positive Percent (Index --> 1)
+            this.covid19SummaryGroup[index][0].push(this.covid19Summary[0].PercentPositive);
+            break;
+
+          default:
+            break;
+        }
+      });
+      //#endregion
+
+      this.loadCovid19SummaryChart();
+    });
+
+    this.reviewService.findSummaryByMonth().subscribe((response) => {
+      this.covid19SummaryByMonth = response;
+
+      //#region Attach Summary --> Last Month Data
+      this.covid19SummaryGroup.forEach((groupInstance, index) => {
+        switch (index) {
+          //Total Screened Card (Index --> 0)
+          case 0:
+            // Total Screened Number --> Last Month (Index --> 2)
+            this.covid19SummaryGroup[index][2] = this.covid19SummaryByMonth[0].TotalScreenedLastMonth;
+            break;
+
+          //Eligible Card (Index --> 1)
+          case 1:
+            // Eligible Number --> Last Month (Index --> 0)
+            this.covid19SummaryGroup[index][2] = this.covid19SummaryByMonth[0].EligibleLastMonth;
+            break;
+
+          //Enrolled Card (Index --> 2)
+          case 2:
+            // Enrolled Number --> Last Month (Index --> 0)
+            this.covid19SummaryGroup[index][2] = this.covid19SummaryByMonth[0].EnrolledLastMonth;
+            break;
+
+          //Tested Card (Index --> 3)
+          case 3:
+            // Tested Number --> Last Month (Index --> 0)
+            this.covid19SummaryGroup[index][2] = this.covid19SummaryByMonth[0].TestedLastMonth;
+            break;
+
+          //Positive Card (Index --> 4)
+          case 4:
+            // Positive Number --> Last Month (Index --> 0)
+            this.covid19SummaryGroup[index][2] = this.covid19SummaryByMonth[0].PositiveLastMonth;
+            break;
+
+          default:
+            break;
+        }
+      });
+      //#endregion
+    });
+  }
+
+  loadCovid19SummaryChart() {
+    this.covid19SummaryGroup.forEach((groupInstance, index) => {
+      //Attach Chart Options (Index --> 1)
+      this.covid19SummaryGroup[index][1] = {
+        chart: {
+          type: 'solidgauge',
+        },
+        title: {
+          text: '',
+        },
+        pane: {
+          center: ['50%', '85%'],
+          size: '100%',
+          startAngle: -90,
+          endAngle: 90,
+          background: [
+            {
+              backgroundColor: '#EEE',
+              innerRadius: '60%',
+              outerRadius: '100%',
+              shape: 'arc',
+            },
+          ],
+        },
+        exporting: {
+          enabled: false,
+        },
+        tooltip: {
+          enabled: false,
+        },
+        yAxis: {
+          stops: [[1, 'blue']],
+          lineWidth: 0,
+          tickWidth: 0,
+          minorTickInterval: null,
+          tickAmount: 2,
+          title: {
+            y: -70,
+          },
+          labels: {
+            y: 16,
+          },
+          min: 0,
+          max: 100,
+        },
+        plotOptions: {
+          solidgauge: {
+            dataLabels: {
+              y: 5,
+              borderWidth: 0,
+              useHTML: true,
+            },
+          },
+        },
+        series: [
+          {
+            name: 'Speed',
+            type: 'solidgauge',
+            data: [groupInstance[0][1]],
+            dataLabels: {
+              format:
+                '<div style="text-align:center">' +
+                '<span style="font-size:25px">{y}%</span><br/>' +
+                '</div>',
+            },
+            tooltip: {
+              valueSuffix: '',
+            },
+          }
+        ],
+        credits: {
+          enabled: false,
+        }
+      }
+    });
+
+    HC_exporting(Highcharts);
+  }
+  //#endregion
+
   //#region Load Gender Data --> Covid-19 Positivity By Gender
   loadCovid19PositivityByGenderData() {
     this.reviewService.findCovid19PositivityByGender().subscribe((response) => {
       this.covid19PositivityByGender = response;
+
       this.covid19PositivityByGender.forEach((dataInstance) => {
         if (dataInstance.Gender == 'Male') {
           this.covid19PositivityByGenderSeries.push(
@@ -179,11 +379,11 @@ export class OverviewComponent implements OnInit {
           );
         }
       });
-      console.log(this.covid19PositivityByGenderSeries[0]);
-      //#endregion
+
       this.loadCovid19PositivityByGenderChart();
     });
   }
+
   loadCovid19PositivityByGenderChart() {
     this.overallpositivitybygenderchartOptions = {
       title: {
@@ -224,12 +424,12 @@ export class OverviewComponent implements OnInit {
         {
           name: 'MALE',
           data: [62403, 123232, 77000],
-          color:'#234FEA'
+          color: '#234FEA'
         },
         {
           name: 'FEMALE',
           data: [51086, 106000, 75500],
-          color:'#FC7500'
+          color: '#FC7500'
         },
       ],
     };
@@ -549,7 +749,7 @@ export class OverviewComponent implements OnInit {
   //#endregion
 
   //#endregion
-  
+
   /*    Highcharts: typeof Highcharts = Highcharts;
        overallpositivitychartOptions: Highcharts.Options = {
            title: {
@@ -752,10 +952,6 @@ export class OverviewComponent implements OnInit {
                 ], // Replace with your data values
             },
         ],
-        credits: {
-          enabled: false
-      },
-    };
     };*/
     /*
       screenedovertimechartOptions: Highcharts.Options = {
@@ -813,7 +1009,7 @@ export class OverviewComponent implements OnInit {
       };*/
 
 
-
+//     overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
 
 //         chart: {
 //             type: 'solidgauge'
