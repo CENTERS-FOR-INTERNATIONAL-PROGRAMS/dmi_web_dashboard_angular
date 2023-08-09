@@ -11,6 +11,9 @@ import { RouterModule, Routes } from '@angular/router';
 import * as HighchartsMore from 'highcharts/highcharts-more.src';
 import * as HighchartsSolidGauge from 'highcharts/modules/solid-gauge'; 
 import * as Highcharts from 'highcharts';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { NgbDate, NgbCalendar, NgbDatepickerModule } from 'ngx-bootstrap/';
 
 
 
@@ -35,9 +38,13 @@ const appRoute: Routes = [
     HighchartsChartModule,
     RouterModule.forRoot(appRoute),
     HttpClientModule, // Add HttpClientModule here,
+    BrowserAnimationsModule,
+    BsDatepickerModule.forRoot(),
+
+  
   ],
   exports: [
-    MdashboardComponent
+    MdashboardComponent,
   ]
 })
 export class MdashboardModule { }
