@@ -6,6 +6,7 @@ import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import { Covid19ResultsByStatus } from 'src/app/models/covid19ResultsByStatus.model';
 import { Covid19ResultsByFacility } from 'src/app/models/covid19ResultsByFacility.model';
+import { Covid19ResultsByAgeGender } from 'src/app/models/covid19ResultsByAgeGender.model';
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
@@ -28,6 +29,12 @@ export class Covid19resultsComponent {
     covid19ResultsByFacilityOptions: {} = {};
     //#endregion
 
+    //#region Prerequisites --> Enrolled by Age and Gender
+    resultsByAgeGender: Covid19ResultsByAgeGender[] = [];
+    resultsByAgeGenderSeries: any[][] = [];
+    resultsByAgeGenderOptions: {} = {};
+    //#endregion
+
     constructor(private reviewService: ReviewService,) {
         //this.loadOverallPositivity();
     }
@@ -38,6 +45,9 @@ export class Covid19resultsComponent {
 
         this.loadCovid19ResultsByFacilityData();
         this.loadCovid19ResultsByFacilityChart();
+        
+        this.loadCovid19ResultsByAgeGenderData();
+        this.loadCovid19ResultsByAgeGenderChart();
     }
 
     //#region Load Chart --> Covid-19 Results by Status
@@ -63,7 +73,7 @@ export class Covid19resultsComponent {
     loadCovid19ResultsByStatusChart() {
         this.covid19ResultsByStatusOptions = {
             title: {
-                text: 'COVID-19 Results By Status',
+                text: 'COVID-19 Positivity',
                 align: 'left'
             },
             chart: {
@@ -120,8 +130,8 @@ export class Covid19resultsComponent {
                     //Compile Facilities
                     this.covid19ResultsByFacilitySeries[0].push(dataInstance.Facility);
 
-                    //Compile Enrolled
-                    this.covid19ResultsByFacilitySeries[1].push(dataInstance.Enrolled);
+                    //Compile Negative
+                    this.covid19ResultsByFacilitySeries[1].push(dataInstance.Covid19Negative);
 
                     //Compile Enrolled --> Positive
                     this.covid19ResultsByFacilitySeries[2].push(dataInstance.Covid19Positive);
@@ -178,12 +188,12 @@ export class Covid19resultsComponent {
                 }
             },
             series: [{
-                name: 'Enrolled',
+                name: 'Negative',
                 data: this.covid19ResultsByFacilitySeries[2],
                 type: 'column',
                 color: 'blue'
             }, {
-                name: 'Covid-19 Positive',
+                name: 'Positive',
                 data: this.covid19ResultsByFacilitySeries[1],
                 type: 'column',
                 color: '#008000'
@@ -194,158 +204,258 @@ export class Covid19resultsComponent {
     }
     //#endregion
 
+    //#region Load Chart --> Enrollment by Age and Gender
+    loadCovid19ResultsByAgeGenderData() {
+        this.reviewService.findCovid19ResultsByAgeGender().subscribe(
+            response => {
+                this.resultsByAgeGender = response;
+
+                //#region Init series indexes
+                // Age Group(Index --> 0)
+                this.resultsByAgeGenderSeries.push([]);
+                this.resultsByAgeGenderSeries[0].push("0-4 Yrs");
+                this.resultsByAgeGenderSeries[0].push("5-14 Yrs");
+                this.resultsByAgeGenderSeries[0].push("15-34 Yrs");
+                this.resultsByAgeGenderSeries[0].push("35-64 Yrs");
+                this.resultsByAgeGenderSeries[0].push("65-84 Yrs");
+                this.resultsByAgeGenderSeries[0].push("85+ Yrs");
+
+                //Positivity - Female (Index --> 1)
+                this.resultsByAgeGenderSeries.push([]);
+
+                //Positivity - Male (Index --> 2)
+                this.resultsByAgeGenderSeries.push([]);
+                //#endregion
+
+                //#region Push series data into array at specific indexes
+                this.resultsByAgeGenderSeries[0].forEach(ageGroupInstance => {
+                    //Compile Female Positivity
+                    let female_found = false;
+                    let male_found = false;
+
+                    this.resultsByAgeGender.forEach(dataInstance => {
+                        if (dataInstance.AgeGroup == ageGroupInstance) {
+                            if (dataInstance.Gender == "Female") {
+                                this.resultsByAgeGenderSeries[1].push(dataInstance.Covid19Positive);
+                                female_found = true;
+                            }
+
+                            //Compile Male Positivity
+                            else if (dataInstance.Gender == "Male") {
+                                this.resultsByAgeGenderSeries[2].push(dataInstance.Covid19Positive * -1);
+                                male_found = true;
+                            }
+                        }
+                    });
+
+                    if (!female_found) {
+                        this.resultsByAgeGenderSeries[1].push(0);
+                        console.log(ageGroupInstance, "!Female");
+                    }
+
+                    if (!male_found) {
+                        this.resultsByAgeGenderSeries[2].push(0);
+                        console.log(ageGroupInstance, "!Male");
+                    }
+                });
+                //#endregion
+
+                this.loadCovid19ResultsByAgeGenderChart();
+            });
+    }
+
+    loadCovid19ResultsByAgeGenderChart() {
+        this.resultsByAgeGenderOptions = {
+            title: {
+                text: 'Positivity by Age Group and Gender',
+                align: 'left',
+            },
+            chart: { type: "bar" },
+            xAxis: [
+                {
+                    categories: this.resultsByAgeGenderSeries[0],
+                    title: { text: "" },
+                    reversed: false
+                },
+                {
+                    categories: this.resultsByAgeGenderSeries[0],
+                    title: { text: "" },
+                    reversed: false,
+                    linkedTo: 0,
+                    opposite: true,
+                },
+            ],
+            yAxis: [
+                {
+                    title: {
+                        text: "Positivity"
+                    }
+                }
+            ],
+            plotOptions: { series: { stacking: "normal" }, bar: { pointWidth: 18 } },
+            tooltip: {
+            },
+            legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
+            series: [
+                {
+                    name: "Female",
+                    data: this.resultsByAgeGenderSeries[1],
+                    color: "#FC7500",
+                    type: 'bar'
+                },
+                {
+                    name: "Male",
+                    data: this.resultsByAgeGenderSeries[2],
+                    color: "#234FEA",
+                    type: 'bar'
+                }
+            ],
+        };
+    }
+    //#endregion
+
     Highcharts: typeof Highcharts = Highcharts;
 
     covid19positivitybygenderchartOptions: Highcharts.Options = {
-   
+
         chart: {
-			type: "pie",
-		},
-		title: {
-			text: "Enrollment By Sex",
-		},
-		colors: [
-			"#234FEA", // Color for Category 2
-			"#FC7500", // Color for Category 3
-		],
-		series: [
-			{
-				name: "Data",
+            type: "pie",
+        },
+        title: {
+            text: "Enrollment By Sex",
+        },
+        colors: [
+            "#234FEA", // Color for Category 2
+            "#FC7500", // Color for Category 3
+        ],
+        series: [
+            {
+                name: "Data",
                 type: 'pie',
-				data: [
-					["Male", 20],
-					["Female", 30],
-				], // Replace with your data values
-			},
-		],
-     
-        
+                data: [
+                    ["Male", 20],
+                    ["Female", 30],
+                ], // Replace with your data values
+            },
+        ],
+
+
 
 
     }
 
-
-
-
     covid19positivitybyageandgenderchartOptions: Highcharts.Options = {
-   
+
         chart: { type: "bar" },
-		title: { text: "Participant Distribution by Age, Sex" },
-		xAxis: [
-			{ categories: ["0-4 yrs","5-9 yrs","15-34 yrs"],
-            title: { text: "" }, reversed: false },
-			{
-                categories: ["0-4 yrs","5-9 yrs","15-34 yrs"],
+        title: { text: "Participant Distribution by Age, Sex" },
+        xAxis: [
+            {
+                categories: ["0-4 yrs", "5-9 yrs", "15-34 yrs"],
+                title: { text: "" }, reversed: false
+            },
+            {
+                categories: ["0-4 yrs", "5-9 yrs", "15-34 yrs"],
                 title: { text: "" },
                 reversed: false,
                 linkedTo: 0,
                 opposite: true,
             },
-		],
-		yAxis: [
-			{
+        ],
+        yAxis: [
+            {
                 // labels: {
                 //     formatter: function () {
                 //         return Math.abs(this.value).toString();
                 //     },
                 // },
             },
-		],
-		plotOptions: { series: { stacking: "normal" }, bar: { pointWidth: 18 } },
-		tooltip: {
-		},
-		legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
-		series: [
-			{ name: "Female", 
-            data: [10, 60, 30], 
-            color: "blue",
-            type: 'bar' 
+        ],
+        plotOptions: { series: { stacking: "normal" }, bar: { pointWidth: 18 } },
+        tooltip: {
         },
-			{ name: "Male", 
-            data: [-9, -41, -34], 
-            color: "orange",
-            type:'bar'
-         },
-		],
-     
-        
+        legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
+        series: [
+            {
+                name: "Female",
+                data: [10, 60, 30],
+                color: "blue",
+                type: 'bar'
+            },
+            {
+                name: "Male",
+                data: [-9, -41, -34],
+                color: "orange",
+                type: 'bar'
+            },
+        ],
+
+
     }
 
+    overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
+        chart: {
+            type: 'solidgauge'
+        },
 
-overvieweligibleparticipantsguagechartOptions: Highcharts.Options =  {
-    chart: {
-        type: 'solidgauge'
-    },
-
-    pane: {
-        center: ['50%', '85%'],
-        size: '140%',
-        startAngle: -90,
-        endAngle: 90,
-        background: [{ 
-            backgroundColor: '#EEE',
-            innerRadius: '60%',
-            outerRadius: '100%',
-            shape: 'arc'
+        pane: {
+            center: ['50%', '85%'],
+            size: '140%',
+            startAngle: -90,
+            endAngle: 90,
+            background: [{
+                backgroundColor: '#EEE',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc'
             }]
-    },
+        },
 
-    exporting: {
-        enabled: false
-    },
+        exporting: {
+            enabled: false
+        },
 
-    tooltip: {
-        enabled: false
-    },
-    yAxis: {
-        stops: [
-            [1, '#55BF3B'],
-        ],
-        lineWidth: 0,
-        tickWidth: 0,
-        minorTickInterval: null,
-        tickAmount: 2,
-        title: {
-            y: -70
-        },
-        labels: {
-            y: 16
-        },
-        min: 0,
-        max: 200,
-    },
-    plotOptions: {
-        solidgauge: {
-            dataLabels: {
-                y: 5,
-                borderWidth: 0,
-                useHTML: true
-            }
-        }
-    },
-    series: [{
-        type: 'solidgauge',
-        name: 'Speed',
-        data: [80],
-        dataLabels: {
-            format:
-                '<div style="text-align:center">' +
-                '<span style="font-size:25px">{y}</span><br/>' +
-                '</div>'
-        },
         tooltip: {
-            valueSuffix: ''
-        }
-    }]
-};
-
-
-
+            enabled: false
+        },
+        yAxis: {
+            stops: [
+                [1, '#55BF3B'],
+            ],
+            lineWidth: 0,
+            tickWidth: 0,
+            minorTickInterval: null,
+            tickAmount: 2,
+            title: {
+                y: -70
+            },
+            labels: {
+                y: 16
+            },
+            min: 0,
+            max: 200,
+        },
+        plotOptions: {
+            solidgauge: {
+                dataLabels: {
+                    y: 5,
+                    borderWidth: 0,
+                    useHTML: true
+                }
+            }
+        },
+        series: [{
+            type: 'solidgauge',
+            name: 'Speed',
+            data: [80],
+            dataLabels: {
+                format:
+                    '<div style="text-align:center">' +
+                    '<span style="font-size:25px">{y}</span><br/>' +
+                    '</div>'
+            },
+            tooltip: {
+                valueSuffix: ''
+            }
+        }]
+    };
 }
-
-
-
-
-
-
-

@@ -1,4 +1,5 @@
 export interface EnrollmentByFacility {
-  Enrolled: number;
+  EnrolledNumber: number;
+  Covid19Positive: number;
   Facility: string;
 }
