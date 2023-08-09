@@ -80,26 +80,54 @@ loadScreeningByGenderData() {
 loadScreeningByGenderChart() {
     this.screenedbygenderchartOptions = {
         title: {
-            text: 'Screnned by Gender',
-            align: 'left'
-        },
-        chart: {
-            type: "pie",
-        },
-        colors: [
-            "#234FEA", // Color for Category 2
-            "#FC7500", // Color for Category 3
-        ],
-        series: [
+            text: 'Screening by Gender',
+          },
+          chart: {
+            type: 'column',
+          },
+          // subtitle: {
+          //     text:
+          //         'Source: <a target="_blank" ' +
+          //         'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>',
+          //     align: 'left'
+          //  },
+          xAxis: {
+            categories: ['Enrolled', 'Tested', 'Positive'],
+            crosshair: true,
+            accessibility: {
+              description: 'Categories',
+            },
+          },
+          yAxis: {
+            min: 0,
+            title: {
+              text: 'Number Screened',
+            },
+          },
+          tooltip: {
+            valueSuffix: '',
+          },
+          plotOptions: {
+            column: {
+              pointPadding: 0.2,
+              borderWidth: 0,
+            },
+          },
+          series: [
             {
-                name: "Data",
-                type: 'pie',
-                data: [
-                    ["Male", this.ScreeningByGenderSeries[0]],
-                    ["Female", this.ScreeningByGenderSeries[1]]
-                ]
-            }
-        ]
+              name: 'MALE',
+              data: [62403, 123232, 77000],
+              color:'#234FEA'
+            },
+            {
+              name: 'FEMALE',
+              data: [51086, 106000, 75500],
+              color:'#FC7500'
+            },
+          ],
+        
+
+
     };
 
     HC_exporting(Highcharts);
@@ -309,31 +337,65 @@ loadScreeningByGenderChart() {
 
     loadScreeningByFacilityChart() {
         this.screenedbyhealthfacilitieschartOptions = {
+           
             title: {
-                text: 'No screened at different health facilities',
+                text: 'Screening by Facility',
                 align: 'left'
             },
             chart: {
-                type: "column",
+                type: 'column'
             },
             xAxis: {
-                categories: this.ScreeningByFacilitySeries[0],
-                title: false
+                categories: ['Kenyatta National Hospital', 'Busia CRH', 'Marsabit CRH', 'Machakos CRH']
             },
             yAxis: {
+                min: 0,
                 title: {
-                    text: "Screening",
+                    text: 'Number Screened'
+                },
+                stackLabels: {
+                    enabled: true
                 }
             },
-            series: [
-                {
-                    showInLegend: false,
-                    name: "Health Facilities",
-                    data: this.ScreeningByFacilitySeries[1],
-                    type: 'column',
-                    color: "#234FEA",
+            legend: {
+                align: 'left',
+                x: 70,
+                verticalAlign: 'top',
+                y: 70,
+                floating: true,
+                backgroundColor:'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
                 }
-            ]
+            },
+            series: [{
+                name: 'Enrolled',
+                data: [3, 5, 1, 13],
+                color:'#234FEA'
+            }, {
+                name: 'Positive',
+                data: [14, 8, 8, 12],
+                color:'#FF0000'
+            },
+        ] 
+
+
+
+
+
+
         };
     }
     //#endregion
