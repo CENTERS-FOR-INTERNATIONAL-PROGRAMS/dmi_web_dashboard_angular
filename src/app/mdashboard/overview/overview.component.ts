@@ -194,10 +194,12 @@ export class OverviewComponent implements OnInit {
         {
           name: 'MALE',
           data: [62403, 123232, 77000],
+          color:'#234FEA'
         },
         {
           name: 'FEMALE',
           data: [51086, 106000, 75500],
+          color:'#FC7500'
         },
       ],
     };
@@ -777,58 +779,58 @@ export class OverviewComponent implements OnInit {
       };*/
 
 
-    overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
+//     overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
 
-        chart: {
-            type: 'solidgauge'
-        },
+//         chart: {
+//             type: 'solidgauge'
+//         },
 
-        title: {
-            text: ''
-        },
+//         title: {
+//             text: ''
+//         },
 
-        pane: {
-            center: ['50%', '85%'],
-            size: '100%',
-            startAngle: -90,
-            endAngle: 90,
-            background: [{
-                backgroundColor: '#EEE',
-                innerRadius: '60%',
-                outerRadius: '100%',
-                shape: 'arc'
-            }
-            ]
-        },
+//         pane: {
+//             center: ['50%', '85%'],
+//             size: '100%',
+//             startAngle: -90,
+//             endAngle: 90,
+//             background: [{
+//                 backgroundColor: '#EEE',
+//                 innerRadius: '60%',
+//                 outerRadius: '100%',
+//                 shape: 'arc'
+//             }
+//             ]
+//         },
 
-        exporting: {
-            enabled: false
-        },
+//         exporting: {
+//             enabled: false
+//         },
 
-        tooltip: {
-            enabled: false
-        },
-        yAxis: {
-            stops: [
-                [1, '#55BF3B'],
-            ],
-            lineWidth: 0,
-            tickWidth: 0,
-            minorTickInterval: null,
-            tickAmount: 2,
-            title: {
-                y: -70
-            },
-            labels: {
-                y: 16
-            },
+//         tooltip: {
+//             enabled: false
+//         },
+//         yAxis: {
+//             stops: [
+//                 [1, '#55BF3B'],
+//             ],
+//             lineWidth: 0,
+//             tickWidth: 0,
+//             minorTickInterval: null,
+//             tickAmount: 2,
+//             title: {
+//                 y: -70
+//             },
+//             labels: {
+//                 y: 16
+//             },
 
-        ],
+        
 
 
-    }
-}
-    };*/
+//     }
+// }
+    
 
   overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
     chart: {
