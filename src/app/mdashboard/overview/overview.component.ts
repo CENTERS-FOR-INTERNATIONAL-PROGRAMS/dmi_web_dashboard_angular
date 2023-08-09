@@ -19,6 +19,7 @@ import * as HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
   styleUrls: ['./overview.component.css'],
 })
 export class OverviewComponent implements OnInit {
+  
   numberEnrolled: NumEnrolled[] = [];
 
   //#region Prerequisites --> COVID-19 Positivity
@@ -68,7 +69,6 @@ export class OverviewComponent implements OnInit {
   ngOnInit() {
     this.loadCovid19PositivityData();
     this.loadCovid19PositivityChart();
-
     this.loadCovid19PositivityByGenderData();
     this.loadCovid19PositivityByGenderChart();
 
@@ -318,6 +318,7 @@ export class OverviewComponent implements OnInit {
               console.log(ageGroupInstance, '!Female');
             }
 
+
             if (!male_found) {
               this.covid19PositivityByAgeGenderSeries[2].push(0);
               console.log(ageGroupInstance, '!Male');
@@ -552,6 +553,7 @@ export class OverviewComponent implements OnInit {
            },
        }; */
 
+
   /* overallpositivitybyfacilitychartOptions: Highcharts.Options = {
         title: {
             text: 'Overall Positivity By Facility',
@@ -719,54 +721,108 @@ export class OverviewComponent implements OnInit {
             },
         ],
     };*/
-  /*
-    screenedovertimechartOptions: Highcharts.Options = {
-        title: {
-            text: 'Screened Over Time',
-            align: 'left',
+    /*
+      screenedovertimechartOptions: Highcharts.Options = {
+          title: {
+              text: 'Screened Over Time',
+              align: 'left',
+          },
+  
+          chart: { type: "bar" },
+          xAxis: [
+              {
+                  categories: ["0-4 yrs", "5-9 yrs", "15-34 yrs"],
+                  title: { text: "" },
+                  reversed: false
+              },
+              {
+                  categories: ["0-4 yrs", "5-9 yrs", "15-34 yrs"],
+                  title: { text: "" },
+                  reversed: false,
+                  linkedTo: 0,
+                  opposite: true,
+              },
+          ],
+          yAxis: [
+              {
+                  // labels: {
+                  //     formatter: function () {
+                  //         return Math.abs(parseInt(this.value)).toString();
+                  //     },
+                  // },
+              },
+          ],
+          plotOptions: { series: { stacking: "normal" }, bar: { pointWidth: 18 } },
+          tooltip: {
+          },
+          legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
+          series: [
+              {
+                  name: "Female",
+                  data: [10, 60, 30],
+                  color: "#FC7500",
+                  type: 'bar'
+              },
+              {
+                  name: "Male",
+                  data: [-9, -41, -34],
+                  color: "#234FEA",
+                  type: 'bar'
+              },
+          ],
+  
+  
+      }
+  }
+      };*/
+
+
+    overvieweligibleparticipantsguagechartOptions: Highcharts.Options = {
+
+        chart: {
+            type: 'solidgauge'
         },
 
-        chart: { type: "bar" },
-        xAxis: [
-            {
-                categories: ["0-4 yrs", "5-9 yrs", "15-34 yrs"],
-                title: { text: "" },
-                reversed: false
-            },
-            {
-                categories: ["0-4 yrs", "5-9 yrs", "15-34 yrs"],
-                title: { text: "" },
-                reversed: false,
-                linkedTo: 0,
-                opposite: true,
-            },
-        ],
-        yAxis: [
-            {
-                // labels: {
-                //     formatter: function () {
-                //         return Math.abs(parseInt(this.value)).toString();
-                //     },
-                // },
-            },
-        ],
-        plotOptions: { series: { stacking: "normal" }, bar: { pointWidth: 18 } },
-        tooltip: {
+        title: {
+            text: ''
         },
-        legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
-        series: [
-            {
-                name: "Female",
-                data: [10, 60, 30],
-                color: "#FC7500",
-                type: 'bar'
+
+        pane: {
+            center: ['50%', '85%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: [{
+                backgroundColor: '#EEE',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc'
+            }
+            ]
+        },
+
+        exporting: {
+            enabled: false
+        },
+
+        tooltip: {
+            enabled: false
+        },
+        yAxis: {
+            stops: [
+                [1, '#55BF3B'],
+            ],
+            lineWidth: 0,
+            tickWidth: 0,
+            minorTickInterval: null,
+            tickAmount: 2,
+            title: {
+                y: -70
             },
-            {
-                name: "Male",
-                data: [-9, -41, -34],
-                color: "#234FEA",
-                type: 'bar'
+            labels: {
+                y: 16
             },
+
         ],
 
 
