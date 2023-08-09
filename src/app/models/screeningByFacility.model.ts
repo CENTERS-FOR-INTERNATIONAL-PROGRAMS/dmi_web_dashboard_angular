@@ -1,4 +1,6 @@
 export interface ScreeningByFacility {
-  Screened: number;
-  Facility: string;
+     Screened: number;
+     Enrolled: number;
+     Covid19Positive: number;
+     Facility: string;
 }

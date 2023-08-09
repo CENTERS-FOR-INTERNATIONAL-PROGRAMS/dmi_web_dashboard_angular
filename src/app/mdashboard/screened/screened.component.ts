@@ -16,7 +16,7 @@ import { ScreeningByOverTime } from 'src/app/models/screeningByOvertime.model';
 export class ScreenedComponent {
 //#region Prerequisites --> Screening by Gender
 ScreeningByGender: ScreeningByGender[] = [];
-ScreeningByGenderSeries: any[] = [];
+ScreeningByGenderSeries: any[][] = [];
 screenedbygenderchartOptions: {} = {};
 //#endregion
 
@@ -63,16 +63,19 @@ loadScreeningByGenderData() {
             this.ScreeningByGender = response;
 
             //#region Push series data into array at specific indexes
-            this.ScreeningByGender.forEach(dataInstance => {
-                if (dataInstance.Gender == "Male") {
-                    this.ScreeningByGenderSeries.push(dataInstance.Screened);
-                }
+                //Male Series (Index --> 0)
+                this.ScreeningByGenderSeries.push([]);
+                this.ScreeningByGenderSeries[0].push(this.ScreeningByGender[0].Male_Screened);
+                this.ScreeningByGenderSeries[0].push(this.ScreeningByGender[0].Male_Eligible);
+                this.ScreeningByGenderSeries[0].push(this.ScreeningByGender[0].Male_Enrolled);
 
-                else if (dataInstance.Gender == "Female") {
-                    this.ScreeningByGenderSeries.push(dataInstance.Screened);
-                }
-            });
-            //#endregion
+                //Female Series (Index --> 1)
+                this.ScreeningByGenderSeries.push([]);
+                this.ScreeningByGenderSeries[1].push(this.ScreeningByGender[0].Female_Screened);
+                this.ScreeningByGenderSeries[1].push(this.ScreeningByGender[0].Female_Eligible);
+                this.ScreeningByGenderSeries[1].push(this.ScreeningByGender[0].Female_Enrolled);
+                //#endregion
+
 
             this.loadScreeningByGenderChart();
         });
@@ -92,7 +95,7 @@ loadScreeningByGenderChart() {
           //     align: 'left'
           //  },
           xAxis: {
-            categories: ['Enrolled', 'Tested', 'Positive'],
+            categories: ['Enrolled', 'Elligible', 'Positive'],
             crosshair: true,
             accessibility: {
               description: 'Categories',
@@ -115,13 +118,13 @@ loadScreeningByGenderChart() {
           },
           series: [
             {
-              name: 'MALE',
-              data: [62403, 123232, 77000],
+                name: 'MALE',
+                data: this.ScreeningByGenderSeries[0],
               color:'#234FEA'
             },
             {
               name: 'FEMALE',
-              data: [51086, 106000, 75500],
+              data: this.ScreeningByGenderSeries[1],
               color:'#FC7500'
             },
           ],
@@ -237,15 +240,15 @@ loadScreeningByGenderChart() {
             legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
             series: [
                 {
-                    name: "Female",
-                    data: this.ScreeningByAgeGenderSeries[1],
-                    color: "#FC7500",
-                    type: 'bar'
-                },
-                {
                     name: "Male",
                     data: this.ScreeningByAgeGenderSeries[2],
                     color: "#234FEA",
+                    type: 'bar'
+                },
+                {
+                    name: "Female",
+                    data: this.ScreeningByAgeGenderSeries[1],
+                    color: "#FC7500",
                     type: 'bar'
                 },
             ],
