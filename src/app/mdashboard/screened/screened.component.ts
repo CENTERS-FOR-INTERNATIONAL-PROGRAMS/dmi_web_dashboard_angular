@@ -320,17 +320,22 @@ loadScreeningByGenderChart() {
                 // Facilities (Index --> 0)
                 this.ScreeningByFacilitySeries.push([]);
 
-                //Screening (Index --> 1)
+                //Enrolled (Index --> 1)
+                this.ScreeningByFacilitySeries.push([]);
+
+                //Positive (Index --> 2)
                 this.ScreeningByFacilitySeries.push([]);
                 //#endregion
-
                 //#region Push series data into array at specific indexes
                 this.ScreeningByFacility.forEach(dataInstance => {
                     //Compile Facilities
                     this.ScreeningByFacilitySeries[0].push(dataInstance.Facility);
 
-                    //Compile Screenings
-                    this.ScreeningByFacilitySeries[1].push(dataInstance.Screened);
+                    //Compile Enrolled
+                    this.ScreeningByFacilitySeries[1].push(dataInstance.Enrolled);
+
+                    //Compile Positives
+                    this.ScreeningByFacilitySeries[2].push(dataInstance.Covid19Positive);
                 });
                 //#endregion
 
@@ -349,7 +354,7 @@ loadScreeningByGenderChart() {
                 type: 'column'
             },
             xAxis: {
-                categories: ['Kenyatta National Hospital', 'Busia CRH', 'Marsabit CRH', 'Machakos CRH']
+                categories: this.ScreeningByFacilitySeries[0],
             },
             yAxis: {
                 min: 0,
@@ -385,11 +390,11 @@ loadScreeningByGenderChart() {
             },
             series: [{
                 name: 'Enrolled',
-                data: [3, 5, 1, 13],
+                data:  this.ScreeningByFacilitySeries[1],
                 color:'#234FEA'
             }, {
                 name: 'Positive',
-                data: [14, 8, 8, 12],
+                data:  this.ScreeningByFacilitySeries[2],
                 color:'#FF0000'
             },
         ] 
