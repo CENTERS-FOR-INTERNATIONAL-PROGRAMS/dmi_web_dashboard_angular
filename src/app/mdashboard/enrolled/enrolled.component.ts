@@ -160,13 +160,13 @@ export class EnrolledComponent {
                     this.enrollmentByAgeGender.forEach(dataInstance => {
                         if (dataInstance.AgeGroup == ageGroupInstance) {
                             if (dataInstance.Gender == "Female") {
-                                this.enrollmentByAgeGenderSeries[1].push(dataInstance.Enrolled);
+                                this.enrollmentByAgeGenderSeries[1].push(dataInstance.EnrolledNumber);
                                 female_found = true;
                             }
 
                             //Compile Male Positivity
                             else if (dataInstance.Gender == "Male") {
-                                this.enrollmentByAgeGenderSeries[2].push(dataInstance.Enrolled * -1);
+                                this.enrollmentByAgeGenderSeries[2].push(dataInstance.EnrolledNumber * -1);
                                 male_found = true;
                             }
                         }
@@ -174,12 +174,10 @@ export class EnrolledComponent {
 
                     if (!female_found) {
                         this.enrollmentByAgeGenderSeries[1].push(0);
-                        console.log(ageGroupInstance, "!Female");
                     }
 
                     if (!male_found) {
                         this.enrollmentByAgeGenderSeries[2].push(0);
-                        console.log(ageGroupInstance, "!Male");
                     }
                 });
                 //#endregion
@@ -222,15 +220,15 @@ export class EnrolledComponent {
             legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
             series: [
                 {
-                    name: "Female",
-                    data: this.enrollmentByAgeGenderSeries[1],
-                    color: "#FC7500",
-                    type: 'bar'
-                },
-                {
                     name: "Male",
                     data: this.enrollmentByAgeGenderSeries[2],
                     color: "#234FEA",
+                    type: 'bar'
+                },
+                {
+                    name: "Female",
+                    data: this.enrollmentByAgeGenderSeries[1],
+                    color: "#FC7500",
                     type: 'bar'
                 },
             ],
@@ -320,7 +318,7 @@ export class EnrolledComponent {
     }
     //#endregion
 
-    //#region Load Chart --> Enrollment by EpiWeek
+    //#region Load Chart --> Enrollment by Over Time
     loadEnrollmentOverTimeData() {
         this.reviewService.findEnrollmentOverTime().subscribe(
             response => {

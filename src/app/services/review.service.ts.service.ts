@@ -23,6 +23,7 @@ import { ScreeningByOverTime } from '../models/screeningByOvertime.model';
 import { Covid19ResultsByStatus } from '../models/covid19ResultsByStatus.model';
 import { Covid19ResultsByFacility } from '../models/covid19ResultsByFacility.model';
 import { Covid19ResultsByAgeGender } from '../models/covid19ResultsByAgeGender.model';
+import { Covid19ResultsByPositivityOverTime } from '../models/covid19ResultsByPositivityOverTime.model';
 
 
 @Injectable({
@@ -39,20 +40,21 @@ export class ReviewService {
 
   // Enrollment --//
   public BASE_URLE1 = 'http://localhost:8080/api/covid19/enrollment/findByGender';
-  public BASE_URLE2 = 'http://localhost:8080/api/enrollment/findEnrollmentByAgeGender';
+  public BASE_URLE2 = 'http://localhost:8080/api/covid19/enrollment/findByAgeGender';
   public BASE_URLE3 = 'http://localhost:8080/api/covid19/enrollment/findByFacility';
   public BASE_URLE4 = 'http://localhost:8080/api/covid19/enrollment/findOverTime';
 
   //Screening --//
-  public BASE_URLES1 = 'http://localhost:8080/api/screening//findScreeningByGender';
+  public BASE_URLES1 = 'http://localhost:8080/api/screening/findScreeningByGender';
   public BASE_URLES2 = 'http://localhost:8080/api/screening/findScreeningByAgeGender';
   public BASE_URLES3 = 'http://localhost:8080/api/screening/findScreeningByHealthFacilities';
   public BASE_URLES4 = 'http://localhost:8080/api/screening/findScreeningOverTime';
 
   //Results --//
-  public BASE_URLR1 = 'http://localhost:8080/api/results/findCovid19ResultsByStatus';
+  public BASE_URLR1 = 'http://localhost:8080/api/covid19/results/findByStatus';
   public BASE_URLR2 = 'http://localhost:8080/api/covid19/results/findByFacility';
   public BASE_URLR3 = 'http://localhost:8080/api/covid19/results/findByAgeGender';
+  public BASE_URLR4 = 'http://localhost:8080/api/covid19/results/findByPositivityOverTime';
 
   constructor(private http: HttpClient) {
   }
@@ -182,6 +184,13 @@ export class ReviewService {
 
   findCovid19ResultsByAgeGender(): Observable<Covid19ResultsByAgeGender[]> {
     return this.http.get<Covid19ResultsByAgeGender[]>(`${this.BASE_URLR3}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+  
+  findCovid19ResultsByPositivityOverTime(): Observable<Covid19ResultsByPositivityOverTime[]> {
+    return this.http.get<Covid19ResultsByPositivityOverTime[]>(`${this.BASE_URLR4}`).pipe(
       retry(1),
       catchError(this.handleError)
     );

@@ -1,5 +1,5 @@
 export interface EnrollmentByAgeGender {
-  Enrolled: number;
+  EnrolledNumber: number;
   Gender: string;
   AgeGroup: string;
 }

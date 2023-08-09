@@ -108,28 +108,58 @@ export class OverviewComponent implements OnInit {
   loadCovid19OverallPositivityByFacilityChart() {
     this.overallpositivitybyfacilitychartOptions = {
       title: {
-        text: 'Overall Positivity By Facility',
-        align: 'left',
-      },
-      chart: {
-        // type: "column",
-      },
-      xAxis: {
-        categories: this.covid19OverallPositivityByFacilitySeries[0], // Replace with your categories
-      },
-      yAxis: {
+        text: 'Enrolled & Tested Postive by Facility',
+        align: 'left'
+    },
+    chart: {
+        type: 'column'
+    },
+    xAxis: {
+        categories: ['Kenyatta National Hospital', 'Busia CRH', 'Marsabit CRH', 'Machakos CRH']
+    },
+    yAxis: {
+        min: 0,
         title: {
-          text: 'Number Positive',
+            text: 'Number Screened'
         },
-      },
-      series: [
-        {
-          name: 'Health Facilities',
-          data: this.covid19OverallPositivityByFacilitySeries[1],
-          type: 'column',
-          color: '#234FEA',
-        },
-      ],
+        stackLabels: {
+            enabled: true
+        }
+    },
+    legend: {
+        align: 'left',
+        x: 70,
+        verticalAlign: 'top',
+        y: 70,
+        floating: true,
+        backgroundColor:'white',
+        borderColor: '#CCC',
+        borderWidth: 1,
+        shadow: false
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
+    series: [{
+        name: 'Enrolled',
+        data: [3, 5, 1, 13],
+        color:'#234FEA'
+    }, {
+        name: 'Positive',
+        data: [14, 8, 8, 12],
+        color:'#FF0000'
+    },
+] 
+
     };
     HC_exporting(Highcharts);
   }
@@ -210,6 +240,7 @@ export class OverviewComponent implements OnInit {
   loadCovid19PositivityData() {
     this.reviewService.findCovid19Positivity().subscribe((response) => {
       this.covid19Positivity = response;
+
 
       //#region Push series data into array at specific indexes
       this.covid19Positivity.forEach((dataInstance) => {
@@ -319,7 +350,6 @@ export class OverviewComponent implements OnInit {
               this.covid19PositivityByAgeGenderSeries[1].push(0);
               console.log(ageGroupInstance, '!Female');
             }
-
 
             if (!male_found) {
               this.covid19PositivityByAgeGenderSeries[2].push(0);
@@ -519,7 +549,7 @@ export class OverviewComponent implements OnInit {
   //#endregion
 
   //#endregion
-
+  
   /*    Highcharts: typeof Highcharts = Highcharts;
        overallpositivitychartOptions: Highcharts.Options = {
            title: {
