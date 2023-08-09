@@ -6,12 +6,10 @@ import { Covid19Summary } from '../models/covid19Summary.model';
 import { NumEnrolled } from '../models/numEnrolled.model';
 
 import { CovidPositivity } from '../models/covidPositivity.model';
-import { CovidPositivityOvertime } from '../models/covidPositivityOvertime.model';
+import { CovidPositivityOverTime } from '../models/covidPositivityOverTime.model';
 import { CovidPositivityByAgeGender } from '../models/covidPositivityByAgeGender.model';
-
 import { Covid19PositivityByGender } from '../models/covid19PositivityByGender.model';
 import { Covid19OverallPositivityByFacility } from '../models/covid19OverallPositivityByFacility.model';
-
 
 import { EnrollmentByGender } from '../models/enrollmentByGender.model';
 import { EnrollmentByAgeGender } from '../models/enrollmentByAgeGender.model';
@@ -93,9 +91,10 @@ export class ReviewService {
       catchError(this.handleError)
     );
   }
-  findCovidPositivityOvertime(): Observable<CovidPositivityOvertime[]> {
+
+  findCovidPositivityOvertime(): Observable<CovidPositivityOverTime[]> {
     console.log('In the service');
-    return this.http.get<CovidPositivityOvertime[]>(`${this.BASE_URL1}`).pipe(
+    return this.http.get<CovidPositivityOverTime[]>(`${this.BASE_URL1}`).pipe(
       retry(1),
       catchError(this.handleError)
     );
@@ -169,6 +168,7 @@ export class ReviewService {
       catchError(this.handleError)
     );
   }
+
 
   findScreeningByAgeGender(): Observable<ScreeningByAgeGender[]> {
     return this.http.get<ScreeningByAgeGender[]>(`${this.BASE_URLES2}`).pipe(
