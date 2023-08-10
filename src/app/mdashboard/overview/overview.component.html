@@ -129,7 +129,7 @@
 
             <!-- <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden">
             </ngb-datepicker>
-            
+
             <ng-template #t let-date let-focused="focused">
                 <span
                     class="custom-day"
@@ -142,9 +142,9 @@
                     {{ date.day }}
                 </span>
             </ng-template>
-            
+
             <hr />
-            
+
             <pre>From: {{ fromDate | json }} </pre>
             <pre>To: {{ toDate | json }} </pre>  -->
 
@@ -155,4 +155,23 @@
 
         </div>
     </div>
+
+    <div class="row">
+      <div class="col">
+        <div ngbDropdown class="d-inline-block">
+          <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+            Toggle dropdown
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem>Action - 1</button>
+            <button ngbDropdownItem>Another Action</button>
+            <button ngbDropdownItem>Something else is here</button>
+          </div>
+        </div>
+      </div>
+
 </div>
+
+
+
+
