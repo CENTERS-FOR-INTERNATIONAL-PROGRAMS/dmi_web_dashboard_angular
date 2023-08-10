@@ -212,7 +212,7 @@ export class EnrolledComponent {
             yAxis: [
                 {
                     title: {
-                        text: "Number Positive"
+                        text: "Number Enrolled"
                     }
                 }
             ],
