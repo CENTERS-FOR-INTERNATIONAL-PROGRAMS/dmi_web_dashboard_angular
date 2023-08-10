@@ -1,11 +1,10 @@
 import { ReviewService } from './../../services/review.service.ts.service';
 import { CovidPositivity } from './../../models/covidPositivity.model';
 import { Covid19Summary } from './../../models/covid19Summary.model';
-import { Covid19PositivityByGender } from './../../models/covid19PositivityByGender.model';
+import { Covid19Cascade } from './../../models/covid19/covid19Cascade.model';
 import { Covid19OverallPositivityByFacility } from './../../models/covid19OverallPositivityByFacility.model';
 import { CovidPositivityOvertime } from './../../models/covidPositivityOvertime.model';
 import { CovidPositivityByAgeGender } from './../../models/covidPositivityByAgeGender.model';
-import { NumEnrolled } from './../../models/numEnrolled.model';
 import { Component, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -19,6 +18,10 @@ import * as HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 })
 
 export class OverviewComponent implements OnInit {
+
+  //#region Prerequisites
+  highcharts = Highcharts;
+  //#endregion
 
   //#region Prerequisites --> COVID-19 Summary
   covid19Summary: Covid19Summary[] = [];
@@ -35,39 +38,32 @@ export class OverviewComponent implements OnInit {
   covid19PositivityOptions: {} = {};
   //#endregion
 
-  //#region Prerequisites --> COVID-19 positivity overtime
+  //#region Prerequisites --> COVID-19 Positivity Over Time
   covid19PositivityOvertime: CovidPositivityOvertime[] = [];
   covid19PositivityOvertimeSeries: any[][] = [];
   covid19PositivityOvertimeOptions: {} = {};
   //#endregion
 
-  //#region Prerequisites --> COVID-19 positivity by age gender
+  //#region Prerequisites --> COVID-19 Positivity by Age and Gender
   covidPositivityByAgeGender: CovidPositivityByAgeGender[] = [];
   covid19PositivityByAgeGenderSeries: any[][] = [];
   covid19PositivityByAgeGenderOptions: {} = {};
   //#endregion
 
-  // Overall Positivity By Facility----
+  //#region Prerequisites --> COVID-19 Positivity By Facility
   covid19OverallPositivityByFacility: Covid19OverallPositivityByFacility[] = [];
   covid19OverallPositivityByFacilitySeries: any[][] = [];
-  overallpositivitybyfacilitychartOptions: {} = {};
-  // ---
+  covid19OverallPositivityByFacilityChartOptions: {} = {};
+  //#endregion
 
-  // Positivity By Gender----
-  covid19PositivityByGender: Covid19PositivityByGender[] = [];
-  covid19PositivityByGenderSeries: any[] = [];
-  overallpositivitybygenderchartOptions: {} = {};
-  // ---
-
-  positives: number = 0;
-  negatives: number = 0;
-  highcharts = Highcharts;
-  highcharts1 = Highcharts;
-  highcharts2 = Highcharts;
-  highcharts3 = Highcharts;
+  //#region Prerequisites --> COVID-19 Cascade
+  covid19Cascade: Covid19Cascade[] = [];
+  covid19CascadeSeries: any[] = [];
+  covid19CascadeChartOptions: {} = {};
+  //#endregion
 
   constructor(private reviewService: ReviewService) {
-    //this.loadOverallPositivity();
+
   }
 
   ngOnInit() {
@@ -77,8 +73,8 @@ export class OverviewComponent implements OnInit {
     this.loadCovid19PositivityData();
     this.loadCovid19PositivityChart();
 
-    this.loadCovid19PositivityByGenderData();
-    this.loadCovid19PositivityByGenderChart();
+    this.loadCovid19CascadeData();
+    this.loadCovid19CascadeChart();
 
     this.loadCovid19PositivityOvertimeData();
     this.loadCovid19PositivityOvertimeChart();
@@ -86,96 +82,12 @@ export class OverviewComponent implements OnInit {
     this.loadCovid19PositivityByAgeGenderData();
     this.loadCovid19PositivityByAgeGenderChart();
 
-    this.loadCovid19OverallPositivityByFacilityData();
-    this.loadCovid19OverallPositivityByFacilityChart();
-  }
-
-  loadCovid19OverallPositivityByFacilityData() {
-    this.reviewService
-      .findCovid19OverallPositivityByFacility()
-      .subscribe((response) => {
-        this.covid19OverallPositivityByFacility = response;
-
-        // Health Facilities (index --> 0)
-        this.covid19OverallPositivityByFacilitySeries.push([]);
-        // Positive Numbers (index --> 1)
-        this.covid19OverallPositivityByFacilitySeries.push([]);
-        //#region Push series data into array at specific indexes
-        this.covid19OverallPositivityByFacility.forEach((dataInstance) => {
-          this.covid19OverallPositivityByFacilitySeries[0].push(
-            dataInstance.Facility
-          );
-          this.covid19OverallPositivityByFacilitySeries[1].push(
-            dataInstance.PositiveNumber
-          );
-        });
-
-        this.loadCovid19OverallPositivityByFacilityChart();
-      });
-  }
-
-  loadCovid19OverallPositivityByFacilityChart() {
-    this.overallpositivitybyfacilitychartOptions = {
-      title: {
-        text: 'Enrolled & Tested Postive by Facility',
-        align: 'left'
-      },
-      chart: {
-        type: 'column'
-      },
-      xAxis: {
-        categories: ['Kenyatta National Hospital', 'Busia CRH', 'Marsabit CRH', 'Machakos CRH']
-      },
-      yAxis: {
-        min: 0,
-        title: {
-          text: 'Number Screened'
-        },
-        stackLabels: {
-          enabled: true
-        }
-      },
-      legend: {
-        align: 'left',
-        x: 70,
-        verticalAlign: 'top',
-        y: 70,
-        floating: true,
-        backgroundColor: 'white',
-        borderColor: '#CCC',
-        borderWidth: 1,
-        shadow: false
-      },
-      tooltip: {
-        headerFormat: '<b>{point.x}</b><br/>',
-        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-      },
-      plotOptions: {
-        column: {
-          stacking: 'normal',
-          dataLabels: {
-            enabled: true
-          }
-        }
-      },
-      series: [{
-        name: 'Enrolled',
-        data: [3, 5, 1, 13],
-        color: '#234FEA'
-      }, {
-        name: 'Positive',
-        data: [14, 8, 8, 12],
-        color: '#FF0000'
-      },
-      ]
-
-    };
-    HC_exporting(Highcharts);
+    this.loadCovid19PositivityByFacilityData();
+    this.loadCovid19PositivityByFacilityChart();
   }
 
   //#region Load Chart --> Covid-19 Summary
   loadCovid19SummaryData() {
-    // Init Group
     for (let index = 0; index < 5; index++) {
       //Init Group Instance
       this.covid19SummaryGroup.push([]);
@@ -371,80 +283,67 @@ export class OverviewComponent implements OnInit {
   }
   //#endregion
 
-  //#region Load Gender Data --> Covid-19 Positivity By Gender
-  loadCovid19PositivityByGenderData() {
-    this.reviewService.findCovid19PositivityByGender().subscribe((response) => {
-      this.covid19PositivityByGender = response;
+  //#region Load Data --> Covid-19 Screening and Enrollment Cascade
+  loadCovid19CascadeData() {
+    this.reviewService.findCovid19Cascade().subscribe(
+      response => {
+        this.covid19Cascade = response;
+        this.covid19CascadeSeries.push([]);
+        this.covid19CascadeSeries[0].push(this.covid19Cascade[0].TotalScreened);
+        this.covid19CascadeSeries[0].push(this.covid19Cascade[0].Eligible);
+        this.covid19CascadeSeries[0].push(this.covid19Cascade[0].Enrolled);
+        this.covid19CascadeSeries[0].push(this.covid19Cascade[0].Tested);
+        this.covid19CascadeSeries[0].push(this.covid19Cascade[0].Positive);
 
-      this.covid19PositivityByGender.forEach((dataInstance) => {
-        if (dataInstance.Gender == 'Male') {
-          this.covid19PositivityByGenderSeries.push(
-            dataInstance.PositiveNumber
-          );
-        } else if (dataInstance.Gender == 'Female') {
-          this.covid19PositivityByGenderSeries.push(
-            dataInstance.PositiveNumber
-          );
-        }
+        //#region Push series data into array at specific indexes
+
+        this.loadCovid19CascadeChart();
       });
-
-      this.loadCovid19PositivityByGenderChart();
-    });
   }
 
-  loadCovid19PositivityByGenderChart() {
-    this.overallpositivitybygenderchartOptions = {
+  loadCovid19CascadeChart() {
+    this.covid19CascadeChartOptions = {
       title: {
-        text: 'Covid 19 Positivity by Gender',
+        text: 'COVID-19 Screening and Enrolment Cascade',
+        align: 'left'
       },
       chart: {
-        type: 'column',
+        type: 'column'
       },
-      // subtitle: {
-      //     text:
-      //         'Source: <a target="_blank" ' +
-      //         'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>',
-      //     align: 'left'
-      //  },
       xAxis: {
-        categories: ['Enrolled', 'Tested', 'Positive'],
+        categories: ['Screened', 'Eligible', 'Enrolled', 'Tested', 'Positive'],
         crosshair: true,
         accessibility: {
-          description: 'Categories',
-        },
+          description: 'Categories'
+        }
       },
       yAxis: {
         min: 0,
         title: {
-          text: 'Number Enrolled',
-        },
+          text: 'Number Screened'
+        }
       },
       tooltip: {
-        valueSuffix: '',
+        valueSuffix: ''
       },
       plotOptions: {
         column: {
           pointPadding: 0.2,
-          borderWidth: 0,
-        },
+          borderWidth: 0
+        }
       },
       series: [
         {
-          name: 'MALE',
-          data: [62403, 123232, 77000],
-          color: '#234FEA'
-        },
-        {
-          name: 'FEMALE',
-          data: [51086, 106000, 75500],
-          color: '#FC7500'
-        },
-      ],
+          color: "#234FEA",
+          data: this.covid19CascadeSeries[0],
+          showInLegend: false
+        }
+      ]
     };
   }
   //#endregion
 
-  //#region Load CHart --> Covid-19 Positivity
+  //#region Load Chart --> Covid-19 Positivity (Deprecated)
   loadCovid19PositivityData() {
     this.reviewService.findCovid19Positivity().subscribe((response) => {
       this.covid19Positivity = response;
@@ -536,6 +435,7 @@ export class OverviewComponent implements OnInit {
 
             this.covidPositivityByAgeGender.forEach((dataInstance) => {
               if (dataInstance.AgeGroup == ageGroupInstance) {
+                //Compile Female (Index --> 1)
                 if (dataInstance.Gender == 'Female') {
                   this.covid19PositivityByAgeGenderSeries[1].push(
                     dataInstance.PositiveNumber
@@ -543,12 +443,9 @@ export class OverviewComponent implements OnInit {
                   female_found = true;
                 }
 
-                //Compile Male Positivity
+                //Compile Male (Index --> 2)
                 else if (dataInstance.Gender == 'Male') {
-                  this.covid19PositivityByAgeGenderSeries[2].push(
-                    dataInstance.PositiveNumber * -1
-                  );
-                  // this.covid19PositivityByAgeGenderSeries[2].push(dataInstance.PositiveNumber);
+                  this.covid19PositivityByAgeGenderSeries[2].push(dataInstance.PositiveNumber * -1);
                   male_found = true;
                 }
               }
@@ -574,7 +471,7 @@ export class OverviewComponent implements OnInit {
   loadCovid19PositivityByAgeGenderChart() {
     this.covid19PositivityByAgeGenderOptions = {
       title: {
-        text: 'Covid-19 Positivity By Age and Gender',
+        text: 'COVID-19 Positivity by Age Group and Gender',
         align: 'left',
       },
       chart: {
@@ -597,12 +494,12 @@ export class OverviewComponent implements OnInit {
           reversed: false,
           opposite: true,
           linkedTo: 0,
-        },
+        }
       ],
       yAxis: [
         {
           title: {
-            text: 'Positivity',
+            text: 'Number Positive',
           },
           labels: {
             format: '{value}', //TODO! Format to remove netagive values
@@ -610,17 +507,16 @@ export class OverviewComponent implements OnInit {
           accessibility: {
             description: 'Percentage population',
             rangeDescription: 'Range: 0 to 5%',
-          },
+          }
         },
       ],
       plotOptions: {
         series: {
           stacking: 'normal',
-          borderRadius: '50%',
         },
         bar: {
           pointWidth: 18,
-        },
+        }
       },
       tooltip: {
         format:
@@ -630,21 +526,108 @@ export class OverviewComponent implements OnInit {
       legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
       series: [
         {
-          name: 'Female',
-          data: this.covid19PositivityByAgeGenderSeries[1],
-          color: '#FC7500',
-        },
-        {
           name: 'Male',
           data: this.covid19PositivityByAgeGenderSeries[2],
           color: '#234FEA',
         },
-      ],
+        {
+          name: 'Female',
+          data: this.covid19PositivityByAgeGenderSeries[1],
+          color: '#FC7500',
+        }
+      ]
     };
   }
   //#endregion
 
-  //#region Load Chart --> COVID-19 Positivity Overtime
+  //#region Load Chart --> Covid-19 Positivity by Facility
+  loadCovid19PositivityByFacilityData() {
+    this.reviewService.findCovid19OverallPositivityByFacility().subscribe(
+      response => {
+        this.covid19OverallPositivityByFacility = response;
+
+        //#region Init series indexes
+        // Facilities (Index --> 0)
+        this.covid19OverallPositivityByFacilitySeries.push([]);
+
+        //Enrolled (Index --> 1)
+        this.covid19OverallPositivityByFacilitySeries.push([]);
+
+        //Positive (Index --> 2)
+        this.covid19OverallPositivityByFacilitySeries.push([]);
+        //#endregion
+
+        //#region Push series data into array at specific indexes
+        this.covid19OverallPositivityByFacility.forEach(dataInstance => {
+          //Compile Facilities (Index --> 0)
+          this.covid19OverallPositivityByFacilitySeries[0].push(dataInstance.Facility);
+
+          //Compile Enrollments (Index --> 1)
+          this.covid19OverallPositivityByFacilitySeries[1].push(dataInstance.EnrolledNumber);
+
+          //Compile Positives (Index --> 2)
+          this.covid19OverallPositivityByFacilitySeries[2].push(dataInstance.Covid19Positive);
+        });
+        //#endregion
+
+        this.loadCovid19PositivityByFacilityChart();
+      });
+  }
+
+  loadCovid19PositivityByFacilityChart() {
+    this.covid19OverallPositivityByFacilityChartOptions = {
+      title: {
+        text: 'Enrolled and Tested Positive by Facility',
+        align: 'left'
+      },
+      chart: {
+        type: "column",
+      },
+      xAxis: {
+        categories: this.covid19OverallPositivityByFacilitySeries[0],
+        title: false
+      },
+      yAxis: {
+        title: {
+          text: "Number Enrolled",
+        }
+      },
+      series: [
+        {
+          showInLegend: true,
+          name: "Enrolled",
+          data: this.covid19OverallPositivityByFacilitySeries[1],
+          type: 'column',
+          color: "#234FEA",
+        },
+        {
+          showInLegend: true,
+          name: "Positive",
+          data: this.covid19OverallPositivityByFacilitySeries[2],
+          type: 'column',
+          color: "red",
+          plotOptions: {
+            column: {
+              dataLabels: {
+                enabled: true
+              }
+            }
+          }
+        }
+      ],
+      plotOptions: {
+        column: {
+          stacking: 'normal',
+          dataLabels: {
+            enabled: true
+          }
+        }
+      }
+    };
+  }
+  //#endregion
+
+  //#region Load Chart --> COVID-19 Positivity Over Time
   loadCovid19PositivityOvertimeData() {
     this.reviewService.findCovidPositivityOvertime().subscribe((response) => {
       this.covid19PositivityOvertime = response;
@@ -680,17 +663,17 @@ export class OverviewComponent implements OnInit {
         // type: 'pie'
       },
       title: {
-        text: 'Covid-19 Positivity Overtime',
+        text: 'COVID-19 Positivity over time',
         align: 'left',
       },
       xAxis: [
         {
           title: {
-            text: 'Epi Week',
+            text: '',
           },
           categories: this.covid19PositivityOvertimeSeries[0],
-          crosshair: true,
-        },
+          crosshair: true
+        }
       ],
       yAxis: [
         {
@@ -702,7 +685,7 @@ export class OverviewComponent implements OnInit {
             // }
           },
           title: {
-            text: 'Samples Tested',
+            text: 'Number Tested',
             // style: {
             //     color: Highcharts.getOptions().colors[1]
             // }
@@ -711,24 +694,24 @@ export class OverviewComponent implements OnInit {
         {
           // Secondary yAxis
           title: {
-            text: 'Covid-19 Positive',
+            text: 'Percent Positive',
             // style: {
             //     color: Highcharts.getOptions().colors[0]
             // }
           },
           labels: {
-            format: '{value}%',
+            // format: '{value}%',
             // style: {
             //     color: Highcharts.getOptions().colors[0]
             // }
           },
           opposite: true,
-        },
+        }
       ],
       colors: ['#FF0000', 'green'],
       series: [
         {
-          name: 'Samples Tested',
+          name: 'Sample Tested',
           type: 'column',
           color: '#234FEA',
           yAxis: 1,
@@ -743,15 +726,15 @@ export class OverviewComponent implements OnInit {
         },
       ],
       plotOptions: {
-        pie: {
-          innerSize: '60%', // Adjust the innerSize to control the size of the inner hole (donut hole)
-          depth: 25, // Adjust the depth to control the thickness of the donut
+        line: {
+          stacking: 'normal',
           dataLabels: {
-            enabled: true, // Disable data labels inside the donut segments
-          },
-        },
-      },
+            enabled: true
+          }
+        }
+      }
     };
+
     HC_exporting(Highcharts);
   }
   //#endregion

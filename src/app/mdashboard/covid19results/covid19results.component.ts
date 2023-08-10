@@ -83,7 +83,7 @@ export class Covid19resultsComponent {
     loadCovid19ResultsByStatusChart() {
         this.covid19ResultsByStatusOptions = {
             title: {
-                text: 'COVID-19 Positivity',
+                text: 'Overall COVID-19 Positivity',
                 align: 'left'
             },
             chart: {
@@ -98,8 +98,8 @@ export class Covid19resultsComponent {
                     name: "Data",
                     type: 'pie',
                     data: [
-                        ["Positive", this.covid19ResultsByStatusSeries[0]],
-                        ["Negative", this.covid19ResultsByStatusSeries[1]]
+                        ["Positive: " + this.covid19ResultsByStatusSeries[0], this.covid19ResultsByStatusSeries[0]],
+                        ["Negative: " + this.covid19ResultsByStatusSeries[1], this.covid19ResultsByStatusSeries[1]]
                     ]
                 }
             ],
@@ -158,7 +158,7 @@ export class Covid19resultsComponent {
                 type: 'column'
             },
             title: {
-                text: 'COVID-19 Results By Facility',
+                text: 'COVID-19 Results by Facility',
                 align: 'left'
             },
             xAxis: {
@@ -167,7 +167,7 @@ export class Covid19resultsComponent {
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Number Enrolled'
+                    text: 'Number Tested'
                 },
                 stackLabels: {
                     enabled: false
@@ -178,12 +178,7 @@ export class Covid19resultsComponent {
                 x: 70,
                 verticalAlign: 'top',
                 y: 70,
-                floating: true,
-                // backgroundColor:
-                //     Highcharts.defaultOptions.legend.backgroundColor || 'white',
-                // borderColor: '#CCC',
-                // borderWidth: 1,
-                // shadow: false
+                floating: true
             },
             tooltip: {
                 headerFormat: '<b>{point.x}</b><br/>',
@@ -201,12 +196,12 @@ export class Covid19resultsComponent {
                 name: 'Negative',
                 data: this.covid19ResultsByFacilitySeries[2],
                 type: 'column',
-                color: 'blue'
+                color: '#008000'
             }, {
                 name: 'Positive',
                 data: this.covid19ResultsByFacilitySeries[1],
                 type: 'column',
-                color: '#008000'
+                color: '#FF0000'
             },]
         };
 
@@ -214,7 +209,7 @@ export class Covid19resultsComponent {
     }
     //#endregion
 
-    //#region Load Chart --> Covid-19 Results by Age and Gender
+    //#region Load Chart --> Covid-19 Positivity by Age and Gender
     loadCovid19ResultsByAgeGenderData() {
         this.reviewService.findCovid19ResultsByAgeGender().subscribe(
             response => {
@@ -277,7 +272,7 @@ export class Covid19resultsComponent {
     loadCovid19ResultsByAgeGenderChart() {
         this.resultsByAgeGenderOptions = {
             title: {
-                text: 'Positivity by Age Group and Gender',
+                text: 'COVID-19 Positivity by Age Group and Gender',
                 align: 'left',
             },
             chart: { type: "bar" },
@@ -293,12 +288,12 @@ export class Covid19resultsComponent {
                     reversed: false,
                     linkedTo: 0,
                     opposite: true,
-                },
+                }
             ],
             yAxis: [
                 {
                     title: {
-                        text: "Positivity"
+                        text: "Number Positive"
                     }
                 }
             ],
@@ -308,18 +303,18 @@ export class Covid19resultsComponent {
             legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
             series: [
                 {
-                    name: "Female",
-                    data: this.resultsByAgeGenderSeries[1],
-                    color: "#FC7500",
-                    type: 'bar'
-                },
-                {
                     name: "Male",
                     data: this.resultsByAgeGenderSeries[2],
                     color: "#234FEA",
                     type: 'bar'
+                },
+                {
+                    name: "Female",
+                    data: this.resultsByAgeGenderSeries[1],
+                    color: "#FC7500",
+                    type: 'bar'
                 }
-            ],
+            ]
         };
     }
     //#endregion
@@ -356,8 +351,6 @@ export class Covid19resultsComponent {
                 });
                 //#endregion
 
-                console.log(this.resultsByPositivityOverTimeSeries);
-
                 this.loadCovid19ResultsByPositivityOverTimeChart();
             });
     }
@@ -365,7 +358,7 @@ export class Covid19resultsComponent {
     loadCovid19ResultsByPositivityOverTimeChart() {
         this.resultsByPositivityOverTimeOptions = {
             title: {
-                text: 'COVID-19 Positivity Over Time',
+                text: 'COVID-19 Positivity over time',
                 align: 'left'
             },
             chart: {
@@ -373,26 +366,43 @@ export class Covid19resultsComponent {
             },
             xAxis: {
                 categories: this.resultsByPositivityOverTimeSeries[0],
+                title: {
+                    text: "Epiweek",
+                }
             },
             yAxis: {
                 title: {
-                    text: "Enrolled",
+                    text: "Number Tested",
                 }
             },
             series: [
                 {
-                    name: "Tested",
+                    name: "Sample Tested",
                     data: this.resultsByPositivityOverTimeSeries[1],
                     color: "#234FEA",
                     type: "column"
                 },
                 {
-                    name: "Positive",
+                    name: "Percent Positive",
                     data: this.resultsByPositivityOverTimeSeries[2],
-                    color: "red",
-                    type: "line" 
+                    color: "#FF0000",
+                    type: "line"
                 }
-            ]
+            ],
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                },
+                line: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
         };
     }
     //#endregion

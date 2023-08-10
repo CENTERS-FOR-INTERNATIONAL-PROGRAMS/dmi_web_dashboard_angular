@@ -1,4 +1,5 @@
 export interface Covid19OverallPositivityByFacility {
-  PositiveNumber: any;
-  Facility : any;
+  EnrolledNumber: number;
+  Covid19Positive: number;
+  Facility: string;
 }
