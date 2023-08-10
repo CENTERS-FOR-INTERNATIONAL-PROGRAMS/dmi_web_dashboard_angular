@@ -159,12 +159,13 @@ export class EnrolledComponent {
 
                     this.enrollmentByAgeGender.forEach(dataInstance => {
                         if (dataInstance.AgeGroup == ageGroupInstance) {
+                            //Compile Female (Index --> 1)
                             if (dataInstance.Gender == "Female") {
                                 this.enrollmentByAgeGenderSeries[1].push(dataInstance.EnrolledNumber);
                                 female_found = true;
                             }
 
-                            //Compile Male Positivity
+                            //Compile Male (Index --> 2)
                             else if (dataInstance.Gender == "Male") {
                                 this.enrollmentByAgeGenderSeries[2].push(dataInstance.EnrolledNumber * -1);
                                 male_found = true;
@@ -220,18 +221,18 @@ export class EnrolledComponent {
             legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
             series: [
                 {
-                    name: "Female",
-                    data: this.enrollmentByAgeGenderSeries[1],
-                    color: "#FC7500",
-                    type: 'bar'
-                },
-                {
                     name: "Male",
                     data: this.enrollmentByAgeGenderSeries[2],
                     color: "#234FEA",
                     type: 'bar'
                 },
-            ],
+                {
+                    name: "Female",
+                    data: this.enrollmentByAgeGenderSeries[1],
+                    color: "#FC7500",
+                    type: 'bar'
+                }
+            ]
         };
     }
     //#endregion
@@ -255,18 +256,16 @@ export class EnrolledComponent {
 
                 //#region Push series data into array at specific indexes
                 this.enrollmentByFacility.forEach(dataInstance => {
-                    //Compile Facilities
+                    //Compile Facilities (Index --> 0)
                     this.enrollmentByFacilitySeries[0].push(dataInstance.Facility);
 
-                    //Compile Enrollments
+                    //Compile Enrollments (Index --> 1)
                     this.enrollmentByFacilitySeries[1].push(dataInstance.EnrolledNumber);
 
-                    //Compile Positives
+                    //Compile Positives (Index --> 2)
                     this.enrollmentByFacilitySeries[2].push(dataInstance.Covid19Positive);
                 });
                 //#endregion
-
-                console.log(this.enrollmentByFacilitySeries);
 
                 this.loadEnrollmentByFacilityChart();
             });
@@ -373,16 +372,16 @@ export class EnrolledComponent {
             },
             series: [
                 {
-                    name: "Enrolled",
-                    data: this.enrollmentOverTimeSeries[2],
-                    color: "red",
-                    type: "line"
-                },
-                {
                     name: "Elligible",
                     data: this.enrollmentOverTimeSeries[1],
                     color: "#234FEA",
                     type: "column"
+                },
+                {
+                    name: "Enrolled",
+                    data: this.enrollmentOverTimeSeries[2],
+                    color: "red",
+                    type: "line"
                 }
             ]
         };
@@ -390,24 +389,4 @@ export class EnrolledComponent {
     //#endregion
 
     Highcharts: typeof Highcharts = Highcharts;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

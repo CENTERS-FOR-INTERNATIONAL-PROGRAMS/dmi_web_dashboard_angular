@@ -43,14 +43,14 @@ export class ReviewService {
   public BASE_URL_BY_GENDER = 'http://localhost:8080/api/overview/findCovid19PositivityByGender';
   public BASE_URL_BY_FACILITY = 'http://localhost:8080/api/overview/findCovid19OverallPositivityByFacility';
 
-  // Enrollment --//
+  // Enrollment --// 
   public BASE_URLE1 = 'http://localhost:8080/api/covid19/enrollment/findByGender';
   public BASE_URLE2 = 'http://localhost:8080/api/covid19/enrollment/findByAgeGender';
   public BASE_URLE3 = 'http://localhost:8080/api/covid19/enrollment/findByFacility';
   public BASE_URLE4 = 'http://localhost:8080/api/covid19/enrollment/findOverTime';
 
   //Screening --//
-  public BASE_URLES1 = 'http://localhost:8080/api/screening//findScreeningByGender';
+  public BASE_URLES1 = 'http://localhost:8080/api/screening/findScreeningByGender';
   public BASE_URLES2 = 'http://localhost:8080/api/screening/findScreeningByAgeGender';
   public BASE_URLES3 = 'http://localhost:8080/api/screening/findScreeningByHealthFacilities';
   public BASE_URLES4 = 'http://localhost:8080/api/screening/findScreeningOverTime';
@@ -63,6 +63,7 @@ export class ReviewService {
 
   constructor(private http: HttpClient) {
   }
+
   //#region Overview
   findSummary(): Observable<Covid19Summary[]> {
     return this.http.get<Covid19Summary[]>(`${this.BASE_URL_COVID19_SUMMARY}`).pipe(
@@ -93,6 +94,7 @@ export class ReviewService {
       catchError(this.handleError)
     );
   }
+
   findCovidPositivityOvertime(): Observable<CovidPositivityOvertime[]> {
     console.log('In the service');
     return this.http.get<CovidPositivityOvertime[]>(`${this.BASE_URL1}`).pipe(
@@ -102,7 +104,6 @@ export class ReviewService {
   }
 
   findCovid19PositivityByGender(): Observable<Covid19PositivityByGender[]> {
-    console.log('In the service');
     return this.http.get<Covid19PositivityByGender[]>(`${this.BASE_URL_BY_GENDER}`).pipe(
       retry(1),
       catchError(this.handleError)
@@ -115,6 +116,7 @@ export class ReviewService {
       catchError(this.handleError)
     );
   }
+
   findCovid19PositivityByAgeGender(): Observable<CovidPositivityByAgeGender[]> {
     console.log('In the service');
     return this.http.get<CovidPositivityByAgeGender[]>(`${this.BASE_URL3}`).pipe(
@@ -122,6 +124,7 @@ export class ReviewService {
       catchError(this.handleError)
     );
   }
+  //#endregion
 
   //#region Enrollment
   findEnrollmentByGender(): Observable<EnrollmentByGender[]> {

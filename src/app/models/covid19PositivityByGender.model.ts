@@ -1,4 +1,6 @@
 export interface Covid19PositivityByGender {
-  PositiveNumber: number;
+  EnrolledNumber: number;
+  TestedNumber: number;
+  Covid19Positive: number;
   Gender : string;
 }
