@@ -2,10 +2,10 @@ import { ReviewService } from './../../services/review.service.ts.service';
 import { Component } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
-import { ScreeningByGender } from 'src/app/models/screeningByGender.model';
 import { ScreeningByAgeGender } from 'src/app/models/screeningByAgeGender.model';
 import { ScreeningByFacility } from 'src/app/models/screeningByFacility.model';
 import { ScreeningByOverTime } from 'src/app/models/screeningByOvertime.model';
+import { Covid19Cascade } from 'src/app/models/covid19/covid19Cascade.model';
 
 @Component({
     selector: 'app-screened',
@@ -14,10 +14,10 @@ import { ScreeningByOverTime } from 'src/app/models/screeningByOvertime.model';
 })
 
 export class ScreenedComponent {
-    //#region Prerequisites --> Screening by Gender
-    screeningByGender: ScreeningByGender[] = [];
+    //#region Prerequisites --> Screening Cascade
+    screeningCascade: Covid19Cascade[] = [];
     screeningByGenderSeries: any[] = [];
-    screeningByGenderChartOptions: {} = {};
+    screeningCascadeChartOptions: {} = {};
     //#endregion
 
     //#region Prerequisites --> Screening by Age and Gender
@@ -43,8 +43,8 @@ export class ScreenedComponent {
     }
 
     ngOnInit() {
-        this.loadScreeningByGenderData();
-        this.loadScreeningByGenderChart();
+        this.loadScreeningCascadeData();
+        this.loadScreeningCascadeChart();
 
         this.loadScreeningByAgeGenderData();
         this.loadScreeningByAgeGenderChart();
@@ -56,34 +56,27 @@ export class ScreenedComponent {
         this.loadScreeningByOverTimeChart();
     }
 
-    //#region Load Chart --> Screening by Gender
-    loadScreeningByGenderData() {
-        this.reviewService.findEnrollmentByGender().subscribe(
+    //#region Load Chart --> Screening Cascade
+    loadScreeningCascadeData() {
+        this.reviewService.findCovid19ScreeningCascade().subscribe(
             response => {
-                this.screeningByGender = response;
+                this.screeningCascade = response;
 
                 //#region Push series data into array at specific indexes
                 //Male Series (Index --> 0)
                 this.screeningByGenderSeries.push([]);
-                this.screeningByGenderSeries[0].push(this.screeningByGender[0].Male_Screened);
-                this.screeningByGenderSeries[0].push(this.screeningByGender[0].Male_Eligible);
-                this.screeningByGenderSeries[0].push(this.screeningByGender[0].Male_Enrolled);
+                this.screeningByGenderSeries[0].push(this.screeningCascade[0].TotalScreened);
+                this.screeningByGenderSeries[0].push(this.screeningCascade[0].Eligible);
+                this.screeningByGenderSeries[0].push(this.screeningCascade[0].Enrolled);
 
-                //Female Series (Index --> 1)
-                this.screeningByGenderSeries.push([]);
-                this.screeningByGenderSeries[1].push(this.screeningByGender[0].Female_Screened);
-                this.screeningByGenderSeries[1].push(this.screeningByGender[0].Female_Eligible);
-                this.screeningByGenderSeries[1].push(this.screeningByGender[0].Female_Enrolled);
-                //#endregion
-
-                this.loadScreeningByGenderChart();
+                this.loadScreeningCascadeChart();
             });
     }
 
-    loadScreeningByGenderChart() {
-        this.screeningByGenderChartOptions = {
+    loadScreeningCascadeChart() {
+        this.screeningCascadeChartOptions = {
             title: {
-                text: 'Screening by Gender',
+                text: 'Screening Cascade',
                 align: 'left'
             },
             chart: {
@@ -99,7 +92,7 @@ export class ScreenedComponent {
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Number'
+                    text: 'Number Screened'
                 }
             },
             tooltip: {
@@ -108,17 +101,17 @@ export class ScreenedComponent {
             plotOptions: {
                 column: {
                     pointPadding: 0.2,
-                    borderWidth: 0
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true
+                    }
                 }
             },
             series: [
                 {
-                    name: 'MALE',
-                    data: this.screeningByGenderSeries[0]
-                },
-                {
-                    name: 'FEMALE',
-                    data: this.screeningByGenderSeries[1]
+                    data: this.screeningByGenderSeries[0],
+                    color: "#234FEA",
+                    showInLegend: false
                 }
             ]
         };
@@ -164,7 +157,7 @@ export class ScreenedComponent {
     loadScreeningByFacilityChart() {
         this.screeningByFacilitiesChartOptions = {
             title: {
-                text: 'Enrollment By Facility',
+                text: 'Screening by Facility',
                 align: 'left'
             },
             chart: {
@@ -176,7 +169,7 @@ export class ScreenedComponent {
             },
             yAxis: {
                 title: {
-                    text: "Enrolled",
+                    text: "Number Screened",
                 }
             },
             series: [
@@ -207,7 +200,7 @@ export class ScreenedComponent {
     }
     //#endregion
 
-    //#region Load Chart --> Screening by Age and Gender
+    //#region Load Chart --> Screening by Age and Gender (Deprecated)
     loadScreeningByAgeGenderData() {
         this.reviewService.findScreeningByAgeGender().subscribe(
             response => {
@@ -249,6 +242,7 @@ export class ScreenedComponent {
                 this.loadScreeningByAgeGenderChart();
             });
     }
+
     loadScreeningByAgeGenderChart() {
         this.screeningbyageandgenderchartOptions = {
             title: {
@@ -343,16 +337,24 @@ export class ScreenedComponent {
             },
             yAxis: {
                 title: {
-                    text: "Enrolled",
+                    text: "Number Screened",
                 }
             },
             series: [
                 {
-                    name: "Epi Week",
+                    name: "Period (Year, Month, epiweek)",
                     data: this.ScreeningByOverTimeSeries[1],
                     color: "#234FEA",
                 }
-            ]
+            ],
+            plotOptions: {
+                line: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            }
         };
     }
     //#endregion

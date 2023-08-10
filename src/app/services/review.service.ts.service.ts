@@ -28,6 +28,7 @@ import { Covid19ResultsByStatus } from '../models/covid19ResultsByStatus.model';
 import { Covid19ResultsByFacility } from '../models/covid19ResultsByFacility.model';
 import { Covid19ResultsByAgeGender } from '../models/covid19ResultsByAgeGender.model';
 import { Covid19ResultsByPositivityOverTime } from '../models/covid19ResultsByPositivityOverTime.model';
+import { Covid19Cascade } from '../models/covid19/covid19Cascade.model';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,7 @@ export class ReviewService {
   // Overview -- //
   public BASE_URL_COVID19_SUMMARY = 'http://localhost:8080/api/overview/findCovid19Summary';
   public BASE_URL_COVID19_SUMMARYBYMONTH = 'http://localhost:8080/api/overview/findCovid19SummaryByMonth';
+  public BASE_URL_CASCADE = 'http://localhost:8080/api/overview/findCovid19ScreeningEnrollmentCascade';
   public BASE_URL = 'http://localhost:8080/api/overview/findCovid19Positivity';
   public BASE_URL1 = 'http://localhost:8080/api/overview/findCovid19OverTime';
   public BASE_URL3 = 'http://localhost:8080/api/overview/findCovid19PositivityByAgeGender';
@@ -50,7 +52,7 @@ export class ReviewService {
   public BASE_URLE4 = 'http://localhost:8080/api/covid19/enrollment/findOverTime';
 
   //Screening --//
-  public BASE_URLES1 = 'http://localhost:8080/api/screening/findScreeningByGender';
+  public BASE_URLES1 = 'http://localhost:8080/api/covid19/screening/findCascade';
   public BASE_URLES2 = 'http://localhost:8080/api/screening/findScreeningByAgeGender';
   public BASE_URLES3 = 'http://localhost:8080/api/screening/findScreeningByHealthFacilities';
   public BASE_URLES4 = 'http://localhost:8080/api/screening/findScreeningOverTime';
@@ -74,6 +76,13 @@ export class ReviewService {
 
   findSummaryByMonth(): Observable<Covid19Summary[]> {
     return this.http.get<Covid19Summary[]>(`${this.BASE_URL_COVID19_SUMMARYBYMONTH}`).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
+  findCovid19Cascade(): Observable<Covid19Cascade[]> {
+    return this.http.get<Covid19Cascade[]>(`${this.BASE_URL_CASCADE}`).pipe(
       retry(1),
       catchError(this.handleError)
     );
@@ -157,8 +166,8 @@ export class ReviewService {
   //#endregion
 
   //#region Screening
-  findScreeningByGender(): Observable<ScreeningByGender[]> {
-    return this.http.get<ScreeningByGender[]>(`${this.BASE_URLES1}`).pipe(
+  findCovid19ScreeningCascade(): Observable<Covid19Cascade[]> {
+    return this.http.get<Covid19Cascade[]>(`${this.BASE_URLES1}`).pipe(
       retry(1),
       catchError(this.handleError)
     );
