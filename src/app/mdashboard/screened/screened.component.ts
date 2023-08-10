@@ -326,7 +326,7 @@ export class ScreenedComponent {
     loadScreeningByOverTimeChart() {
         this.screenedovertimechartOptions = {
             title: {
-                text: 'Screened over time',
+                text: 'Screening over time',
                 align: 'left'
             },
             chart: {
@@ -342,7 +342,7 @@ export class ScreenedComponent {
             },
             series: [
                 {
-                    name: "Period (Year, Month, epiweek)",
+                    name: "Epiweek",
                     data: this.ScreeningByOverTimeSeries[1],
                     color: "#234FEA",
                 }

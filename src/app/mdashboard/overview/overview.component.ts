@@ -320,7 +320,7 @@ export class OverviewComponent implements OnInit {
       yAxis: {
         min: 0,
         title: {
-          text: 'Number'
+          text: 'Number Screened'
         }
       },
       tooltip: {
@@ -669,7 +669,7 @@ export class OverviewComponent implements OnInit {
       xAxis: [
         {
           title: {
-            text: 'Period (Year, Month, epiweek)',
+            text: '',
           },
           categories: this.covid19PositivityOvertimeSeries[0],
           crosshair: true

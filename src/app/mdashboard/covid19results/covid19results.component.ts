@@ -367,7 +367,7 @@ export class Covid19resultsComponent {
             xAxis: {
                 categories: this.resultsByPositivityOverTimeSeries[0],
                 title: {
-                    text: "Period (Year, Month, epi week)",
+                    text: "Epiweek",
                 }
             },
             yAxis: {

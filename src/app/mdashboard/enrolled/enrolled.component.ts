@@ -366,7 +366,7 @@ export class EnrolledComponent {
             xAxis: {
                 categories: this.enrollmentOverTimeSeries[0],
                 title: {
-                    text: "Year, Month, epiweek",
+                    text: "Epiweek",
                 }
             },
             yAxis: {
