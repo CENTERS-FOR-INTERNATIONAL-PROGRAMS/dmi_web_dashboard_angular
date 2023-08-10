@@ -360,13 +360,4 @@ export class ScreenedComponent {
     //#endregion
 
     Highcharts: typeof Highcharts = Highcharts;
-
-
-
-
-
-
-
-
 }
-

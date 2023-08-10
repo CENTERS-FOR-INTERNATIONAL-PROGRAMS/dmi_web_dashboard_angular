@@ -10,13 +10,14 @@
     <div>
         <router-outlet> </router-outlet>
         <div class="row overViewRow equal-height-row">
-            <div class="col-xl-2 col-sm-6 col-md-6 col-6 equal-col">
+            <div class= "col-xl-2 col-sm-6 col-md-6 col-6 equal-col">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Total Screened</h5>
                         <hr>
                         <h3>{{this.covid19SummaryGroup[0][0][0]}}</h3>
                     </div>
+                    <hr>
                     <div class="card-footer">
                         <span>{{this.covid19SummaryGroup[0][2]}} last month</span>
                     </div>
@@ -124,6 +125,34 @@
                     style="width: 100%; height: 400px; display: block;"></highcharts-chart>
                 </div>
             </div> -->
+            <p>Example of the range selection</p>
+
+            <!-- <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden">
+            </ngb-datepicker>
+            
+            <ng-template #t let-date let-focused="focused">
+                <span
+                    class="custom-day"
+                    [class.focused]="focused"
+                    [class.range]="isRange(date)"
+                    [class.faded]="isHovered(date) || isInside(date)"
+                    (mouseenter)="hoveredDate = date"
+                    (mouseleave)="hoveredDate = null"
+                >
+                    {{ date.day }}
+                </span>
+            </ng-template>
+            
+            <hr />
+            
+            <pre>From: {{ fromDate | json }} </pre>
+            <pre>To: {{ toDate | json }} </pre>  -->
+
+
+
+
+
+
         </div>
     </div>
 </div>
