@@ -8,11 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { MdashboardModule } from './mdashboard/mdashboard.module';
-
-
-
-
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     AppComponent
@@ -24,6 +20,7 @@ import { MdashboardModule } from './mdashboard/mdashboard.module';
     CoreModule,
     HighchartsChartModule,
     MdashboardModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

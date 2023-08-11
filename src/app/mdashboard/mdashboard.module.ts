@@ -9,11 +9,12 @@ import { Covid19resultsComponent } from './covid19results/covid19results.compone
 import { HttpClientModule } from '@angular/common/http'; // Use HTTP import
 import { RouterModule, Routes } from '@angular/router';
 import * as HighchartsMore from 'highcharts/highcharts-more.src';
-import * as HighchartsSolidGauge from 'highcharts/modules/solid-gauge'; 
+import * as HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import * as Highcharts from 'highcharts';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { NgbDate, NgbCalendar, NgbDatepickerModule } from 'ngx-bootstrap/';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -39,9 +40,10 @@ const appRoute: Routes = [
     RouterModule.forRoot(appRoute),
     HttpClientModule, // Add HttpClientModule here,
     BrowserAnimationsModule,
+    NgbModule,
     BsDatepickerModule.forRoot(),
 
-  
+
   ],
   exports: [
     MdashboardComponent,
